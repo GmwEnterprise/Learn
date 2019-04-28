@@ -1,0 +1,12 @@
+spring:
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    servlet:
+      content-type: text/html
+logging:
+  level:
+    org.springframework.web: debug
