@@ -1,3 +1,0 @@
-spring:
-  thymeleaf:
-    cache: false # 禁用缓存，html文件修改可以实现热部署
