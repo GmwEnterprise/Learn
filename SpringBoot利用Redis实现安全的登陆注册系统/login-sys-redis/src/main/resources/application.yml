@@ -1,0 +1,18 @@
+spring:
+  thymeleaf:
+    cache: false
+    mode: HTML5
+  redis:
+    host: localhost
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: 100ms
+
+mybatis:
+  type-aliases-package: com.example.lsr.domain
+  type-handlers-package: com.example.lsr.typehandler
+  configuration:
+    map-underscore-to-camel-case: true
