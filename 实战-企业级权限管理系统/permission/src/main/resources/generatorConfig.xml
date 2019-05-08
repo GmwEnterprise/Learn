@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+    "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+    <properties resource="generatorConfig.properties"/>
+
+    <classPathEntry location="${mysql.jdbc.location}"/>
+
+    <context id="mysqlGenerator" targetRuntime="MyBatis3">
+
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="avaFileEncoding " value="UTF-8"/>
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection
+            driverClass="${mysql.jdbc.driver}"
+            connectionURL="${mysql.jdbc.url}"
+            userId="${mysql.jdbc.username}"
+            password="${mysql.jdbc.password}"/>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator
+            targetPackage="cn.edu.cqut.permission.domain"
+            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator
+            targetPackage="mappers"
+            targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator
+            type="XMLMAPPER"
+            targetPackage="cn.edu.cqut.permission.dao"
+            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table
+            tableName="sys_acl"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+        <table
+            tableName="sys_acl_module"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+        <table
+            tableName="sys_dept"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+        <table
+            tableName="sys_log"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+        <table
+            tableName="sys_role"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+        <table
+            tableName="sys_role_acl"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+        <table
+            tableName="sys_role_user"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+        <table
+            tableName="sys_user"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+    </context>
+
+</generatorConfiguration>
