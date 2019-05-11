@@ -16,4 +16,3 @@ mybatis:
 logging:
   level:
     cn.edu.cqut.permission.dao: DEBUG
-

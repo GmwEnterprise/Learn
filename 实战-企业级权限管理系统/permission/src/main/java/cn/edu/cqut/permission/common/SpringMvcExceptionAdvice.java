@@ -11,25 +11,23 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class SpringMvcExceptionAdvice {
 
-  @ExceptionHandler(PermissionException.class)
-  public Object permissionExceptionHandler(HttpServletRequest request, PermissionException exp) {
-    String url = request.getRequestURL().toString();
-    log.error("unknown exception, url -> " + url, exp);
-    JsonData fail = JsonData.fail(exp.getMessage());
-    if (url.endsWith(".json")) {
-      return fail;
-    }
-    return new ModelAndView("exception", fail.toMap());
+  @ExceptionHandler({ PermissionException.class, ParamException.class })
+  public Object customExceptionHandler(HttpServletRequest request, Exception e) {
+    return getObject(request, e);
   }
 
-  @ExceptionHandler(Throwable.class)
-  public Object throwableHandler(HttpServletRequest request, Throwable exp) {
+  @ExceptionHandler({ Throwable.class })
+  public Object otherExceptionHandler(HttpServletRequest request, Exception e) {
+    return getObject(request, e);
+  }
+
+  private Object getObject(HttpServletRequest request, Exception e) {
     String url = request.getRequestURL().toString();
-    log.error("unknown sys exception, url -> " + url, exp);
-    JsonData fail = JsonData.fail("Unknown System Exception");
-    if (url.endsWith(".json")) {
-      return fail;
+    if (url.endsWith(".page")) {
+      log.error(String.format("unknown page exception. url: %s", url), e);
+      return new ModelAndView("exception", JsonData.fail(e.getMessage()).toMap());
     }
-    return new ModelAndView("exception", fail.toMap());
+    log.error(String.format("unknown ajax exception. url: %s", url), e);
+    return JsonData.fail(e.getMessage());
   }
 }
