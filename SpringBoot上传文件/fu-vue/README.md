@@ -1,4 +1,4 @@
-# file-upload-vue
+# fu-vue
 
 ## Project setup
 ```
