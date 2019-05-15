@@ -12,11 +12,10 @@ public class RegisterDto {
   @Length(min = 8, max = 16, message = "手机号长度错误")
   private String phone;
 
-  @NotNull(message = "密码不能为空")
-  @Length(min = 8, max = 20)
+  // 密码由前端加密为32位MD5码
   private String password;
 
-  @NotNull(message = "请设置用户名")
+  @NotNull(message = "用户名不能为空")
   @Length(min = 1, max = 16, message = "用户名长度应在16个字符以内")
   private String username;
 }

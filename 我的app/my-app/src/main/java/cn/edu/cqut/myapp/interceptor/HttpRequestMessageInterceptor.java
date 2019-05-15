@@ -1,6 +1,5 @@
 package cn.edu.cqut.myapp.interceptor;
 
-import cn.edu.cqut.myapp.util.RequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -15,8 +14,7 @@ public class HttpRequestMessageInterceptor implements HandlerInterceptor {
     String url = request.getRequestURL().toString();
     String remoteAddr = request.getRemoteAddr();
     request.setAttribute("start", System.currentTimeMillis());
-    String params = RequestUtils.param2String(request);
-    log.info("request url: {}, from addr: {}, params: {}", url, remoteAddr, params);
+    log.info("request url: {}, from addr: {}", url, remoteAddr);
     return true;
   }
 

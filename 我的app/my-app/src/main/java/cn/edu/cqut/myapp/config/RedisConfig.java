@@ -19,7 +19,7 @@ public class RedisConfig {
    * @param factory 自动注入
    * @return 自定义redisTemplate
    */
-  @Bean(name = "redisTemplate")
+  @Bean("redisTemplate")
   public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
     // 获取key序列化器
     StringRedisSerializer keySerializer = new StringRedisSerializer();

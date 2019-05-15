@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import crypto from "@/utils/crypto.util.js";
+
 const MODE_LOG = 1,
   MODE_REG = 2;
 
@@ -51,10 +53,10 @@ export default {
     };
   },
   computed: {
-    logMode: function() {
+    logMode() {
       return this.mode === MODE_LOG;
     },
-    regMode: function() {
+    regMode() {
       return this.mode === MODE_REG;
     }
   },
@@ -65,17 +67,29 @@ export default {
     submit() {
       const data = {
         phone: this.inputData.phone,
-        password: this.inputData.password
+        password: crypto.md5(this.inputData.password)
       };
       if (this.logMode) {
-        this.$axios.post(this.REQUEST_URL.LOGIN, data).then(response => {
-          console.log(response.data);
-        });
+        this.$axios
+          .post('/app/user/login', data)
+          .then(response => {
+            console.log(response.data)
+            const data = response.data;
+            if (data.success) {
+              const token = data.body;
+              sessionStorage.setItem('token', token);
+              this.$router.push({
+                path: '/'
+              });
+            }
+          })
+          .catch(error => console.error(error));
       } else if (this.regMode) {
         data.username = this.inputData.username;
-        this.$axios.post(this.REQUEST_URL.REG, data).then(response => {
-          console.log(response.data);
-        });
+        this.$axios
+          .post('/app/user/reg', data)
+          .then(response => console.log(response.data))
+          .catch(error => console.error(error));
       }
     }
   }

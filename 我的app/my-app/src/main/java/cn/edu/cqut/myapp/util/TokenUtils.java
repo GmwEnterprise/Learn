@@ -12,9 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -36,9 +34,7 @@ public class TokenUtils {
     this.redisUtils = redisUtils;
   }
 
-  public String getToken(AppUser user, HttpServletRequest request) {
-    // 获取请求来源信息，封装
-    Map<String, Object> requestMessage = RequestUtils.requestMessage(request);
+  public String getToken(AppUser user) {
     // 生成token
     long currentTimeMillis = System.currentTimeMillis();
     Date now = new Date(currentTimeMillis);
@@ -49,8 +45,6 @@ public class TokenUtils {
         .setIssuer(issuer)
         .setIssuedAt(now)
         .setExpiration(expire)
-        // claims中添加客户端信息
-        .setClaims(requestMessage)
         .signWith(key)
         .compact();
     // 存储token到redis
@@ -64,9 +58,9 @@ public class TokenUtils {
    * @param token token
    * @return 通过返回AppUser 不通过返回null
    */
-  public AppUser checkToken(String token, HttpServletRequest request) {
+  public AppUser checkToken(String token) {
     try {
-      // token是否存在
+      // token是否存在于redis
       Object user = redisUtils.get(token);
       if (user instanceof AppUser) {
         // 解析token
@@ -74,20 +68,15 @@ public class TokenUtils {
             .setSigningKey(key)
             .parseClaimsJws(token)
             .getBody();
-        // 从token中取出客户端信息并验证当前请求是否来自同一个客户端
-        Map<String, Object> requestMessage = RequestUtils.requestMessage(request);
-        boolean flag = true;
-        for (Map.Entry<String, Object> entry : requestMessage.entrySet()) {
-          flag = flag && body.get(entry.getKey()).equals(entry.getValue());
-        }
-        if (flag) {
-          // 是同一个客户端
-          return (AppUser) user;
-        }
+        return (AppUser) user;
       }
     } catch (JwtException e) {
       log.error("token验证失败", e);
     }
     return null;
+  }
+
+  public void clearToken(String token) {
+    redisUtils.del(token);
   }
 }

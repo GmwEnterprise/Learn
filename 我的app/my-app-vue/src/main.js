@@ -9,14 +9,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 
 // 引入axios
-import Qs from "qs";
 import Axios from 'axios'
 Vue.prototype.$axios = Axios
-Vue.prototype.$qs = Qs
-
-// 引入全局常量
-import RequestUrl from '@/constants/url.js'
-Vue.prototype.REQUEST_URL = RequestUrl
 
 Vue.config.productionTip = false
 

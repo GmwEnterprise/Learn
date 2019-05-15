@@ -2,8 +2,8 @@ package cn.edu.cqut.myapp.service.impl;
 
 import cn.edu.cqut.myapp.dao.AppUserMapper;
 import cn.edu.cqut.myapp.domain.AppUser;
+import cn.edu.cqut.myapp.enums.LoginExecution;
 import cn.edu.cqut.myapp.service.AppUserService;
-import cn.edu.cqut.myapp.vo.MapResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,14 @@ public class AppUserServiceImpl implements AppUserService {
   }
 
   @Override
-  public MapResult userLoginByPassword(AppUser user) {
-    return null;
+  public LoginExecution userLoginByPassword(AppUser user) {
+    AppUser appUser = getUserByPhone(user.getUserPhone());
+    if (appUser == null) {
+      return LoginExecution.ACCOUNT_NOT_EXIST;
+    }
+    if (!user.getPassword().equals(appUser.getPassword())) {
+      return LoginExecution.WRONG_PASSWORD;
+    }
+    return LoginExecution.SUCCESS;
   }
 }

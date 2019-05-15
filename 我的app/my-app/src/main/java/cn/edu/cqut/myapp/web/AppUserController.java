@@ -3,42 +3,62 @@ package cn.edu.cqut.myapp.web;
 import cn.edu.cqut.myapp.domain.AppUser;
 import cn.edu.cqut.myapp.dto.LoginDto;
 import cn.edu.cqut.myapp.dto.RegisterDto;
+import cn.edu.cqut.myapp.enums.LoginExecution;
 import cn.edu.cqut.myapp.service.AppUserService;
+import cn.edu.cqut.myapp.util.TokenUtils;
 import cn.edu.cqut.myapp.vo.AjaxResponse;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@AllArgsConstructor
 public class AppUserController implements BaseController {
 
   private final AppUserService appUserService;
-
-  public AppUserController(AppUserService appUserService) {
-    this.appUserService = appUserService;
-  }
+  private final TokenUtils tokenUtils;
 
   @PostMapping("/reg")
-  public AjaxResponse register(RegisterDto data) {
+  public AjaxResponse register(@RequestBody @Valid RegisterDto data, Errors errors) {
+    if (errors.hasErrors()) {
+      return paramErrorOutput(errors.getAllErrors());
+    }
     AppUser user = new AppUser();
     user.setUsername(data.getUsername());
     user.setPassword(data.getPassword());
     user.setUserPhone(data.getPhone());
-    System.out.println(user);
-    // TODO 参数校验
-    return success();
+    log.info("{}", user);
+    return appUserService.createUser(user) ? success() : fail();
   }
 
   @PostMapping("/login")
-  public AjaxResponse login(LoginDto data) {
+  public AjaxResponse login(@RequestBody @Valid LoginDto data, Errors errors) {
+    if (errors.hasErrors()) {
+      return paramErrorOutput(errors.getAllErrors());
+    }
     AppUser user = new AppUser();
     user.setUserPhone(data.getPhone());
     user.setPassword(data.getPassword());
-    System.out.println(user);
+    log.info("{}", user);
+    LoginExecution execution = appUserService.userLoginByPassword(user);
+    if (execution == LoginExecution.SUCCESS) {
+      AppUser appUser = appUserService.getUserByPhone(user.getUserPhone());
+      String token = tokenUtils.getToken(appUser);
+      return success("登陆成功", token);
+    }
+    return fail(execution.getMessage());
+  }
 
-    return success();
+  @GetMapping("/getUserByToken")
+  public AppUser getUserByToken(String token) {
+    // TODO redis序列化过程中Java8日期的转换
+    AppUser appUser = tokenUtils.checkToken(token);
+    log.info("user message: {}", appUser);
+    return appUser;
   }
 }

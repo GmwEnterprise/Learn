@@ -1,7 +1,7 @@
 package cn.edu.cqut.myapp.service;
 
 import cn.edu.cqut.myapp.domain.AppUser;
-import cn.edu.cqut.myapp.vo.MapResult;
+import cn.edu.cqut.myapp.enums.LoginExecution;
 
 public interface AppUserService {
 
@@ -9,5 +9,5 @@ public interface AppUserService {
 
   boolean createUser(AppUser user);
 
-  MapResult userLoginByPassword(AppUser user);
+  LoginExecution userLoginByPassword(AppUser user);
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public final class RequestUtils {
 
-  public static String param2String(HttpServletRequest request) {
+  public static String formParamStringify(HttpServletRequest request) {
     if (request.getParameterMap().size() == 0) {
       return "[]";
     }

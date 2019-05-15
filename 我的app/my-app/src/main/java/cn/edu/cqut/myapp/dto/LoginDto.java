@@ -12,7 +12,6 @@ public class LoginDto {
   @Length(min = 8, max = 16, message = "手机号长度错误")
   private String phone;
 
-  @NotNull(message = "密码不能为空")
-  @Length(min = 8, max = 20)
+  // 密码由前端加密为32位MD5码
   private String password;
 }
