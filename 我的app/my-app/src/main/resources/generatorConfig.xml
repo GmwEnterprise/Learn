@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+    "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+    <properties resource="application.properties"/>
+
+    <classPathEntry location="D:/MvnRepo/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar"/>
+
+    <context id="mysqlGenerator" targetRuntime="MyBatis3">
+
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="avaFileEncoding " value="UTF-8"/>
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection
+            driverClass="${spring.datasource.druid.driver-class-name}"
+            connectionURL="${spring.datasource.druid.url}"
+            userId="${spring.datasource.druid.username}"
+            password="${spring.datasource.druid.password}"/>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator
+            targetPackage="cn.edu.cqut.myapp.domain"
+            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator
+            targetPackage="mapping"
+            targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator
+            type="XMLMAPPER"
+            targetPackage="cn.edu.cqut.myapp.dao"
+            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table
+            tableName="app_user"
+            enableCountByExample="false"
+            enableUpdateByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySQL"/>
+        </table>
+    </context>
+
+</generatorConfiguration>

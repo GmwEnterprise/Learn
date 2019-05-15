@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="js/jquery-3.4.1.min.js"></script>
+</head>
+
+<body>
+
+  <p id="content"></p>
+
+  <script>
+    $(function () {
+      $.ajax({
+        url: 'http://localhost:8080/t1/class',
+        method: 'post',
+        type: 'json',
+        data: {
+          className: '高三二班'
+        },
+        success(response) {
+          console.log(response.data)
+        },
+        error(xhr, status, error) {
+          console.log('error')
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>

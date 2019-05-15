@@ -1,0 +1,23 @@
+### mybatis配置 ###
+mybatis:
+  mapper-locations: classpath:mapping/**/*.xml
+  type-aliases-package: cn.edu.cqut.myapp
+  type-handlers-package: cn.edu.cqut.myapp.typehandler
+
+### server配置 ###
+server:
+  port: 4200
+  servlet:
+    context-path: /app
+
+### spring配置 ###
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      password: root
+      url: jdbc:mysql://127.0.0.1:3306/my_app?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+      username: root
+  redis:
+    host: 127.0.0.1
+    port: 6379
