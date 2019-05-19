@@ -1,4 +1,4 @@
-package cn.edu.cqut.myapp.interceptor;
+package cn.edu.cqut.myapp.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -1,4 +1,4 @@
-package cn.edu.cqut.myapp.config;
+package cn.edu.cqut.myapp.common;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -13,6 +13,18 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
+  private ObjectMapper objectMapper;
+
+  public RedisConfig() {
+    objectMapper = new ObjectMapper()
+        .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
+        .enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+  }
+
+  public ObjectMapper getObjectMapper() {
+    return objectMapper;
+  }
+
   /**
    * 自定义redisTemplate，覆盖系统自动配置
    *
@@ -25,10 +37,7 @@ public class RedisConfig {
     StringRedisSerializer keySerializer = new StringRedisSerializer();
     // 获取value序列化器
     Jackson2JsonRedisSerializer<Object> valueSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-    valueSerializer.setObjectMapper(
-        new ObjectMapper()
-            .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
-            .enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL));
+    valueSerializer.setObjectMapper(objectMapper);
     // 获取template
     RedisTemplate<String, Object> template = new RedisTemplate<>();
     template.setConnectionFactory(factory);

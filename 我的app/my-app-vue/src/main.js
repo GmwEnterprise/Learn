@@ -6,16 +6,16 @@ import store from './store'
 // 引入element
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-Vue.use(ElementUI)
 
 // 引入axios
-import Axios from 'axios'
-Vue.prototype.$axios = Axios
+import './plugins/axios'
 
-Vue.config.productionTip = false
+Vue.use(ElementUI);
+
+Vue.config.productionTip = false;
 
 new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');

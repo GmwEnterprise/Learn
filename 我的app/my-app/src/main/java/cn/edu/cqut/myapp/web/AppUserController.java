@@ -1,17 +1,18 @@
 package cn.edu.cqut.myapp.web;
 
 import cn.edu.cqut.myapp.domain.AppUser;
-import cn.edu.cqut.myapp.dto.LoginDto;
-import cn.edu.cqut.myapp.dto.RegisterDto;
-import cn.edu.cqut.myapp.enums.LoginExecution;
+import cn.edu.cqut.myapp.execution.LoginExecution;
+import cn.edu.cqut.myapp.execution.enums.Login;
+import cn.edu.cqut.myapp.param.LoginParam;
+import cn.edu.cqut.myapp.param.Register;
 import cn.edu.cqut.myapp.service.AppUserService;
-import cn.edu.cqut.myapp.util.TokenUtils;
-import cn.edu.cqut.myapp.vo.AjaxResponse;
+import cn.edu.cqut.myapp.common.ResponseEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
@@ -21,44 +22,53 @@ import javax.validation.Valid;
 public class AppUserController implements BaseController {
 
   private final AppUserService appUserService;
-  private final TokenUtils tokenUtils;
 
+  /**
+   * 注册账户，注册成功则自动登录并返回TOKEN信息；注册失败则返回错误信息
+   */
   @PostMapping("/reg")
-  public AjaxResponse register(@RequestBody @Valid RegisterDto data, Errors errors) {
+  public ResponseEntity register(@Valid @RequestBody Register register, Errors errors, HttpServletRequest request) {
     if (errors.hasErrors()) {
-      return paramErrorOutput(errors.getAllErrors());
+      return fail("参数错误", errorMap(errors));
     }
     AppUser user = new AppUser();
-    user.setUsername(data.getUsername());
-    user.setPassword(data.getPassword());
-    user.setUserPhone(data.getPhone());
-    log.info("{}", user);
-    return appUserService.createUser(user) ? success() : fail();
+    user.setUserPhone(register.getPhone());
+    user.setUsername(register.getUsername());
+    user.setPassword(register.getPassword());
+    boolean result = appUserService.createAppUser(user);
+    if (result) {
+      // 注册成功，自动登陆
+      String token = appUserService.userLoginDirectly(user, request);
+      LoginExecution execution = new LoginExecution();
+      execution.setToken(token);
+      execution.setResult(Login.LOGIN_SUCCESS);
+      return success("注册成功", execution);
+    } else {
+      return fail("系统异常，注册失败");
+    }
   }
 
+  /**
+   * 登陆， 登陆成功返回token；登陆失败返回错误信息
+   */
   @PostMapping("/login")
-  public AjaxResponse login(@RequestBody @Valid LoginDto data, Errors errors) {
+  public ResponseEntity userLogin(@Valid @RequestBody LoginParam login, Errors errors, HttpServletRequest request) {
     if (errors.hasErrors()) {
-      return paramErrorOutput(errors.getAllErrors());
+      return fail("参数错误", errorMap(errors));
     }
-    AppUser user = new AppUser();
-    user.setUserPhone(data.getPhone());
-    user.setPassword(data.getPassword());
-    log.info("{}", user);
-    LoginExecution execution = appUserService.userLoginByPassword(user);
-    if (execution == LoginExecution.SUCCESS) {
-      AppUser appUser = appUserService.getUserByPhone(user.getUserPhone());
-      String token = tokenUtils.getToken(appUser);
-      return success("登陆成功", token);
+    LoginExecution execution = appUserService.userLoginByPassword(login.getPhone(), login.getPassword(), request);
+    if (execution.getResult() == Login.LOGIN_SUCCESS) {
+      return success("登陆成功", execution);
     }
-    return fail(execution.getMessage());
+    return fail("登陆失败", execution);
   }
 
-  @GetMapping("/getUserByToken")
-  public AppUser getUserByToken(String token) {
-    // TODO redis序列化过程中Java8日期的转换
-    AppUser appUser = tokenUtils.checkToken(token);
-    log.info("user message: {}", appUser);
-    return appUser;
+  @GetMapping("/{userId}")
+  public ResponseEntity userMessage(@PathVariable String userId) {
+    AppUser user = appUserService.getAppUserById(userId);
+    if (user != null) {
+      return success(user);
+    }
+    return fail("账户不存在");
   }
 }

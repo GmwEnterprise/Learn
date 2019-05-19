@@ -1,8 +1,6 @@
 package cn.edu.cqut.myapp.util;
 
 import cn.edu.cqut.myapp.domain.AppUser;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -10,9 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 
 import javax.crypto.SecretKey;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -20,7 +21,6 @@ import java.util.Date;
 public class TokenUtils {
 
   private SecretKey key;
-
   private final RedisUtils redisUtils;
 
   @Value("${jwt.issuer}")
@@ -30,25 +30,39 @@ public class TokenUtils {
   private Long expireMills;
 
   public TokenUtils(RedisUtils redisUtils) {
-    key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     this.redisUtils = redisUtils;
+    key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
   }
 
-  public String getToken(AppUser user) {
+  private String getTokenKey(String userId, HttpServletRequest request) {
+    Objects.requireNonNull(userId);
+    String requestMsg = userId + "-" + RequestUtils.requestMessage(request);
+    return DigestUtils.md5DigestAsHex(requestMsg.getBytes());
+  }
+
+  /**
+   * 生成token字符串并将其存储到redis缓存，key为请求信息，value为token
+   *
+   * @param user 用户信息
+   * @param request 请求对象
+   * @return token字符串
+   */
+  public String getToken(AppUser user, HttpServletRequest request) {
+    // 通过参数映射为key
+    String key = getTokenKey(user.getUserId(), request);
     // 生成token
     long currentTimeMillis = System.currentTimeMillis();
     Date now = new Date(currentTimeMillis);
     Date expire = new Date(currentTimeMillis + expireMills);
     String token = Jwts.builder()
-        // subject为userId
         .setSubject(user.getUserId())
         .setIssuer(issuer)
         .setIssuedAt(now)
         .setExpiration(expire)
-        .signWith(key)
+        .signWith(this.key)
         .compact();
     // 存储token到redis
-    redisUtils.set(token, user, expireMills);
+    redisUtils.set(key, token, expireMills);
     return token;
   }
 
@@ -56,26 +70,29 @@ public class TokenUtils {
    * 验证token
    *
    * @param token token
-   * @return 通过返回AppUser 不通过返回null
+   * @return 通过返回AppUser, 不通过返回null
    */
-  public AppUser checkToken(String token) {
+  public boolean checkToken(String token, HttpServletRequest request) {
     try {
-      // token是否存在于redis
-      Object user = redisUtils.get(token);
-      if (user instanceof AppUser) {
-        // 解析token
-        Claims body = Jwts.parser()
-            .setSigningKey(key)
-            .parseClaimsJws(token)
-            .getBody();
-        return (AppUser) user;
-      }
-    } catch (JwtException e) {
-      log.error("token验证失败", e);
+      String userId = Jwts.parser()
+          .setSigningKey(key)
+          .parseClaimsJws(token)
+          .getBody()
+          .getSubject();
+      String key = getTokenKey(userId, request);
+      Object value = redisUtils.get(key);
+      return value != null && value.equals(token);
+    } catch (Exception e) {
+      log.error("token验证失败：" + e.getMessage());
     }
-    return null;
+    return false;
   }
 
+  /**
+   * 主动清除token，主要用于注销登陆
+   *
+   * @param token token
+   */
   public void clearToken(String token) {
     redisUtils.del(token);
   }

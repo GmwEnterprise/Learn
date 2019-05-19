@@ -1,5 +1,6 @@
 package cn.edu.cqut.myapp.domain;
 
+import cn.edu.cqut.myapp.common.JsonLocalDateTime;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -21,8 +22,10 @@ public class AppUser {
 
   private String userEmail;
 
+  @JsonLocalDateTime
   private LocalDateTime createTime;
 
+  @JsonLocalDateTime
   private LocalDateTime updateTime;
 
   private String remark;

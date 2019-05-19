@@ -1,13 +1,17 @@
-package cn.edu.cqut.myapp.vo;
+package cn.edu.cqut.myapp.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AjaxResponse {
+public final class ResponseEntity {
 
   private Boolean success;
+
   private String message;
+
   private Object body;
+
+  private Object errorMsg;
 }

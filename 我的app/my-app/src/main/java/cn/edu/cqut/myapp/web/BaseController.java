@@ -1,54 +1,55 @@
 package cn.edu.cqut.myapp.web;
 
-import cn.edu.cqut.myapp.vo.AjaxResponse;
+import cn.edu.cqut.myapp.common.ResponseEntity;
 import com.google.common.collect.Maps;
+import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public interface BaseController {
 
-  String DEFAULT_SUCCESS_MESSAGE = "REQUEST SUCCESS";
+  String SUCCESS = "请求成功";
 
-  String DEFAULT_FAIL_MESSAGE = "REQUEST FAILED";
-
-  default AjaxResponse success() {
-    return new AjaxResponse(true, DEFAULT_SUCCESS_MESSAGE, null);
+  default ResponseEntity success() {
+    return new ResponseEntity(true, SUCCESS, null, null);
   }
 
-  default AjaxResponse success(String message) {
-    return new AjaxResponse(true, message, null);
+  default ResponseEntity success(String message) {
+    return new ResponseEntity(true, message, null, null);
   }
 
-  default AjaxResponse success(String message, Object body) {
-    return new AjaxResponse(true, message, body);
+  default ResponseEntity success(Object body) {
+    return new ResponseEntity(true, SUCCESS, body, null);
   }
 
-  default AjaxResponse fail() {
-    return new AjaxResponse(false, DEFAULT_FAIL_MESSAGE, null);
+  default ResponseEntity success(String message, Object body) {
+    return new ResponseEntity(true, message, body, null);
   }
 
-  default AjaxResponse fail(Object msgOrErrorData) {
-    if (msgOrErrorData instanceof String) {
-      return new AjaxResponse(false, ((String) msgOrErrorData), null);
-    }
-    return new AjaxResponse(false, DEFAULT_FAIL_MESSAGE, msgOrErrorData);
+  default ResponseEntity fail(String message) {
+    return new ResponseEntity(false, message, null, null);
   }
 
-  default AjaxResponse paramErrorOutput(List<ObjectError> errorList) {
-    Map<String, String> errorMap = Maps.newHashMapWithExpectedSize(errorList.size());
-    for (ObjectError objectError : errorList) {
-      String key, value;
-      if (objectError instanceof FieldError) {
-        key = ((FieldError) objectError).getField();
+  default ResponseEntity fail(String message, Object errorMsg) {
+    return new ResponseEntity(false, message, null, errorMsg);
+  }
+
+  default Map<String, String> errorMap(Errors errors) {
+    HashMap<String, String> map = Maps.newHashMap();
+    for (ObjectError error : errors.getAllErrors()) {
+      String key;
+      if (error instanceof FieldError) {
+        // 字段错误
+        key = ((FieldError) error).getField();
       } else {
-        key = objectError.getObjectName();
+        // 非字段错误
+        key = error.getObjectName();
       }
-      value = objectError.getDefaultMessage();
-      errorMap.put(key, value);
+      map.put(key, error.getDefaultMessage());
     }
-    return fail(errorMap);
+    return map;
   }
 }
