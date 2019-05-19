@@ -2,6 +2,7 @@ package cn.edu.cqut.myapp.service;
 
 import cn.edu.cqut.myapp.domain.AppUser;
 import cn.edu.cqut.myapp.execution.LoginExecution;
+import cn.edu.cqut.myapp.vo.AppUserVo;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,5 +40,13 @@ public interface AppUserService {
    */
   String userLoginDirectly(AppUser user, HttpServletRequest request);
 
-  AppUser getAppUserById(String userId);
+  /**
+   * 获取用户信息并传递到前端
+   *
+   * @param userId 用户主键
+   * @return 用户信息VO
+   */
+  AppUserVo getAppUserById(String userId);
+
+  AppUser userUpdate(AppUser appUser);
 }

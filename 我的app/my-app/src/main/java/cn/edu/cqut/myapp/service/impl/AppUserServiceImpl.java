@@ -6,6 +6,7 @@ import cn.edu.cqut.myapp.execution.LoginExecution;
 import cn.edu.cqut.myapp.execution.enums.Login;
 import cn.edu.cqut.myapp.service.AppUserService;
 import cn.edu.cqut.myapp.util.TokenUtils;
+import cn.edu.cqut.myapp.vo.AppUserVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,6 @@ public class AppUserServiceImpl implements AppUserService {
     return insertResult > 0;
   }
 
-
-
   @Override
   public LoginExecution userLoginByPassword(String phone, String password, HttpServletRequest request) {
       AppUser target = getAppUserByPhone(phone);
@@ -55,7 +54,17 @@ public class AppUserServiceImpl implements AppUserService {
   }
 
   @Override
-  public AppUser getAppUserById(String userId) {
-    return userMapper.selectByPrimaryKey(userId);
+  public AppUserVo getAppUserById(String userId) {
+    if (userId == null) {
+      return null;
+    }
+    AppUser user = userMapper.selectByPrimaryKey(userId);
+    return user != null ? new AppUserVo(user) : null;
+  }
+
+  @Override
+  public AppUser userUpdate(AppUser appUser) {
+    int result = userMapper.updateByPrimaryKeySelective(appUser);
+    return result > 0 ? appUser : null;
   }
 }

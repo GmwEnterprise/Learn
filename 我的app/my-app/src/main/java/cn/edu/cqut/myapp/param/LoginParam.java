@@ -12,6 +12,5 @@ public class LoginParam {
   @Length(min = 8, max = 16, message = "手机号长度错误")
   private String phone;
 
-  @NotNull
   private String password;
 }

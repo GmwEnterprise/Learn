@@ -16,6 +16,5 @@ public class Register {
   @Length(min = 1, max = 16, message = "用户名长度错误")
   private String username;
 
-  @NotNull
   private String password;
 }
