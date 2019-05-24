@@ -6,17 +6,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppUserMapper {
 
-  int deleteByPrimaryKey(String userId);
+  AppUser selectByPrimaryKey(String userId);
+
+  AppUser selectByUserPhone(String phone);
 
   int insert(AppUser record);
 
   int insertSelective(AppUser record);
 
-  AppUser selectByPrimaryKey(String userId);
-
   int updateByPrimaryKeySelective(AppUser record);
 
   int updateByPrimaryKey(AppUser record);
 
-  AppUser selectByUserPhone(String phone);
+  int deleteByPrimaryKey(String userId);
 }

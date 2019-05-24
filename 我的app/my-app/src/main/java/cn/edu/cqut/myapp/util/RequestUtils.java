@@ -1,11 +1,7 @@
 package cn.edu.cqut.myapp.util;
 
-import com.google.common.collect.Maps;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 public final class RequestUtils {
 
@@ -24,13 +20,5 @@ public final class RequestUtils {
           .append("), ");
     }
     return sb.delete(sb.length() - 2, sb.length()).append("]").toString();
-  }
-
-  public static Map<String, Object> requestMessage(HttpServletRequest request) {
-    HashMap<String, Object> map = Maps.newHashMap();
-    map.put("url", request.getRequestURL().toString());
-    map.put("port", request.getRemotePort());
-    map.put("userAgent", request.getHeader("User-Agent"));
-    return map;
   }
 }

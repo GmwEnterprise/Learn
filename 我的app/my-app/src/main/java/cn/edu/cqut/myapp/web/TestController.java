@@ -1,8 +1,11 @@
 package cn.edu.cqut.myapp.web;
 
 import cn.edu.cqut.myapp.common.AuthToken;
+import cn.edu.cqut.myapp.dto.AppUserBasicDto;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/test")
 public class TestController {
@@ -43,5 +47,11 @@ public class TestController {
     System.out.println(request.getRemoteAddr());
     System.out.println(request.getRemotePort());
     return request.toString();
+  }
+
+  @GetMapping("testJson")
+  public String func(@RequestBody AppUserBasicDto dto) {
+    log.info("param => {}", dto);
+    return "";
   }
 }

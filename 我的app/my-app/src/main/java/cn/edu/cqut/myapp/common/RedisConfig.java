@@ -21,7 +21,7 @@ public class RedisConfig {
         .enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
   }
 
-  public ObjectMapper getObjectMapper() {
+  ObjectMapper getObjectMapper() {
     return objectMapper;
   }
 

@@ -1,7 +1,6 @@
 ### mybatis配置 ###
 mybatis:
   mapper-locations: classpath:mapping/**/*.xml
-  type-aliases-package: cn.edu.cqut.myapp
   type-handlers-package: cn.edu.cqut.myapp.typehandler
 
 ### server配置 ###

@@ -1,70 +1,80 @@
 package cn.edu.cqut.myapp.service.impl;
 
+import cn.edu.cqut.myapp.common.ServiceReturnVal;
 import cn.edu.cqut.myapp.dao.AppUserMapper;
 import cn.edu.cqut.myapp.domain.AppUser;
-import cn.edu.cqut.myapp.execution.LoginExecution;
-import cn.edu.cqut.myapp.execution.enums.Login;
+import cn.edu.cqut.myapp.dto.AppUserBasicDto;
+import cn.edu.cqut.myapp.enums.SexEnum;
+import cn.edu.cqut.myapp.status.Login;
 import cn.edu.cqut.myapp.service.AppUserService;
-import cn.edu.cqut.myapp.util.TokenUtils;
-import cn.edu.cqut.myapp.vo.AppUserVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class AppUserServiceImpl implements AppUserService {
 
-  private final AppUserMapper userMapper;
+  private final AppUserMapper appUserMapper;
 
-  private final TokenUtils tokenUtils;
-
-  @Override
-  public AppUser getAppUserByPhone(String phone) {
-    return userMapper.selectByUserPhone(phone);
+  private AppUser dto2AppUser(AppUserBasicDto userBasic) {
+    AppUser user = new AppUser();
+    user.setUserId(userBasic.getUserId());
+    user.setUsername(userBasic.getUsername());
+    user.setPassword(userBasic.getPassword());
+    Integer sex = userBasic.getSex();
+    user.setSex(sex != null ? SexEnum.getSexEnum(sex) : null);
+    user.setUserPhone(userBasic.getPhone());
+    user.setUserEmail(userBasic.getEmail());
+    return user;
   }
 
   @Override
-  public boolean createAppUser(AppUser user) {
-    int insertResult = userMapper.insertSelective(user);
-    return insertResult > 0;
+  public AppUser createAppUser(AppUserBasicDto userBasic) {
+    AppUser user = dto2AppUser(userBasic);
+    int result = appUserMapper.insertSelective(user);
+    return result > 0 ? appUserMapper.selectByPrimaryKey(user.getUserId()) : null;
   }
 
   @Override
-  public LoginExecution userLoginByPassword(String phone, String password, HttpServletRequest request) {
-      AppUser target = getAppUserByPhone(phone);
-      LoginExecution ex = new LoginExecution();
-      if (target == null) {
-        ex.setResult(Login.ERROR_USER_NOT_EXIST);
-      } else if (!target.getPassword().equals(password)) {
-        ex.setResult(Login.ERROR_PASSWORD_WRONG);
-      } else {
-        ex.setResult(Login.LOGIN_SUCCESS);
-        ex.setToken(tokenUtils.getToken(target, request));
-      }
-      return ex;
+  public AppUser updateAppUser(AppUserBasicDto userBasic) {
+    AppUser user = dto2AppUser(userBasic);
+    int result = appUserMapper.updateByPrimaryKeySelective(user);
+    return result > 0 ? appUserMapper.selectByPrimaryKey(user.getUserId()) : null;
+  }
+
+  @Override
+  public AppUser deleteAppUser(String userId) {
+    AppUser user = appUserMapper.selectByPrimaryKey(userId);
+    if (user != null) {
+      appUserMapper.deleteByPrimaryKey(userId);
     }
-
-    @Override
-    public String userLoginDirectly(AppUser user, HttpServletRequest request) {
-      return tokenUtils.getToken(user, request);
+    return user;
   }
 
   @Override
-  public AppUserVo getAppUserById(String userId) {
-    if (userId == null) {
-      return null;
+  public AppUser getUserByPhone(String phone) {
+    return appUserMapper.selectByUserPhone(phone);
+  }
+
+  @Override
+  public AppUser getUserById(String userId) {
+    return appUserMapper.selectByPrimaryKey(userId);
+  }
+
+  @Override
+  public ServiceReturnVal<Login, AppUser> userLoginOnBrowser(AppUserBasicDto userBasic) {
+    ServiceReturnVal<Login, AppUser> returnVal = new ServiceReturnVal<>();
+    AppUser user = appUserMapper.selectByUserPhone(userBasic.getPhone());
+    if (user == null) {
+      returnVal.setStatus(Login.ERROR_USER_NOT_EXIST);
+    } else if (!user.getPassword().equals(userBasic.getPassword())) {
+      returnVal.setStatus(Login.ERROR_PASSWORD_WRONG);
+    } else {
+      returnVal.setStatus(Login.LOGIN_SUCCESS);
+      returnVal.setData(user);
     }
-    AppUser user = userMapper.selectByPrimaryKey(userId);
-    return user != null ? new AppUserVo(user) : null;
-  }
-
-  @Override
-  public AppUser userUpdate(AppUser appUser) {
-    int result = userMapper.updateByPrimaryKeySelective(appUser);
-    return result > 0 ? appUser : null;
+    return returnVal;
   }
 }

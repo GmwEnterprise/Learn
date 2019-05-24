@@ -5,6 +5,8 @@
         <id column="user_id" jdbcType="VARCHAR" property="userId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="sex" property="sex"
+                typeHandler="cn.edu.cqut.myapp.domain.typehandler.SexEnumTypeHandler"/>
         <result column="user_photo" jdbcType="VARCHAR" property="userPhoto"/>
         <result column="salt" jdbcType="VARCHAR" property="salt"/>
         <result column="user_phone" jdbcType="VARCHAR" property="userPhone"/>
@@ -15,7 +17,7 @@
     </resultMap>
 
     <sql id="app_user_column_list">
-        user_id, username, `password`, user_photo, salt, user_phone, user_email, create_time,
+        user_id, username, `password`, sex, user_photo, salt, user_phone, user_email, create_time,
     update_time, remark
     </sql>
 
@@ -25,26 +27,29 @@
         from app_user
         where user_id = #{userId,jdbcType=VARCHAR}
     </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete
         from app_user
         where user_id = #{userId,jdbcType=VARCHAR}
     </delete>
+
     <insert id="insert" parameterType="cn.edu.cqut.myapp.domain.AppUser">
         <selectKey keyColumn="user_id" keyProperty="userId" order="BEFORE" resultType="string">
             select uuid()
         </selectKey>
         insert into app_user
-            (user_id, username, `password`,
-             user_photo, salt, user_phone,
-             user_email, create_time, update_time,
-             remark)
+        (user_id, username, `password`, sex,
+        user_photo, salt, user_phone,
+        user_email, create_time, update_time,
+        remark)
         values
-            (#{userId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-             #{userPhoto,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR},
-             #{userEmail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
-             #{remark,jdbcType=VARCHAR})
+        (#{userId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{sex.index,jdbcType=TINYINT}, #{userPhoto,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR},
+        #{userPhone,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
     </insert>
+
     <insert id="insertSelective" parameterType="cn.edu.cqut.myapp.domain.AppUser">
         <selectKey keyColumn="user_id" keyProperty="userId" order="BEFORE" resultType="string">
             select uuid()
@@ -59,6 +64,9 @@
             </if>
             <if test="password != null">
                 `password`,
+            </if>
+            <if test="sex != null">
+                sex,
             </if>
             <if test="userPhoto != null">
                 user_photo,
@@ -92,6 +100,9 @@
             <if test="password != null">
                 #{password,jdbcType=VARCHAR},
             </if>
+            <if test="sex != null">
+                #{sex.index,jdbcType=TINYINT},
+            </if>
             <if test="userPhoto != null">
                 #{userPhoto,jdbcType=VARCHAR},
             </if>
@@ -115,6 +126,7 @@
             </if>
         </trim>
     </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="cn.edu.cqut.myapp.domain.AppUser">
         update app_user
         <set>
@@ -123,6 +135,9 @@
             </if>
             <if test="password != null">
                 `password` = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex.index,jdbcType=TINYINT},
             </if>
             <if test="userPhoto != null">
                 user_photo = #{userPhoto,jdbcType=VARCHAR},
@@ -148,10 +163,12 @@
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
+
     <update id="updateByPrimaryKey" parameterType="cn.edu.cqut.myapp.domain.AppUser">
         update app_user
         set username    = #{username,jdbcType=VARCHAR},
             `password`  = #{password,jdbcType=VARCHAR},
+            sex         = #{sex.index,jdbcType=TINYINT},
             user_photo  = #{userPhoto,jdbcType=VARCHAR},
             salt        = #{salt,jdbcType=VARCHAR},
             user_phone  = #{userPhone,jdbcType=VARCHAR},
@@ -161,6 +178,7 @@
             remark      = #{remark,jdbcType=VARCHAR}
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
+
     <select id="selectByUserPhone" resultMap="appUserMap">
         select
         <include refid="app_user_column_list"/>

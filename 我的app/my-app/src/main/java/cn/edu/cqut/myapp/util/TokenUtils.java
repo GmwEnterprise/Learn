@@ -36,14 +36,15 @@ public class TokenUtils {
 
   private String getTokenKey(String userId, HttpServletRequest request) {
     Objects.requireNonNull(userId);
-    String requestMsg = userId + "-" + RequestUtils.requestMessage(request);
+    String requestMsg = String.format("%s-%s:%d/%s", userId, request.getRequestURL(),
+        request.getRemotePort(), request.getHeader("User-Agent"));
     return DigestUtils.md5DigestAsHex(requestMsg.getBytes());
   }
 
   /**
    * 生成token字符串并将其存储到redis缓存，key为请求信息，value为token
    *
-   * @param user 用户信息
+   * @param user    用户信息
    * @param request 请求对象
    * @return token字符串
    */

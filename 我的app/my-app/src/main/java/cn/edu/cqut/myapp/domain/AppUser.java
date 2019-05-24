@@ -1,6 +1,7 @@
 package cn.edu.cqut.myapp.domain;
 
 import cn.edu.cqut.myapp.common.JsonLocalDateTime;
+import cn.edu.cqut.myapp.enums.SexEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,8 @@ public class AppUser {
   private String username;
 
   private String password;
+
+  private SexEnum sex;
 
   private String userPhoto;
 

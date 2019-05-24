@@ -1,22 +1,13 @@
 package cn.edu.cqut.myapp.web;
 
-import cn.edu.cqut.myapp.common.AuthToken;
-import cn.edu.cqut.myapp.common.ResponseEntity;
+import cn.edu.cqut.myapp.common.ServiceReturnVal;
 import cn.edu.cqut.myapp.domain.AppUser;
-import cn.edu.cqut.myapp.execution.LoginExecution;
-import cn.edu.cqut.myapp.execution.enums.Login;
-import cn.edu.cqut.myapp.param.AppUserUpdate;
-import cn.edu.cqut.myapp.param.LoginParam;
-import cn.edu.cqut.myapp.param.Register;
+import cn.edu.cqut.myapp.dto.AppUserBasicDto;
 import cn.edu.cqut.myapp.service.AppUserService;
-import cn.edu.cqut.myapp.vo.AppUserVo;
+import cn.edu.cqut.myapp.status.Login;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -24,79 +15,35 @@ import javax.validation.Valid;
 @AllArgsConstructor
 public class AppUserController implements BaseController {
 
-  private final AppUserService appUserService;
+  final AppUserService appUserService;
 
-  /**
-   * 注册账户，注册成功则自动登录并返回TOKEN信息; 注册失败则返回错误信息
-   */
-  @PostMapping("/reg")
-  public ResponseEntity register(@Valid @RequestBody Register register, Errors errors, HttpServletRequest request) {
-    if (errors.hasErrors()) {
-      return fail("参数错误", errorMap(errors));
-    }
-    AppUser user = new AppUser();
-    user.setUserPhone(register.getPhone());
-    user.setUsername(register.getUsername());
-    user.setPassword(register.getPassword());
-    boolean result = appUserService.createAppUser(user);
-    if (result) {
-      // 注册成功，自动登陆
-      String token = appUserService.userLoginDirectly(user, request);
-      LoginExecution execution = new LoginExecution();
-      execution.setToken(token);
-      execution.setResult(Login.LOGIN_SUCCESS);
-      return success("注册成功", execution);
-    } else {
-      return fail("系统异常，注册失败");
-    }
-  }
+  // TODO 阅读：SB红书restful相关章节
+  // TODO 研究org.springframework.http.ResponseEntity<T>作为controller返回类的方案
+  // TODO 编写rest风格的接口
 
-  /**
-   * 登陆，登陆成功返回token；登陆失败返回错误信息
-   */
-  @PostMapping("/login")
-  public ResponseEntity userLogin(@Valid @RequestBody LoginParam login, Errors errors, HttpServletRequest request) {
-    if (errors.hasErrors()) {
-      return fail("参数错误", errorMap(errors));
-    }
-    LoginExecution execution = appUserService.userLoginByPassword(login.getPhone(), login.getPassword(), request);
-    if (execution.getResult() == Login.LOGIN_SUCCESS) {
-      return success("登陆成功", execution);
-    }
-    return fail("登陆失败", execution);
-  }
+  // TODO mybatis运行过程、插件
+  // TODO pageHelper的配置与使用
 
-  /**
-   * 查询用户信息
-   */
-  @AuthToken
-  @GetMapping("/{userId}")
-  public ResponseEntity userMessage(@PathVariable String userId) {
-    AppUserVo user = appUserService.getAppUserById(userId);
+  @PostMapping
+  public void signUp(@RequestBody AppUserBasicDto userBasic) {
+    // 创建user
+    AppUser user = appUserService.createAppUser(userBasic);
     if (user != null) {
-      return success(user);
+      // 创建成功
+    } else {
+      // 创建失败
     }
-    return fail("账户不存在");
   }
 
-  /**
-   * 更新用户信息
-   */
-  @AuthToken
-  @GetMapping("/update")
-  public ResponseEntity userMessageUpdate(@Valid @RequestBody AppUserUpdate user, Errors errors) {
-    if (errors.hasErrors()) {
-      return fail("参数错误", errorMap(errors));
+  @GetMapping
+  public void signIn(AppUserBasicDto userBasic) {
+    ServiceReturnVal<Login, AppUser> val = appUserService.userLoginOnBrowser(userBasic);
+    if (val.getStatus().equals(Login.LOGIN_SUCCESS)) {
+      // 验证成功
+    } else {
+      // 验证失败
     }
-    AppUser appUser = new AppUser();
-    appUser.setUserId(user.getUserId());
-    appUser.setUsername(user.getUsername());
-    appUser.setUserPhone(user.getUserPhone());
-    appUser.setUserEmail(user.getUserEmail());
-    AppUser result = appUserService.userUpdate(appUser);
-    if (result != null) {
-      return success(result);
-    }
-    return fail("修改失败");
   }
+
+
 }

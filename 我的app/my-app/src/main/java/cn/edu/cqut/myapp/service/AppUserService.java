@@ -1,52 +1,57 @@
 package cn.edu.cqut.myapp.service;
 
+import cn.edu.cqut.myapp.common.ServiceReturnVal;
 import cn.edu.cqut.myapp.domain.AppUser;
-import cn.edu.cqut.myapp.execution.LoginExecution;
-import cn.edu.cqut.myapp.vo.AppUserVo;
-
-import javax.servlet.http.HttpServletRequest;
+import cn.edu.cqut.myapp.dto.AppUserBasicDto;
+import cn.edu.cqut.myapp.status.Login;
 
 public interface AppUserService {
 
   /**
-   * 通过绑定的手机号获取用户信心
+   * 创建用户
+   *
+   * @param userBasic 用户信息
+   * @return 创建成功返回用户信息；创建失败返回空
+   */
+  AppUser createAppUser(AppUserBasicDto userBasic);
+
+  /**
+   * 更新用户
+   *
+   * @param userBasic 用户信息
+   * @return 更新成功返回更新后的用户信息；更新失败返回空
+   */
+  AppUser updateAppUser(AppUserBasicDto userBasic);
+
+  /**
+   * 删除用户
+   *
+   * @param userId 主键
+   * @return 若不存在指定ID用户则返回空；反之则返回该用户信息
+   */
+  AppUser deleteAppUser(String userId);
+
+  /**
+   * 获取用户
    *
    * @param phone 手机号
    * @return 用户信息
    */
-  AppUser getAppUserByPhone(String phone);
+  AppUser getUserByPhone(String phone);
 
   /**
-   * 创建用户
+   * 获取用户
    *
-   * @param user 用户数据
-   * @return 是否创建成功
+   * @param userId 主键
+   * @return 用户信息
    */
-  boolean createAppUser(AppUser user);
+  AppUser getUserById(String userId);
 
   /**
-   * 通过密码验证登陆
+   * 用户浏览器登陆
    *
-   * @param password 密码
-   * @return 验证结果
+   * @param userBasic 登陆信息
+   * @return 登陆结果。成功则额外返回用户信息
    */
-  LoginExecution userLoginByPassword(String phone, String password, HttpServletRequest request);
-
-  /**
-   * 直接设置用户为登陆状态
-   *
-   * @param user 用户信息
-   * @return token
-   */
-  String userLoginDirectly(AppUser user, HttpServletRequest request);
-
-  /**
-   * 获取用户信息并传递到前端
-   *
-   * @param userId 用户主键
-   * @return 用户信息VO
-   */
-  AppUserVo getAppUserById(String userId);
-
-  AppUser userUpdate(AppUser appUser);
+  ServiceReturnVal<Login, AppUser> userLoginOnBrowser(AppUserBasicDto userBasic);
 }
