@@ -1,5 +1,6 @@
 package cn.edu.cqut.myapp.web;
 
+import cn.edu.cqut.myapp.common.AuthToken;
 import cn.edu.cqut.myapp.common.Re;
 import cn.edu.cqut.myapp.common.ServiceReturnVal;
 import cn.edu.cqut.myapp.domain.AppUser;
@@ -62,8 +63,37 @@ public class AppUserController implements BaseController {
     }
   }
 
-  @PatchMapping
-  public Re updateUser(@RequestBody AppUserBasicDto userBasic) {
+  /**
+   * 修改用户信息
+   *
+   * @param userBasic 用户信息
+   * @param userId    唯一标识
+   * @return 结果
+   */
+  @AuthToken
+  @PatchMapping("/{userId}")
+  public Re updateUser(@RequestBody AppUserBasicDto userBasic, @PathVariable String userId) {
+    userBasic.setUserId(userId);
+    AppUser user = appUserService.updateAppUser(userBasic);
+    if (user != null) {
+      // 修改成功
+      return Re.ok(user);
+    } else {
+      // 修改失败
+      return Re.fail("修改失败", appUserService.getUserById(userId));
+    }
+  }
 
+  /**
+   * 获取用户信息
+   *
+   * @param userId 唯一标识
+   * @return 结果
+   */
+  @AuthToken
+  @GetMapping("/{userId}")
+  public Re getUserById(@PathVariable String userId) {
+    AppUser user = appUserService.getUserById(userId);
+    return user != null ? Re.ok(user) : Re.fail("获取用户信息失败", null);
   }
 }
