@@ -18,7 +18,7 @@
 
     <sql id="app_user_column_list">
         user_id, username, `password`, sex, user_photo, salt, user_phone, user_email, create_time,
-    update_time, remark
+        update_time, remark
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="appUserMap">
@@ -166,16 +166,16 @@
 
     <update id="updateByPrimaryKey" parameterType="cn.edu.cqut.myapp.domain.AppUser">
         update app_user
-        set username    = #{username,jdbcType=VARCHAR},
-            `password`  = #{password,jdbcType=VARCHAR},
-            sex         = #{sex.index,jdbcType=TINYINT},
-            user_photo  = #{userPhoto,jdbcType=VARCHAR},
-            salt        = #{salt,jdbcType=VARCHAR},
-            user_phone  = #{userPhone,jdbcType=VARCHAR},
-            user_email  = #{userEmail,jdbcType=VARCHAR},
-            create_time = #{createTime,jdbcType=TIMESTAMP},
-            update_time = #{updateTime,jdbcType=TIMESTAMP},
-            remark      = #{remark,jdbcType=VARCHAR}
+        set username = #{username,jdbcType=VARCHAR},
+        `password` = #{password,jdbcType=VARCHAR},
+        sex = #{sex.index,jdbcType=TINYINT},
+        user_photo = #{userPhoto,jdbcType=VARCHAR},
+        salt = #{salt,jdbcType=VARCHAR},
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+        user_email = #{userEmail,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        remark = #{remark,jdbcType=VARCHAR}
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
 
