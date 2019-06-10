@@ -1,16 +1,12 @@
 package cn.edu.cqut.myapp.util;
 
 import cn.edu.cqut.myapp.domain.AppUser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
-import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Objects;
@@ -20,7 +16,6 @@ import java.util.Objects;
 @PropertySource(value = "classpath:globalParam.properties")
 public class TokenUtils {
 
-  private SecretKey key;
   private final RedisUtils redisUtils;
 
   @Value("${jwt.issuer}")
@@ -31,7 +26,6 @@ public class TokenUtils {
 
   public TokenUtils(RedisUtils redisUtils) {
     this.redisUtils = redisUtils;
-    key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
   }
 
   private String getTokenKey(String userId, HttpServletRequest request) {
