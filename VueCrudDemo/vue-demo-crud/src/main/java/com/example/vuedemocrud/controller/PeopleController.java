@@ -2,11 +2,11 @@ package com.example.vuedemocrud.controller;
 
 import com.example.vuedemocrud.mapper.PeopleMapper;
 import com.example.vuedemocrud.po.People;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * people类基本增删改查接口提供
@@ -24,10 +24,13 @@ public class PeopleController {
     }
 
     @GetMapping
-    public List<People> list() {
-        List<People> list = mapper.selectAll();
-        log.info("data list size: {}", list.size());
-        return list;
+    public PageInfo<People> list(Integer startPage, Integer pageSize) {
+        startPage = startPage != null ? startPage : 1;
+        pageSize = pageSize != null ? pageSize : 5;
+        PageHelper.startPage(startPage, pageSize);
+        PageInfo<People> pageInfo = new PageInfo<>(mapper.selectAll());
+        log.info("page size: {}", pageInfo.getSize());
+        return pageInfo;
     }
 
     @GetMapping("/{id}")

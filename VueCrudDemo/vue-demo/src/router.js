@@ -7,6 +7,7 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    { path: '/test', component: () => import('@/testviews/test.vue') },
     {
       path: '/',
       component: () => import('@/views/list.vue')
