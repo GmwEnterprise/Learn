@@ -68,6 +68,7 @@ export default {
       this.$router.push('/add')
     },
     initData(startPage = 1, pageSize = 5) {
+      this.$store.commit('modalChange')
       const that = this
       this.axios
         .get('/app/people', {
@@ -76,7 +77,10 @@ export default {
             pageSize
           }
         })
-        .then(response => (that.page = response.data))
+        .then(response => {
+          that.page = response.data
+          this.$store.commit('modalChange')
+        })
     }
   },
   created() {

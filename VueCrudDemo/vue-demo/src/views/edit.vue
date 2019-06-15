@@ -37,23 +37,27 @@ export default {
   methods: {
     edit() {
       const that = this
-      this.axios.patch('/app/people', {
-        ...this.data
-      }).then(response => {
-        if (typeof response.data === 'object') {
-          that.$message.success('修改信息成功！')
-          that.$router.go(-1)
-        } else {
-          that.$message.error('修改信息失败')
-        }
-      })
+      this.axios
+        .patch('/app/people', {
+          ...this.data
+        })
+        .then(response => {
+          if (typeof response.data === 'object') {
+            that.$message.success('修改信息成功！')
+            that.$router.go(-1)
+          } else {
+            that.$message.error('修改信息失败')
+          }
+        })
     }
   },
-  created() {
-    const that = this
-    this.axios
-      .get(`/app/people/${this.$route.params.id}`)
-      .then(response => (that.data = response.data))
+  beforeRouteEnter(to, from, next) {
+    // 参数v为还未进入的当前组件的实例，此时this指向的还不是当前组件
+    next(v => {
+      v.axios
+        .get(`/app/people/${to.params.id}`)
+        .then(response => (v.data = response.data))
+    })
   }
 }
 </script>
