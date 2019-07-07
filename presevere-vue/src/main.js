@@ -1,6 +1,5 @@
-// my css
+// reset
 import '@/assets/reset.css'
-import '@/assets/global.css'
 
 // sys
 import Vue from 'vue'
@@ -14,6 +13,9 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
+
+// my css
+import '@/assets/global.css'
 
 Vue.config.productionTip = false
 
