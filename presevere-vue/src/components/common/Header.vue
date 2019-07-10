@@ -1,5 +1,5 @@
 <template>
-  <div id="header">
+  <div class="header">
     <b-container>
       <b-row class="head-content">
         <b-col class="icon-wrapper">
@@ -52,7 +52,7 @@ export default {
   }
 }
 
-#header {
+.header {
   width: 100%;
   position: fixed;
   left: 0;

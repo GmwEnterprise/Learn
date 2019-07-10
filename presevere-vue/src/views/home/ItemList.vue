@@ -1,5 +1,5 @@
 <template>
-  <div id="item-list">
+  <div class="item-list">
     <div class="item-wrapper">
       <item></item>
     </div>
@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style>
-#item-list {
+.item-list {
   background-color: white;
   width: 100%;
   box-shadow: 0 1px 3px rgba(26,26,26,.1);

@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <b-card
-      title="Card Title"
-      img-src="https://picsum.photos/600/300/?image=25"
-      img-alt="Image"
-      img-top
-      tag="article"
-      class="mb-2"
-    >
-      <b-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</b-card-text>
-    </b-card>
+  <div class="item-card">
+    <h4 class="title">这里是标题</h4>
+    <div class="content"></div>
+    <div class="item-foot"></div>
   </div>
 </template>
+
+<style>
+.item-card {
+  padding: 20px;
+  background-color: white;
+}
+</style>
