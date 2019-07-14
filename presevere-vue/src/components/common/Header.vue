@@ -9,21 +9,23 @@
         </b-col>
         <b-col class="media-hidden"></b-col>
         <b-col class="icon-wrapper right">
-          <a class="icon-link" href="javascript:void(0)" title="个人信息">
+          <a class="icon-link" href="javascript:void(0)" title="个人信息" @click="signInOutBox">
             <img class="icon" :src="headPath" style="height: 35px;" />
           </a>
         </b-col>
       </b-row>
     </b-container>
-    <b-modal id="sign-in-out">
-      
+    <b-modal id="sign-in-out" hide-footer hide-header>
+      <login-form></login-form>
     </b-modal>
   </div>
 </template>
 
 <script>
+import LoginForm from '@/components/common/LoginForm.vue'
 export default {
   name: 'commonHeader',
+  components: { LoginForm },
   data() {
     return {
       online: true
@@ -38,8 +40,8 @@ export default {
     }
   },
   methods: {
-    openSignInOutBox() {
-      
+    signInOutBox() {
+      this.$bvModal.show('sign-in-out')
     }
   }
 }
@@ -51,7 +53,6 @@ export default {
     display: none;
   }
 }
-
 .header {
   width: 100%;
   position: fixed;
