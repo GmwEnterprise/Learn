@@ -20,12 +20,12 @@ public class BeanUtils implements ApplicationContextAware {
             context = applicationContext;
         }
         DataSource bean = context.getBean(DataSource.class);
-        log.info(BEAN_INIT_STATUS_OUTPUT, "DataSource", bean);
-        log.info(BEAN_INIT_STATUS_OUTPUT, "     Redis", context.getBean("redisTemplate"));
+        log.info(BEAN_INIT_STATUS_OUTPUT, "DataSource", bean != null ? "success" : "fail");
+        log.info(BEAN_INIT_STATUS_OUTPUT, "     Redis", context.getBean("redisTemplate") != null ? "success" : "fail");
     }
 
-    public <T> T getBean(Class<T> tClass) {
-        return context.getBean(tClass);
+    public <T> T getBean(Class<T> clazz) {
+        return context.getBean(clazz);
     }
 
     public Object getBean(String className) {
