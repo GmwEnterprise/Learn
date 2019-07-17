@@ -1,6 +1,10 @@
 package cn.gmwenterprise.website.generator;
 
+import com.google.common.collect.Maps;
 import lombok.Data;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 class ColumnStruct {
@@ -33,4 +37,27 @@ class ColumnStruct {
      * 成员类型
      */
     private String fieldType;
+
+    /**
+     * 该字段是否为主键
+     */
+    private boolean primaryKey;
+
+    /**
+     * 该字段是否为自增
+     */
+    private boolean autoIncrement;
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> map = Maps.newHashMap();
+        map.put("columnName", columnName);
+        map.put("columnType", columnType);
+        map.put("columnTypeNo", columnTypeNo);
+        map.put("columnComment", columnComment);
+        map.put("fieldName", fieldName);
+        map.put("fieldType", fieldType);
+        map.put("isPrimaryKey", primaryKey);
+        map.put("isAutoIncrement", autoIncrement);
+        return map;
+    }
 }

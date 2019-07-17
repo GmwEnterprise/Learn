@@ -1,6 +1,6 @@
-package com.yingjun.ssm.dao;
+package cn.gmwenterprise.website.dao;
 
-import com.yingjun.ssm.entity.Account;
+import cn.gmwenterprise.website.po.Account;
 
 public interface AccountMapper {
     int deleteByPrimaryKey(Integer id);
