@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gmwenterprise.website.dao.AccountDao">
+
+    <resultMap id="BaseResultMap" type="cn.gmwenterprise.website.po.Account">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="account_id" jdbcType="VARCHAR" property="accountId"/>
+        <result column="account_type" jdbcType="TINYINT" property="accountType"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="sex" jdbcType="TINYINT" property="sex"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="introduction" jdbcType="VARCHAR" property="introduction"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="create_datetime" jdbcType="TIMESTAMP" property="createDatetime"/>
+        <result column="update_datetime" jdbcType="TIMESTAMP" property="updateDatetime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        account_id,
+        account_type,
+        nickname,
+        sex,
+        age,
+        introduction,
+        phone,
+        email,
+        create_datetime,
+        update_datetime
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from account
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from account
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="cn.gmwenterprise.website.po.Account">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into account (id, account_id, account_type,
+        nickname, sex, age,
+        introduction, phone, email,
+        create_datetime, update_datetime)
+        values (#{id,jdbcType=INTEGER}, #{accountId,jdbcType=VARCHAR}, #{accountType,jdbcType=TINYINT},
+        #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{age,jdbcType=INTEGER},
+        #{introduction,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+        #{createDatetime,jdbcType=TIMESTAMP}, #{updateDatetime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.gmwenterprise.website.po.Account">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="accountId != null">
+                account_id,
+            </if>
+            <if test="accountType != null">
+                account_type,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="introduction != null">
+                introduction,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="createDatetime != null">
+                create_datetime,
+            </if>
+            <if test="updateDatetime != null">
+                update_datetime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=INTEGER},
+            <if test="accountId != null">
+                #{accountId,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="introduction != null">
+                #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="createDatetime != null">
+                #{createDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDatetime != null">
+                #{updateDatetime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.gmwenterprise.website.po.Account">
+        update account
+        <set>
+            <if test="accountId != null">
+                account_id = #{accountId,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                account_type = #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=INTEGER},
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="createDatetime != null">
+                create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDatetime != null">
+                update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.gmwenterprise.website.po.Account">
+    update account
+    set account_id = #{accountId,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=TINYINT},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      age = #{age,jdbcType=INTEGER},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=TIMESTAMP},
+      update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

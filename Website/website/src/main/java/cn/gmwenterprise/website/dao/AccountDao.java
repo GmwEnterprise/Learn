@@ -1,59 +1,59 @@
 package cn.gmwenterprise.website.dao;
 
-import cn.gmwenterprise.website.po.${entityName};
+import cn.gmwenterprise.website.po.Account;
 import org.springframework.stereotype.Repository;
 
 /**
-* @author gmw
-*/
+ * @author gmw
+ */
 @Repository
-public interface ${entityName}Dao {
-    
+public interface AccountDao {
+
     /**
      * 删除记录
      *
-     * @param ${primaryKey} 主键
+     * @param id 主键
      * @return 受影响行数
      */
-    int deleteByPrimaryKey(Integer ${primaryKey});
-    
+    int deleteByPrimaryKey(Integer id);
+
     /**
      * 插入记录
      *
      * @param record 记录
      * @return 受影响行数
      */
-    int insert(${entityName} record);
-    
+    int insert(Account record);
+
     /**
      * 插入满足条件的字段
      *
      * @param record 记录
      * @return 受影响行数
      */
-    int insertSelective(${entityName} record);
+    int insertSelective(Account record);
 
     /**
      * 查询记录
      *
-     * @param ${primaryKey} 主键
+     * @param id 主键
      * @return 结果
      */
-    ${entityName} selectByPrimaryKey(Integer ${primaryKey});
-    
+    Account selectByPrimaryKey(Integer id);
+
     /**
      * 更新满足条件的字段
      *
      * @param record 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKeySelective(${entityName} record);
-    
+    int updateByPrimaryKeySelective(Account record);
+
     /**
      * 更新记录
      *
      * @param record 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKey(${entityName} record);
+    int updateByPrimaryKey(Account record);
 }

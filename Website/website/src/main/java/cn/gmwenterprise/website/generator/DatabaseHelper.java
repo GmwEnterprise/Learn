@@ -17,6 +17,9 @@ public class DatabaseHelper {
     private DatabaseHelper() throws Exception {
         InputStream resource = ClassLoader.getSystemResourceAsStream("application.properties");
         Properties properties = new Properties();
+        if (resource == null) {
+            throw new Exception("application.properties不存在！");
+        }
         properties.load(resource);
         String url = properties.getProperty("spring.datasource.druid.url");
         String user = properties.getProperty("spring.datasource.druid.username");
@@ -59,8 +62,9 @@ public class DatabaseHelper {
      * @param tableName 指定表名
      * @throws SQLException 异常
      */
-    public TableStruct getTableStruct(String tableName) throws SQLException {
+    public TableStruct getTableStruct(String tableName) throws Exception {
         ResultSet trs = databaseMetaData.getTables(conn.getCatalog(), "%", tableName, null);
+        String pk = getPrimaryKeyFieldName(databaseMetaData, tableName);
         List<TableStruct> tableStructs = new ArrayList<>();
         while (trs.next()) {
             TableStruct tableStruct = new TableStruct();
@@ -69,7 +73,11 @@ public class DatabaseHelper {
             tableStruct.setColumnList(getColumnStructList(tableStruct.getTableName()));
             tableStruct.setEntityName(nameConversion(tableStruct.getTableName(), 2));
             tableStruct.setEntityAlias(nameConversion(tableStruct.getTableName(), 1));
+            tableStruct.setPrimaryKey(nameConversion(pk, 1));
             tableStructs.add(tableStruct);
+            if (tableStructs.size() > 0) {
+                break;
+            }
         }
         return tableStructs.size() > 0 ? tableStructs.get(0) : null;
     }
@@ -81,13 +89,9 @@ public class DatabaseHelper {
      * @return 该表所有字段结构集合
      * @throws SQLException 异常
      */
-    private List<ColumnStruct> getColumnStructList(String tableName) throws SQLException {
+    private List<ColumnStruct> getColumnStructList(String tableName) throws Exception {
         ResultSet columns = databaseMetaData.getColumns(conn.getCatalog(), "%", tableName, "%");
-        ResultSet pk = databaseMetaData.getPrimaryKeys(conn.getCatalog(), "%", tableName);
-        List<String> pkList = Lists.newArrayList();
-        while (pk.next()) {
-            pkList.add(pk.getString("COLUMN_NAME"));
-        }
+        String pk = getPrimaryKeyFieldName(databaseMetaData, tableName);
         List<ColumnStruct> list = new ArrayList<>();
         while (columns.next()) {
             ColumnStruct struct = new ColumnStruct();
@@ -98,10 +102,22 @@ public class DatabaseHelper {
             struct.setFieldName(nameConversion(struct.getColumnName(), 1));
             struct.setFieldType(typeConversion(struct.getColumnTypeNo()));
             struct.setAutoIncrement("YES".equals(columns.getString("IS_AUTOINCREMENT")));
-            struct.setPrimaryKey(pkList.contains(struct.getColumnName()));
+            struct.setPrimaryKey(pk.equals(struct.getColumnName()));
             list.add(struct);
         }
         return list;
+    }
+
+    private String getPrimaryKeyFieldName(DatabaseMetaData databaseMetaData, String tableName) throws Exception {
+        ResultSet pk = databaseMetaData.getPrimaryKeys(conn.getCatalog(), "%", tableName);
+        List<String> pkList = Lists.newArrayList();
+        while (pk.next()) {
+            pkList.add(pk.getString("COLUMN_NAME"));
+        }
+        if (pkList.size() > 1) {
+            throw new Exception("代码生成器只支持表中有且只有一个主键，不支持多主键存在！");
+        }
+        return pkList.get(0);
     }
 
     /**
@@ -120,8 +136,8 @@ public class DatabaseHelper {
                     return original;
                 }
                 String collect = Arrays.stream(strings)
-                        .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
-                        .collect(Collectors.joining());
+                    .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
+                    .collect(Collectors.joining());
                 char[] chars = collect.toCharArray();
                 chars[0] += 32;
                 return String.valueOf(chars);
@@ -134,8 +150,8 @@ public class DatabaseHelper {
                     return String.valueOf(chars1);
                 }
                 return Arrays.stream(string2)
-                        .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
-                        .collect(Collectors.joining());
+                    .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
+                    .collect(Collectors.joining());
             default:
                 return null;
         }
@@ -174,16 +190,16 @@ public class DatabaseHelper {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         DatabaseHelper.getInstance()
-                .getTableStruct("account")
-                .toMap()
-                .forEach((key, value) -> {
-                    if (value instanceof Iterable) {
-                        System.out.println(key + ": [");
-                        ((List) value).forEach(listItem -> System.out.println("    " + listItem));
-                        System.out.println("]");
-                    } else {
-                        System.out.println(key + ": " + value);
-                    }
-                });
+            .getTableStruct("account")
+            .toMap()
+            .forEach((key, value) -> {
+                if (value instanceof Iterable) {
+                    System.out.println(key + ": [");
+                    ((List) value).forEach(listItem -> System.out.println("    " + listItem));
+                    System.out.println("]");
+                } else {
+                    System.out.println(key + ": " + value);
+                }
+            });
     }
 }

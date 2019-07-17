@@ -34,16 +34,22 @@ class TableStruct {
     private String tableComment;
 
     /**
+     * 主键对应的成员名
+     */
+    private String primaryKey;
+
+    /**
      * 表的所有字段
      */
     private List<ColumnStruct> columnList;
 
-    public Map<String, Object> toMap() {
+    Map<String, Object> toMap() {
         HashMap<String, Object> map = Maps.newHashMap();
         map.put("tableName", tableName);
         map.put("entityName", entityName);
         map.put("entityAlias", entityAlias);
         map.put("tableComment", tableComment);
+        map.put("primaryKey", primaryKey);
         map.put("columnList", columnList.stream().map(ColumnStruct::toMap).collect(Collectors.toList()));
         return map;
     }

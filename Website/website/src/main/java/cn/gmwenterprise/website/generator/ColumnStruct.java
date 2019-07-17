@@ -48,7 +48,7 @@ class ColumnStruct {
      */
     private boolean autoIncrement;
 
-    public Map<String, Object> toMap() {
+    Map<String, Object> toMap() {
         HashMap<String, Object> map = Maps.newHashMap();
         map.put("columnName", columnName);
         map.put("columnType", columnType);
