@@ -3,9 +3,11 @@ package cn.gmwenterprise.website.dao;
 import cn.gmwenterprise.website.po.${entityName};
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
-* @author gmw
-*/
+ * @author gmw
+ */
 @Repository
 public interface ${entityName}Dao {
     
@@ -40,6 +42,14 @@ public interface ${entityName}Dao {
      * @return 结果
      */
     ${entityName} selectByPrimaryKey(Integer ${keyProperty});
+
+    /**
+     * 查询所有记录
+     *
+     * @param record 条件
+     * @return 结果
+     */
+    List<${entityName}> selectAll(${entityName} record);
     
     /**
      * 更新满足条件的字段

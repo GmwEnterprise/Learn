@@ -2,7 +2,10 @@ package cn.gmwenterprise.website.generator;
 
 import freemarker.template.Template;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Map;
 
 public class CodeHelper {
@@ -26,7 +29,7 @@ public class CodeHelper {
         }
         Map<String, Object> tsMap = ts.toMap();
         generatePoFile(tsMap);
-//        generateBoFile(tsMap);
+        generateBoFile(tsMap);
         generateDaoFile(tsMap);
         generateMapperFile(tsMap);
 //        generateServiceFile(tsMap);

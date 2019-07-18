@@ -1,16 +1,14 @@
-package cn.gmwenterprise.website.po;
+package cn.gmwenterprise.website.bo;
 
 import lombok.Data;
-import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
 
 /**
- * article
+ * Article 业务对象
  */
 @Data
-@Alias("article")
-public class Article {
+public class ArticleBo {
     /**
      * PRIMARY KEY<br>
      * AUTO INCREMENT<br>

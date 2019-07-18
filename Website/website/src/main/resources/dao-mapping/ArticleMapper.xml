@@ -29,6 +29,32 @@
         where a.`id` = #{id}
     </select>
 
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from article a
+        <where>
+            <if test="title != null">
+                `title` = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="wordContent != null">
+                `word_content` = #{wordContent,jdbcType=VARCHAR},
+            </if>
+            <if test="markdownContent != null">
+                `markdown_content` = #{markdownContent,jdbcType=VARCHAR},
+            </if>
+            <if test="writer != null">
+                `writer` = #{writer,jdbcType=INTEGER},
+            </if>
+            <if test="writeDatetime != null">
+                `write_datetime` = #{writeDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateDatetime != null">
+                `last_update_datetime` = #{lastUpdateDatetime,jdbcType=TIMESTAMP},
+            </if>
+        </where>
+    </select>
+
     <delete id="deleteByPrimaryKey">
         delete
         from article a

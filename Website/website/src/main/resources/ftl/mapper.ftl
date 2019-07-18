@@ -25,6 +25,21 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
         ${'where a.`${keyColumn}` = #' + '{${keyProperty}}'}
     ${'</select>'}
 
+    ${'<select id="selectAll" resultMap="BaseResultMap">'}
+        select
+        ${'<include refid="Base_Column_List"/>'}
+        from ${tableName} a
+        ${'<where>'}
+            <#list columnList as item>
+            <#if !item.isPrimaryKey>
+            ${'<if test="${item.fieldName} != null">'}
+                ${'`${item.columnName}` = #' + '{${item.fieldName},jdbcType=${item.columnType}},'}
+            ${'</if>'}
+            </#if>
+            </#list>
+        ${'</where>'}
+    ${'</select>'}
+
     ${'<delete id="deleteByPrimaryKey">'}
         delete
         from ${tableName} a
