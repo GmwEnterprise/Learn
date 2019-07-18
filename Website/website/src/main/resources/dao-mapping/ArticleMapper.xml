@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gmwenterprise.website.dao.ArticleDao">
+
+    <resultMap id="BaseResultMap" type="article">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="word_content" jdbcType="VARCHAR" property="wordContent"/>
+        <result column="markdown_content" jdbcType="VARCHAR" property="markdownContent"/>
+        <result column="writer" jdbcType="INTEGER" property="writer"/>
+        <result column="write_datetime" jdbcType="TIMESTAMP" property="writeDatetime"/>
+        <result column="last_update_datetime" jdbcType="TIMESTAMP" property="lastUpdateDatetime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `title`,
+        `word_content`,
+        `markdown_content`,
+        `writer`,
+        `write_datetime`,
+        `last_update_datetime`
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from article a
+        where a.`id` = #{id}
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete
+        from article a
+        where a.`id` = #{id}
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into article (
+            `title`,
+            `word_content`,
+            `markdown_content`,
+            `writer`,
+            `write_datetime`,
+            `last_update_datetime`
+        ) values (
+            #{title,jdbcType=VARCHAR},
+            #{wordContent,jdbcType=VARCHAR},
+            #{markdownContent,jdbcType=VARCHAR},
+            #{writer,jdbcType=INTEGER},
+            #{writeDatetime,jdbcType=TIMESTAMP},
+            #{lastUpdateDatetime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                `title`,
+            </if>
+            <if test="wordContent != null">
+                `word_content`,
+            </if>
+            <if test="markdownContent != null">
+                `markdown_content`,
+            </if>
+            <if test="writer != null">
+                `writer`,
+            </if>
+            <if test="writeDatetime != null">
+                `write_datetime`,
+            </if>
+            <if test="lastUpdateDatetime != null">
+                `last_update_datetime`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="wordContent != null">
+                #{wordContent,jdbcType=VARCHAR},
+            </if>
+            <if test="markdownContent != null">
+                #{markdownContent,jdbcType=VARCHAR},
+            </if>
+            <if test="writer != null">
+                #{writer,jdbcType=INTEGER},
+            </if>
+            <if test="writeDatetime != null">
+                #{writeDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateDatetime != null">
+                #{lastUpdateDatetime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective">
+        update article
+        <set>
+            <if test="title != null">
+                `title` = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="wordContent != null">
+                `word_content` = #{wordContent,jdbcType=VARCHAR},
+            </if>
+            <if test="markdownContent != null">
+                `markdown_content` = #{markdownContent,jdbcType=VARCHAR},
+            </if>
+            <if test="writer != null">
+                `writer` = #{writer,jdbcType=INTEGER},
+            </if>
+            <if test="writeDatetime != null">
+                `write_datetime` = #{writeDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateDatetime != null">
+                `last_update_datetime` = #{lastUpdateDatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+    where id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey">
+        update article
+        set
+            `title` = #{title,jdbcType=VARCHAR},
+            `word_content` = #{wordContent,jdbcType=VARCHAR},
+            `markdown_content` = #{markdownContent,jdbcType=VARCHAR},
+            `writer` = #{writer,jdbcType=INTEGER},
+            `write_datetime` = #{writeDatetime,jdbcType=TIMESTAMP},
+            `last_update_datetime` = #{lastUpdateDatetime,jdbcType=TIMESTAMP}
+        where id = #{id}
+    </update>
+</mapper>

@@ -19,7 +19,7 @@ class ColumnStruct {
     private String columnType;
 
     /**
-     * 字段对应的数据库类型，对应java.sql.Types
+     * 字段对应的数据库类型值，对应java.sql.Types
      */
     private int columnTypeNo;
 

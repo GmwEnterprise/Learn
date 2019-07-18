@@ -36,7 +36,12 @@ class TableStruct {
     /**
      * 主键对应的成员名
      */
-    private String primaryKey;
+    private String keyProperty;
+
+    /**
+     * 主键
+     */
+    private String keyColumn;
 
     /**
      * 表的所有字段
@@ -49,7 +54,8 @@ class TableStruct {
         map.put("entityName", entityName);
         map.put("entityAlias", entityAlias);
         map.put("tableComment", tableComment);
-        map.put("primaryKey", primaryKey);
+        map.put("keyProperty", keyProperty);
+        map.put("keyColumn", keyColumn);
         map.put("columnList", columnList.stream().map(ColumnStruct::toMap).collect(Collectors.toList()));
         return map;
     }

@@ -10,7 +10,7 @@ public class CodeHelper {
     private static final String PO_PATH = "/src/main/java/cn/gmwenterprise/website/po/";
     private static final String BO_PATH = "/src/main/java/cn/gmwenterprise/website/bo/";
     private static final String DAO_PATH = "/src/main/java/cn/gmwenterprise/website/dao/";
-    private static final String MAPPER_PATH = "/src/main/resource/dao-mapping/";
+    private static final String MAPPER_PATH = "/src/main/resources/dao-mapping/";
     private static final String SERVICE_PATH = "/src/main/java/cn/gmwenterprise/website/service/";
     private static final String SERVICE_IMPL_PATH = "/src/main/java/cn/gmwenterprise/website/service/impl/";
     private static final String CONTROLLER_PATH = "/src/main/java/cn/gmwenterprise/website/web/";
@@ -28,7 +28,7 @@ public class CodeHelper {
         generatePoFile(tsMap);
 //        generateBoFile(tsMap);
         generateDaoFile(tsMap);
-//        generateMapperFile(tsMap);
+        generateMapperFile(tsMap);
 //        generateServiceFile(tsMap);
 //        generateServiceImplFile(tsMap);
 //        generateControllerFile(tsMap);

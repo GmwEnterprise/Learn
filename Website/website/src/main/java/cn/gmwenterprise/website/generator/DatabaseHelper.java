@@ -2,10 +2,14 @@ package cn.gmwenterprise.website.generator;
 
 import com.google.common.collect.Lists;
 import lombok.Getter;
+import org.apache.ibatis.type.JdbcType;
 
 import java.io.InputStream;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 @Getter
@@ -73,7 +77,8 @@ public class DatabaseHelper {
             tableStruct.setColumnList(getColumnStructList(tableStruct.getTableName()));
             tableStruct.setEntityName(nameConversion(tableStruct.getTableName(), 2));
             tableStruct.setEntityAlias(nameConversion(tableStruct.getTableName(), 1));
-            tableStruct.setPrimaryKey(nameConversion(pk, 1));
+            tableStruct.setKeyProperty(nameConversion(pk, 1));
+            tableStruct.setKeyColumn(pk);
             tableStructs.add(tableStruct);
             if (tableStructs.size() > 0) {
                 break;
@@ -97,8 +102,8 @@ public class DatabaseHelper {
             ColumnStruct struct = new ColumnStruct();
             struct.setColumnName(columns.getString("COLUMN_NAME"));
             struct.setColumnComment(columns.getString("REMARKS"));
-            struct.setColumnType(columns.getString("TYPE_NAME"));
             struct.setColumnTypeNo(columns.getInt("DATA_TYPE"));
+            struct.setColumnType(JdbcType.forCode(struct.getColumnTypeNo()).name());
             struct.setFieldName(nameConversion(struct.getColumnName(), 1));
             struct.setFieldType(typeConversion(struct.getColumnTypeNo()));
             struct.setAutoIncrement("YES".equals(columns.getString("IS_AUTOINCREMENT")));
@@ -136,8 +141,8 @@ public class DatabaseHelper {
                     return original;
                 }
                 String collect = Arrays.stream(strings)
-                    .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
-                    .collect(Collectors.joining());
+                        .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
+                        .collect(Collectors.joining());
                 char[] chars = collect.toCharArray();
                 chars[0] += 32;
                 return String.valueOf(chars);
@@ -150,8 +155,8 @@ public class DatabaseHelper {
                     return String.valueOf(chars1);
                 }
                 return Arrays.stream(string2)
-                    .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
-                    .collect(Collectors.joining());
+                        .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
+                        .collect(Collectors.joining());
             default:
                 return null;
         }
@@ -187,19 +192,22 @@ public class DatabaseHelper {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void main1() throws Exception {
         DatabaseHelper.getInstance()
-            .getTableStruct("account")
-            .toMap()
-            .forEach((key, value) -> {
-                if (value instanceof Iterable) {
-                    System.out.println(key + ": [");
-                    ((List) value).forEach(listItem -> System.out.println("    " + listItem));
-                    System.out.println("]");
-                } else {
-                    System.out.println(key + ": " + value);
-                }
-            });
+                .getTableStruct("account")
+                .toMap()
+                .forEach((key, value) -> {
+                    if (value instanceof Iterable) {
+                        System.out.println(key + ": [");
+                        ((List) value).forEach(listItem -> System.out.println("    " + listItem));
+                        System.out.println("]");
+                    } else {
+                        System.out.println(key + ": " + value);
+                    }
+                });
     }
 }

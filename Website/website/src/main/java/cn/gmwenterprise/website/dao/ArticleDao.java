@@ -1,21 +1,21 @@
 package cn.gmwenterprise.website.dao;
 
-import cn.gmwenterprise.website.po.${entityName};
+import cn.gmwenterprise.website.po.Article;
 import org.springframework.stereotype.Repository;
 
 /**
 * @author gmw
 */
 @Repository
-public interface ${entityName}Dao {
+public interface ArticleDao {
     
     /**
      * 删除记录
      *
-     * @param ${keyProperty} 主键
+     * @param id 主键
      * @return 受影响行数
      */
-    int deleteByPrimaryKey(Integer ${keyProperty});
+    int deleteByPrimaryKey(Integer id);
     
     /**
      * 插入记录
@@ -23,7 +23,7 @@ public interface ${entityName}Dao {
      * @param record 记录
      * @return 受影响行数
      */
-    int insert(${entityName} record);
+    int insert(Article record);
     
     /**
      * 插入满足条件的字段
@@ -31,15 +31,15 @@ public interface ${entityName}Dao {
      * @param record 记录
      * @return 受影响行数
      */
-    int insertSelective(${entityName} record);
+    int insertSelective(Article record);
 
     /**
      * 查询记录
      *
-     * @param ${keyProperty} 主键
+     * @param id 主键
      * @return 结果
      */
-    ${entityName} selectByPrimaryKey(Integer ${keyProperty});
+    Article selectByPrimaryKey(Integer id);
     
     /**
      * 更新满足条件的字段
@@ -47,7 +47,7 @@ public interface ${entityName}Dao {
      * @param record 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKeySelective(${entityName} record);
+    int updateByPrimaryKeySelective(Article record);
     
     /**
      * 更新记录
@@ -55,5 +55,5 @@ public interface ${entityName}Dao {
      * @param record 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKey(${entityName} record);
+    int updateByPrimaryKey(Article record);
 }
