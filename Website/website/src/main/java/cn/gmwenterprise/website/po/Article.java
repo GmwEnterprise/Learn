@@ -3,10 +3,10 @@ package cn.gmwenterprise.website.po;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
-import java.time.LocalDateTime;
+import java.time.*;
 
 /**
- * article
+ * article 
  */
 @Data
 @Alias("article")

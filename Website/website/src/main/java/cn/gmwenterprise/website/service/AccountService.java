@@ -1,13 +1,13 @@
 package cn.gmwenterprise.website.service;
 
-import cn.gmwenterprise.website.bo.ArticleBo;
+import cn.gmwenterprise.website.bo.AccountBo;
 
 import java.util.List;
 
 /**
  * @author gmw
  */
-public interface ArticleService {
+public interface AccountService {
 
     /**
      * 删除记录
@@ -23,7 +23,7 @@ public interface ArticleService {
      * @param bo 记录
      * @return 受影响行数
      */
-    int insert(ArticleBo bo);
+    int insert(AccountBo bo);
 
     /**
      * 插入满足条件的字段
@@ -31,7 +31,7 @@ public interface ArticleService {
      * @param bo 记录
      * @return 受影响行数
      */
-    int insertSelective(ArticleBo bo);
+    int insertSelective(AccountBo bo);
 
     /**
      * 查询记录
@@ -39,7 +39,7 @@ public interface ArticleService {
      * @param id 主键
      * @return 结果
      */
-    ArticleBo selectByPrimaryKey(Integer id);
+    AccountBo selectByPrimaryKey(Integer id);
 
     /**
      * 查询所有记录
@@ -47,7 +47,7 @@ public interface ArticleService {
      * @param bo 条件
      * @return 结果
      */
-    List<ArticleBo> selectAll(ArticleBo bo);
+    List<AccountBo> selectAll(AccountBo bo);
 
     /**
      * 更新满足条件的字段
@@ -55,7 +55,7 @@ public interface ArticleService {
      * @param bo 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKeySelective(ArticleBo bo);
+    int updateByPrimaryKeySelective(AccountBo bo);
 
     /**
      * 更新记录
@@ -63,5 +63,5 @@ public interface ArticleService {
      * @param bo 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKey(ArticleBo bo);
+    int updateByPrimaryKey(AccountBo bo);
 }

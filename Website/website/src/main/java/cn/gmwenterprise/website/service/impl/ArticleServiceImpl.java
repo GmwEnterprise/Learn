@@ -13,47 +13,47 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleServiceImpl implements ArticleService {
     private final ArticleDao articleDao;
-
+    
     public ArticleServiceImpl(ArticleDao articleDao) {
         this.articleDao = articleDao;
     }
-
+    
     @Override
-    public void deleteByPrimaryKey(Integer id) {
-        articleDao.deleteByPrimaryKey(id);
+    public int deleteByPrimaryKey(Integer id) {
+        return articleDao.deleteByPrimaryKey(id);
     }
-
+    
     @Override
-    public void insert(ArticleBo bo) {
-        articleDao.insert(po(bo));
+    public int insert(ArticleBo bo) {
+        return articleDao.insert(po(bo));
     }
-
+    
     @Override
-    public void insertSelective(ArticleBo bo) {
-        articleDao.insertSelective(po(bo));
+    public int insertSelective(ArticleBo bo) {
+        return articleDao.insertSelective(po(bo));
     }
-
+    
     @Override
     public ArticleBo selectByPrimaryKey(Integer id) {
         return bo(articleDao.selectByPrimaryKey(id));
     }
-
+    
     @Override
     public List<ArticleBo> selectAll(ArticleBo bo) {
         return articleDao.selectAll(po(bo))
-                .stream()
-                .map(this::bo)
-                .collect(Collectors.toList());
+            .stream()
+            .map(this::bo)
+            .collect(Collectors.toList());
     }
 
     @Override
-    public void updateByPrimaryKeySelective(ArticleBo bo) {
-        articleDao.updateByPrimaryKeySelective(po(bo));
+    public int updateByPrimaryKeySelective(ArticleBo bo) {
+        return articleDao.updateByPrimaryKeySelective(po(bo));
     }
 
     @Override
-    public void updateByPrimaryKey(ArticleBo bo) {
-        articleDao.updateByPrimaryKey(po(bo));
+    public int updateByPrimaryKey(ArticleBo bo) {
+        return articleDao.updateByPrimaryKey(po(bo));
     }
 
     private ArticleBo bo(Article po) {

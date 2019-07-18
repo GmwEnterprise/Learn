@@ -74,11 +74,18 @@ public class DatabaseHelper {
             TableStruct tableStruct = new TableStruct();
             tableStruct.setTableName(trs.getString("TABLE_NAME"));
             tableStruct.setTableComment(trs.getString("REMARKS"));
-            tableStruct.setColumnList(getColumnStructList(tableStruct.getTableName()));
+            List<ColumnStruct> columns = getColumnStructList(tableStruct.getTableName());
+            ColumnStruct key = columns.stream()
+                .filter(ColumnStruct::isPrimaryKey)
+                .collect(Collectors.toList())
+                .get(0);
+            tableStruct.setColumnList(columns);
             tableStruct.setEntityName(nameConversion(tableStruct.getTableName(), 2));
             tableStruct.setEntityAlias(nameConversion(tableStruct.getTableName(), 1));
             tableStruct.setKeyProperty(nameConversion(pk, 1));
+            tableStruct.setKeyPropertyType(key.getFieldType());
             tableStruct.setKeyColumn(pk);
+            tableStruct.setKeyColumnType(key.getColumnType());
             tableStructs.add(tableStruct);
             if (tableStructs.size() > 0) {
                 break;
@@ -141,8 +148,8 @@ public class DatabaseHelper {
                     return original;
                 }
                 String collect = Arrays.stream(strings)
-                        .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
-                        .collect(Collectors.joining());
+                    .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
+                    .collect(Collectors.joining());
                 char[] chars = collect.toCharArray();
                 chars[0] += 32;
                 return String.valueOf(chars);
@@ -155,8 +162,8 @@ public class DatabaseHelper {
                     return String.valueOf(chars1);
                 }
                 return Arrays.stream(string2)
-                        .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
-                        .collect(Collectors.joining());
+                    .map(str -> str.substring(0, 1).toUpperCase() + str.substring(1))
+                    .collect(Collectors.joining());
             default:
                 return null;
         }
@@ -198,16 +205,16 @@ public class DatabaseHelper {
     @SuppressWarnings("unchecked")
     public static void main1() throws Exception {
         DatabaseHelper.getInstance()
-                .getTableStruct("account")
-                .toMap()
-                .forEach((key, value) -> {
-                    if (value instanceof Iterable) {
-                        System.out.println(key + ": [");
-                        ((List) value).forEach(listItem -> System.out.println("    " + listItem));
-                        System.out.println("]");
-                    } else {
-                        System.out.println(key + ": " + value);
-                    }
-                });
+            .getTableStruct("account")
+            .toMap()
+            .forEach((key, value) -> {
+                if (value instanceof Iterable) {
+                    System.out.println(key + ": [");
+                    ((List) value).forEach(listItem -> System.out.println("    " + listItem));
+                    System.out.println("]");
+                } else {
+                    System.out.println(key + ": " + value);
+                }
+            });
     }
 }

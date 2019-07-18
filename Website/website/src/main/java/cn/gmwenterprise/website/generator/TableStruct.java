@@ -39,9 +39,19 @@ class TableStruct {
     private String keyProperty;
 
     /**
+     * 主键JAVA类型
+     */
+    private String keyPropertyType;
+
+    /**
      * 主键
      */
     private String keyColumn;
+
+    /**
+     * 主键JDBC类型
+     */
+    private String keyColumnType;
 
     /**
      * 表的所有字段
@@ -56,6 +66,8 @@ class TableStruct {
         map.put("tableComment", tableComment);
         map.put("keyProperty", keyProperty);
         map.put("keyColumn", keyColumn);
+        map.put("keyPropertyType", keyPropertyType);
+        map.put("keyColumnType", keyColumnType);
         map.put("columnList", columnList.stream().map(ColumnStruct::toMap).collect(Collectors.toList()));
         return map;
     }

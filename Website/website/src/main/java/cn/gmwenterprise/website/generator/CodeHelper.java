@@ -20,6 +20,8 @@ public class CodeHelper {
 
     public static void main(String[] args) throws Exception {
         generateAllFiles(DatabaseHelper.getInstance().getTableStruct("article"));
+        generateAllFiles(DatabaseHelper.getInstance().getTableStruct("account"));
+        generateAllFiles(DatabaseHelper.getInstance().getTableStruct("comment"));
     }
 
     public static void generateAllFiles(TableStruct ts) throws Exception {
@@ -32,9 +34,9 @@ public class CodeHelper {
         generateBoFile(tsMap);
         generateDaoFile(tsMap);
         generateMapperFile(tsMap);
-//        generateServiceFile(tsMap);
-//        generateServiceImplFile(tsMap);
-//        generateControllerFile(tsMap);
+        generateServiceFile(tsMap);
+        generateServiceImplFile(tsMap);
+        generateControllerFile(tsMap);
     }
 
     /**

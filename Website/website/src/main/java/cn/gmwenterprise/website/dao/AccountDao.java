@@ -1,14 +1,16 @@
-package cn.gmwenterprise.website.service;
+package cn.gmwenterprise.website.dao;
 
-import cn.gmwenterprise.website.bo.ArticleBo;
+import cn.gmwenterprise.website.po.Account;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author gmw
  */
-public interface ArticleService {
-
+@Repository
+public interface AccountDao {
+    
     /**
      * 删除记录
      *
@@ -16,22 +18,22 @@ public interface ArticleService {
      * @return 受影响行数
      */
     int deleteByPrimaryKey(Integer id);
-
+    
     /**
      * 插入记录
      *
-     * @param bo 记录
+     * @param record 记录
      * @return 受影响行数
      */
-    int insert(ArticleBo bo);
-
+    int insert(Account record);
+    
     /**
      * 插入满足条件的字段
      *
-     * @param bo 记录
+     * @param record 记录
      * @return 受影响行数
      */
-    int insertSelective(ArticleBo bo);
+    int insertSelective(Account record);
 
     /**
      * 查询记录
@@ -39,29 +41,29 @@ public interface ArticleService {
      * @param id 主键
      * @return 结果
      */
-    ArticleBo selectByPrimaryKey(Integer id);
+    Account selectByPrimaryKey(Integer id);
 
     /**
      * 查询所有记录
      *
-     * @param bo 条件
+     * @param record 条件
      * @return 结果
      */
-    List<ArticleBo> selectAll(ArticleBo bo);
-
+    List<Account> selectAll(Account record);
+    
     /**
      * 更新满足条件的字段
      *
-     * @param bo 记录
+     * @param record 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKeySelective(ArticleBo bo);
-
+    int updateByPrimaryKeySelective(Account record);
+    
     /**
      * 更新记录
      *
-     * @param bo 记录
+     * @param record 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKey(ArticleBo bo);
+    int updateByPrimaryKey(Account record);
 }

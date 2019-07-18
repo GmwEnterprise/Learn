@@ -6,6 +6,9 @@ import cn.gmwenterprise.website.common.ResponseEntity;
 import cn.gmwenterprise.website.service.ArticleService;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author gmw
+ */
 @RestController
 @RequestMapping("/article")
 public class ArticleController implements BaseController {
@@ -15,15 +18,31 @@ public class ArticleController implements BaseController {
         this.articleService = articleService;
     }
 
-    @GetMapping("/{key}")
-    public ResponseEntity queryByPrimaryKey(@PathVariable Integer key) {
-        return ok(articleService.selectByPrimaryKey(key));
+    @GetMapping("/{id}")
+    public ResponseEntity queryByPrimaryKey(@PathVariable Integer id) {
+        return ok(articleService.selectByPrimaryKey(id));
     }
 
     @GetMapping("/")
-    public ResponseEntity queryByPrimaryKey(@RequestBody ArticleBo bo) {
+    public ResponseEntity queryAll(ArticleBo bo) {
         return ok(articleService.selectAll(bo));
     }
 
-    // TODO
+    @PostMapping("/")
+    public ResponseEntity add(@RequestBody ArticleBo bo) {
+        articleService.insert(bo);
+        return ok();
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity modify(@RequestBody ArticleBo bo) {
+        articleService.updateByPrimaryKeySelective(bo);
+        return ok();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Integer id) {
+        articleService.deleteByPrimaryKey(id);
+        return ok();
+    }
 }
