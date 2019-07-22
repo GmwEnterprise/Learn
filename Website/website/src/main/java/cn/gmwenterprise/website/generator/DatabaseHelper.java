@@ -67,7 +67,7 @@ public class DatabaseHelper {
      * @throws SQLException 异常
      */
     public TableStruct getTableStruct(String tableName) throws Exception {
-        ResultSet trs = databaseMetaData.getTables(conn.getCatalog(), "%", tableName, null);
+        ResultSet trs = databaseMetaData.getTables(conn.getCatalog(), "%", tableName, new String[]{"TABLE"});
         String pk = getPrimaryKeyFieldName(databaseMetaData, tableName);
         List<TableStruct> tableStructs = new ArrayList<>();
         while (trs.next()) {
