@@ -2,6 +2,7 @@ package cn.gmwenterprise.website.cache;
 
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -30,6 +31,18 @@ public class JvmMemoryCache implements Cache {
     @Override
     public Object get(String key) {
         return CACHE_REPOSITORY.get(key);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <E> E get(Class<E> clazz, String key) {
+        return (E) CACHE_REPOSITORY.get(key);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <E> List<E> getList(Class<E> clazz, String key) {
+        return (List<E>) CACHE_REPOSITORY.get(key);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package cn.gmwenterprise.website.cache;
 
+import java.util.List;
+
 public interface Cache {
 
     /**
@@ -26,6 +28,24 @@ public interface Cache {
      * @return 结果
      */
     Object get(String key);
+
+    /**
+     * 获取指定类型缓存
+     *
+     * @param clazz 指定类型
+     * @param key 缓存键
+     * @return 结果
+     */
+    <E> E get(Class<E> clazz, String key);
+
+    /**
+     * 获取指定类型缓存列表
+     *
+     * @param clazz 指定类型
+     * @param key 缓存键
+     * @return 结果
+     */
+    <E> List<E> getList(Class<E> clazz, String key);
 
     /**
      * 指定key缓存是否存在
