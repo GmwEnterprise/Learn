@@ -19,9 +19,11 @@ public class CodeHelper {
     private static final String CONTROLLER_PATH = "/src/main/java/cn/gmwenterprise/website/web/";
 
     public static void main(String[] args) throws Exception {
-        generateAllFiles(DatabaseHelper.getInstance().getTableStruct("article"));
-        generateAllFiles(DatabaseHelper.getInstance().getTableStruct("account"));
-        generateAllFiles(DatabaseHelper.getInstance().getTableStruct("comment"));
+        generateTable("表名");
+    }
+
+    public static void generateTable(String tableName) throws Exception {
+        generateAllFiles(DatabaseHelper.getInstance().getTableStruct("tableName"));
     }
 
     public static void generateAllFiles(TableStruct ts) throws Exception {
