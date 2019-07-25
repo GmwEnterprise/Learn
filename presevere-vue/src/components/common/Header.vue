@@ -9,7 +9,7 @@
         </b-col>
         <b-col class="media-hidden"></b-col>
         <b-col class="icon-wrapper right">
-          <a class="icon-link" href="javascript:void(0)" title="个人信息" @click="signInOutBox">
+          <a class="icon-link" href="javascript:void(0)" :title="headTitle" @click="signInOutBox">
             <img class="icon" :src="headPath" style="height: 35px;" />
           </a>
         </b-col>
@@ -29,24 +29,33 @@ export default {
   components: { LoginForm },
   data() {
     return {
-      online: true
+      currentUser: {},
+      headTitle: ''
     }
   },
   computed: {
+    isLogin() {
+      return this.$store.state.isLogin
+    },
     headPath() {
-      if (this.online) {
-        return process.env.BASE_URL + 'head-online.png'
+      return process.env.BASE_URL + (this.isLogin ? 'head-online.png' : 'head-offline.png')
+    }
+  },
+  watch: {
+    isLogin() {
+      if (this.isLogin) {
+        this.currentUser = store.get('identification')
+        this.headTitle = this.currentUser.nickname
+      } else {
+        this.currentUser = {}
+        this.headTitle = '请登陆'
       }
-      return process.env.BASE_URL + 'head-offline.png'
     }
   },
   methods: {
     signInOutBox() {
       this.$bvModal.show('sign-in-out')
     }
-  },
-  created() {
-    this.online = store.exist('identification')
   }
 }
 </script>

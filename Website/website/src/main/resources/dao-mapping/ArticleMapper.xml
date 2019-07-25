@@ -13,13 +13,13 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        `id`,
-        `title`,
-        `word_content`,
-        `markdown_content`,
-        `writer`,
-        `write_datetime`,
-        `last_update_datetime`
+        a.`id`,
+        a.`title`,
+        a.`word_content`,
+        a.`markdown_content`,
+        a.`writer`,
+        a.`write_datetime`,
+        a.`last_update_datetime`
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -35,22 +35,22 @@
         from article a
         <where>
             <if test="title != null">
-                `title` = #{title,jdbcType=VARCHAR},
+                a.`title` = #{title,jdbcType=VARCHAR},
             </if>
             <if test="wordContent != null">
-                `word_content` = #{wordContent,jdbcType=VARCHAR},
+                a.`word_content` = #{wordContent,jdbcType=VARCHAR},
             </if>
             <if test="markdownContent != null">
-                `markdown_content` = #{markdownContent,jdbcType=VARCHAR},
+                a.`markdown_content` = #{markdownContent,jdbcType=VARCHAR},
             </if>
             <if test="writer != null">
-                `writer` = #{writer,jdbcType=INTEGER},
+                a.`writer` = #{writer,jdbcType=INTEGER},
             </if>
             <if test="writeDatetime != null">
-                `write_datetime` = #{writeDatetime,jdbcType=TIMESTAMP},
+                a.`write_datetime` = #{writeDatetime,jdbcType=TIMESTAMP},
             </if>
             <if test="lastUpdateDatetime != null">
-                `last_update_datetime` = #{lastUpdateDatetime,jdbcType=TIMESTAMP},
+                a.`last_update_datetime` = #{lastUpdateDatetime,jdbcType=TIMESTAMP},
             </if>
         </where>
     </select>

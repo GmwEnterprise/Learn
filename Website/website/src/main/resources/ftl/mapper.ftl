@@ -14,7 +14,7 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
 
     ${'<sql id="Base_Column_List">'}
         <#list columnList as item>
-        `${item.columnName}`<#if item_has_next>,</#if>
+        a.`${item.columnName}`<#if item_has_next>,</#if>
         </#list>
     ${'</sql>'}
 
@@ -33,7 +33,7 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
             <#list columnList as item>
             <#if !item.isPrimaryKey>
             ${'<if test="${item.fieldName} != null">'}
-                ${'`${item.columnName}` = #' + '{${item.fieldName},jdbcType=${item.columnType}},'}
+                ${'a.`${item.columnName}` = #' + '{${item.fieldName},jdbcType=${item.columnType}},'}
             ${'</if>'}
             </#if>
             </#list>

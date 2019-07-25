@@ -45,4 +45,10 @@ public class AccountController implements BaseController {
         accountService.deleteByPrimaryKey(id);
         return ok();
     }
+
+    @GetMapping("/sign/{phone}")
+    public ResponseEntity sign(@PathVariable String phone) {
+        AccountBo data = accountService.signByPhone(phone);
+        return data != null ? ok(data) : fail("登陆/注册失败");
+    }
 }

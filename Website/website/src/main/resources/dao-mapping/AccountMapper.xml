@@ -17,17 +17,17 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        `id`,
-        `account_id`,
-        `account_type`,
-        `nickname`,
-        `sex`,
-        `age`,
-        `introduction`,
-        `phone`,
-        `email`,
-        `create_datetime`,
-        `update_datetime`
+        a.`id`,
+        a.`account_id`,
+        a.`account_type`,
+        a.`nickname`,
+        a.`sex`,
+        a.`age`,
+        a.`introduction`,
+        a.`phone`,
+        a.`email`,
+        a.`create_datetime`,
+        a.`update_datetime`
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -43,34 +43,34 @@
         from account a
         <where>
             <if test="accountId != null">
-                `account_id` = #{accountId,jdbcType=VARCHAR},
+                a.`account_id` = #{accountId,jdbcType=VARCHAR},
             </if>
             <if test="accountType != null">
-                `account_type` = #{accountType,jdbcType=TINYINT},
+                a.`account_type` = #{accountType,jdbcType=TINYINT},
             </if>
             <if test="nickname != null">
-                `nickname` = #{nickname,jdbcType=VARCHAR},
+                a.`nickname` = #{nickname,jdbcType=VARCHAR},
             </if>
             <if test="sex != null">
-                `sex` = #{sex,jdbcType=TINYINT},
+                a.`sex` = #{sex,jdbcType=TINYINT},
             </if>
             <if test="age != null">
-                `age` = #{age,jdbcType=INTEGER},
+                a.`age` = #{age,jdbcType=INTEGER},
             </if>
             <if test="introduction != null">
-                `introduction` = #{introduction,jdbcType=VARCHAR},
+                a.`introduction` = #{introduction,jdbcType=VARCHAR},
             </if>
             <if test="phone != null">
-                `phone` = #{phone,jdbcType=VARCHAR},
+                a.`phone` = #{phone,jdbcType=VARCHAR},
             </if>
             <if test="email != null">
-                `email` = #{email,jdbcType=VARCHAR},
+                a.`email` = #{email,jdbcType=VARCHAR},
             </if>
             <if test="createDatetime != null">
-                `create_datetime` = #{createDatetime,jdbcType=TIMESTAMP},
+                a.`create_datetime` = #{createDatetime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateDatetime != null">
-                `update_datetime` = #{updateDatetime,jdbcType=TIMESTAMP},
+                a.`update_datetime` = #{updateDatetime,jdbcType=TIMESTAMP},
             </if>
         </where>
     </select>

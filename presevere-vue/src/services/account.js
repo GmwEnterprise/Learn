@@ -84,5 +84,16 @@ export default {
           error()
         }
       }).catch(() => error())
-  }
+  },
+
+  sign(phone, success, error) {
+    axios.get(`/app/account/sign/${phone}`)
+      .then(response => {
+        if (response.data.code === 0) {
+          success(response.data)
+        } else {
+          error()
+        }
+      }).catch(() => error())
+  },
 }

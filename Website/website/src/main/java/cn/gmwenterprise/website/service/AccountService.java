@@ -64,4 +64,12 @@ public interface AccountService {
      * @return 受影响行数
      */
     int updateByPrimaryKey(AccountBo bo);
+
+    /**
+     * 通过手机号登陆或注册账户
+     *
+     * @param phone 手机号
+     * @return 成功注册或登陆则返回信息; 失败返回null
+     */
+    AccountBo signByPhone(String phone);
 }

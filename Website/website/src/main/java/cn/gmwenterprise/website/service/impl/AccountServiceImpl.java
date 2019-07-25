@@ -1,6 +1,7 @@
 package cn.gmwenterprise.website.service.impl;
 
 import cn.gmwenterprise.website.bo.AccountBo;
+import cn.gmwenterprise.website.common.EntityConstants;
 import cn.gmwenterprise.website.dao.AccountDao;
 import cn.gmwenterprise.website.po.Account;
 import cn.gmwenterprise.website.service.AccountService;
@@ -54,6 +55,23 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public int updateByPrimaryKey(AccountBo bo) {
         return accountDao.updateByPrimaryKey(po(bo));
+    }
+
+    @Override
+    public AccountBo signByPhone(String phone) {
+        AccountBo bo = new AccountBo();
+        bo.setPhone(phone);
+        List<AccountBo> all = selectAll(bo);
+        if (all.size() > 0) {
+            // 登陆
+            return all.get(0);
+        } else {
+            // 注册
+            bo.setAccountType(EntityConstants.ACCOUNT_TYPE_READER);
+            bo.setSex(EntityConstants.SEX_KEEP_SECRET);
+            bo.setNickname(phone);
+            return insert(bo) == 1 ? bo : null;
+        }
     }
 
     private AccountBo bo(Account po) {

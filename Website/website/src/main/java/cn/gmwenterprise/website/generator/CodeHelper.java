@@ -35,14 +35,14 @@ public class CodeHelper {
             return;
         }
         Map<String, Object> tsMap = ts.toMap();
-        generatePoFile(tsMap);
-        generateBoFile(tsMap);
-        generateDaoFile(tsMap);
+//        generatePoFile(tsMap);
+//        generateBoFile(tsMap);
+//        generateDaoFile(tsMap);
         generateMapperFile(tsMap);
-        generateServiceFile(tsMap);
-        generateServiceImplFile(tsMap);
-        generateServiceJsFile(tsMap);
-        generateControllerFile(tsMap);
+//        generateServiceFile(tsMap);
+//        generateServiceImplFile(tsMap);
+//        generateServiceJsFile(tsMap);
+//        generateControllerFile(tsMap);
     }
 
     /**

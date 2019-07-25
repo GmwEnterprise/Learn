@@ -12,12 +12,12 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        `id`,
-        `comment_writer`,
-        `comment_content`,
-        `comment_belong`,
-        `create_datetime`,
-        `status`
+        a.`id`,
+        a.`comment_writer`,
+        a.`comment_content`,
+        a.`comment_belong`,
+        a.`create_datetime`,
+        a.`status`
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -33,19 +33,19 @@
         from comment a
         <where>
             <if test="commentWriter != null">
-                `comment_writer` = #{commentWriter,jdbcType=VARCHAR},
+                a.`comment_writer` = #{commentWriter,jdbcType=VARCHAR},
             </if>
             <if test="commentContent != null">
-                `comment_content` = #{commentContent,jdbcType=VARCHAR},
+                a.`comment_content` = #{commentContent,jdbcType=VARCHAR},
             </if>
             <if test="commentBelong != null">
-                `comment_belong` = #{commentBelong,jdbcType=INTEGER},
+                a.`comment_belong` = #{commentBelong,jdbcType=INTEGER},
             </if>
             <if test="createDatetime != null">
-                `create_datetime` = #{createDatetime,jdbcType=TIMESTAMP},
+                a.`create_datetime` = #{createDatetime,jdbcType=TIMESTAMP},
             </if>
             <if test="status != null">
-                `status` = #{status,jdbcType=TINYINT},
+                a.`status` = #{status,jdbcType=TINYINT},
             </if>
         </where>
     </select>

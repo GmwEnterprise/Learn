@@ -10,6 +10,9 @@
 </template>
 
 <script>
+import validator from '@/tools/validator.js'
+import accountService from '@/services/account.js'
+import store from '@/services/local-store.js'
 export default {
   name: 'LoginForm',
   data() {
@@ -18,7 +21,16 @@ export default {
     }
   },
   methods: {
-    submit() {}
+    submit() {
+      if (validator.validPhone(this.phone)) {
+        accountService.sign(this.phone, data => {
+          store.set('identification', data)
+          this.$store.commit('changeLoginStatus')
+        }, () => {
+          console.error('登陆报错')
+        })
+      }
+    }
   }
 }
 </script>
