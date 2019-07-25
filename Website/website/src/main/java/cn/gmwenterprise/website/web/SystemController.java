@@ -2,7 +2,7 @@ package cn.gmwenterprise.website.web;
 
 import cn.gmwenterprise.website.common.BaseController;
 import cn.gmwenterprise.website.common.ResponseEntity;
-import cn.gmwenterprise.website.service.DatabaseService;
+import cn.gmwenterprise.website.service.sys.DatabaseService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

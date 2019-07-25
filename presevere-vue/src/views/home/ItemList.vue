@@ -8,13 +8,9 @@
 
 <script>
 import Item from './Item.vue'
-import { queryAll as queryAllAccount } from '@/services/account.js'
 export default {
   name: 'itemList',
-  components: { Item },
-  created() {
-    queryAllAccount(null, data => console.log(data), () => console.error('error ajax !'))
-  }
+  components: { Item }
 }
 </script>
 

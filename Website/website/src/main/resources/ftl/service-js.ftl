@@ -8,7 +8,7 @@ export default {
    * @param {function} error
    */
   queryByKey(key, success, error) {
-    axios.get(`/app/account/${key}`)
+    ${'axios.get(`/app/${entityAlias}/$' + '{key}`)'}
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)
@@ -17,7 +17,7 @@ export default {
         }
       }).catch(() => error())
   },
-
+  
   /**
    * 查询多条数据
    * @param {object} params
@@ -25,7 +25,7 @@ export default {
    * @param {function} error
    */
   queryAll(params, success, error) {
-    axios.get('/app/account/', params)
+    axios.get('/app/${entityAlias}/', params)
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)
@@ -34,7 +34,7 @@ export default {
         }
       }).catch(() => error())
   },
-
+  
   /**
    * 新增数据
    * @param {object} params
@@ -42,7 +42,7 @@ export default {
    * @param {function} error
    */
   add(params, success, error) {
-    axios.post('/app/account/', params)
+    axios.post('/app/${entityAlias}/', params)
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)
@@ -51,7 +51,7 @@ export default {
         }
       }).catch(() => error())
   },
-
+  
   /**
    * 修改数据
    * @param {object} params
@@ -59,7 +59,7 @@ export default {
    * @param {function} error
    */
   modify(params, success, error) {
-    axios.patch('/app/account/', params)
+    axios.patch('/app/${entityAlias}/', params)
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)
@@ -68,7 +68,7 @@ export default {
         }
       }).catch(() => error())
   },
-
+  
   /**
    * 删除数据
    * @param {number | string} key
@@ -76,7 +76,7 @@ export default {
    * @param {function} error
    */
   delByKey(key, success, error) {
-    axios.delete(`/app/account/${key}`)
+    ${'axios.delete(`/app/${entityAlias}/$' + '{key}`)'}
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)

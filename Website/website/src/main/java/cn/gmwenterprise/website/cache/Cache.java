@@ -33,7 +33,7 @@ public interface Cache {
      * 获取指定类型缓存
      *
      * @param clazz 指定类型
-     * @param key 缓存键
+     * @param key   缓存键
      * @return 结果
      */
     <E> E get(Class<E> clazz, String key);
@@ -42,7 +42,7 @@ public interface Cache {
      * 获取指定类型缓存列表
      *
      * @param clazz 指定类型
-     * @param key 缓存键
+     * @param key   缓存键
      * @return 结果
      */
     <E> List<E> getList(Class<E> clazz, String key);

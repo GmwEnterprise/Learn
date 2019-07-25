@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Repository
 public interface ${entityName}Dao {
-    
+
     /**
      * 删除记录
      *
@@ -18,7 +18,7 @@ public interface ${entityName}Dao {
      * @return 受影响行数
      */
     int deleteByPrimaryKey(Integer ${keyProperty});
-    
+
     /**
      * 插入记录
      *
@@ -26,7 +26,7 @@ public interface ${entityName}Dao {
      * @return 受影响行数
      */
     int insert(${entityName} record);
-    
+
     /**
      * 插入满足条件的字段
      *
@@ -50,7 +50,7 @@ public interface ${entityName}Dao {
      * @return 结果
      */
     List<${entityName}> selectAll(${entityName} record);
-    
+
     /**
      * 更新满足条件的字段
      *
@@ -58,7 +58,7 @@ public interface ${entityName}Dao {
      * @return 受影响行数
      */
     int updateByPrimaryKeySelective(${entityName} record);
-    
+
     /**
      * 更新记录
      *

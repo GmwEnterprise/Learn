@@ -23,6 +23,7 @@
 
 <script>
 import LoginForm from '@/components/common/LoginForm.vue'
+import store from '@/services/local-store.js'
 export default {
   name: 'commonHeader',
   components: { LoginForm },
@@ -43,6 +44,9 @@ export default {
     signInOutBox() {
       this.$bvModal.show('sign-in-out')
     }
+  },
+  created() {
+    this.online = store.exist('identification')
   }
 }
 </script>

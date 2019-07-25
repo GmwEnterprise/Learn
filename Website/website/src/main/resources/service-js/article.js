@@ -8,7 +8,7 @@ export default {
    * @param {function} error
    */
   queryByKey(key, success, error) {
-    axios.get(`/app/account/${key}`)
+    axios.get(`/app/article/${key}`)
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)
@@ -25,7 +25,7 @@ export default {
    * @param {function} error
    */
   queryAll(params, success, error) {
-    axios.get('/app/account/', params)
+    axios.get('/app/article/', params)
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)
@@ -42,7 +42,7 @@ export default {
    * @param {function} error
    */
   add(params, success, error) {
-    axios.post('/app/account/', params)
+    axios.post('/app/article/', params)
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)
@@ -59,7 +59,7 @@ export default {
    * @param {function} error
    */
   modify(params, success, error) {
-    axios.patch('/app/account/', params)
+    axios.patch('/app/article/', params)
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)
@@ -76,7 +76,7 @@ export default {
    * @param {function} error
    */
   delByKey(key, success, error) {
-    axios.delete(`/app/account/${key}`)
+    axios.delete(`/app/article/${key}`)
       .then(response => {
         if (response.data.code === 0) {
           success(response.data)

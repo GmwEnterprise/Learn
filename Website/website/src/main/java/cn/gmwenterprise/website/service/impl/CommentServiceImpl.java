@@ -13,31 +13,31 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl implements CommentService {
     private final CommentDao commentDao;
-    
+
     public CommentServiceImpl(CommentDao commentDao) {
         this.commentDao = commentDao;
     }
-    
+
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return commentDao.deleteByPrimaryKey(id);
     }
-    
+
     @Override
     public int insert(CommentBo bo) {
         return commentDao.insert(po(bo));
     }
-    
+
     @Override
     public int insertSelective(CommentBo bo) {
         return commentDao.insertSelective(po(bo));
     }
-    
+
     @Override
     public CommentBo selectByPrimaryKey(Integer id) {
         return bo(commentDao.selectByPrimaryKey(id));
     }
-    
+
     @Override
     public List<CommentBo> selectAll(CommentBo bo) {
         return commentDao.selectAll(po(bo))
@@ -57,12 +57,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private CommentBo bo(Comment po) {
+        if (po == null) {
+            return null;
+        }
         CommentBo bo = new CommentBo();
         BeanUtils.copyProperties(po, bo);
         return bo;
     }
 
     private Comment po(CommentBo bo) {
+        if (bo == null) {
+            return null;
+        }
         Comment po = new Comment();
         BeanUtils.copyProperties(bo, po);
         return po;

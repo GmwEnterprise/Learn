@@ -16,14 +16,17 @@ public class CodeHelper {
     private static final String MAPPER_PATH = "/src/main/resources/dao-mapping/";
     private static final String SERVICE_PATH = "/src/main/java/cn/gmwenterprise/website/service/";
     private static final String SERVICE_IMPL_PATH = "/src/main/java/cn/gmwenterprise/website/service/impl/";
+    private static final String SERVICE_JS_PATH = "/src/main/resources/service-js/";
     private static final String CONTROLLER_PATH = "/src/main/java/cn/gmwenterprise/website/web/";
 
     public static void main(String[] args) throws Exception {
-        generateTable("表名");
+        generateTable("account");
+        generateTable("article");
+        generateTable("comment");
     }
 
     public static void generateTable(String tableName) throws Exception {
-        generateAllFiles(DatabaseHelper.getInstance().getTableStruct("tableName"));
+        generateAllFiles(DatabaseHelper.getInstance().getTableStruct(tableName));
     }
 
     public static void generateAllFiles(TableStruct ts) throws Exception {
@@ -38,6 +41,7 @@ public class CodeHelper {
         generateMapperFile(tsMap);
         generateServiceFile(tsMap);
         generateServiceImplFile(tsMap);
+        generateServiceJsFile(tsMap);
         generateControllerFile(tsMap);
     }
 
@@ -127,6 +131,19 @@ public class CodeHelper {
     public static void generateControllerFile(Map<String, Object> ts) throws Exception {
         Template template = FreemarkerConfig.getTemplate("controller.ftl");
         File po = new File(System.getProperty("user.dir") + CONTROLLER_PATH + ts.get("entityName") + "Controller.java");
+        Writer out = new OutputStreamWriter(new FileOutputStream(po));
+        template.process(ts, out);
+        out.flush();
+    }
+
+    /**
+     * 生成serviceImpl
+     *
+     * @throws Exception 异常
+     */
+    public static void generateServiceJsFile(Map<String, Object> ts) throws Exception {
+        Template template = FreemarkerConfig.getTemplate("service-js.ftl");
+        File po = new File(System.getProperty("user.dir") + SERVICE_JS_PATH + ts.get("entityAlias") + ".js");
         Writer out = new OutputStreamWriter(new FileOutputStream(po));
         template.process(ts, out);
         out.flush();

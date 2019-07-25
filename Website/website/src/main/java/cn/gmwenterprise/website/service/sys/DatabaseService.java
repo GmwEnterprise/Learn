@@ -1,4 +1,4 @@
-package cn.gmwenterprise.website.service;
+package cn.gmwenterprise.website.service.sys;
 
 import java.util.List;
 

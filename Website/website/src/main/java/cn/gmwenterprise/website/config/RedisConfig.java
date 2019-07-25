@@ -20,8 +20,8 @@ public class RedisConfig {
         // 获取value序列化器
         Jackson2JsonRedisSerializer<Object> valueSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         valueSerializer.setObjectMapper(new ObjectMapper()
-                .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
-                .enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL));
+            .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
+            .enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL));
         // 获取template
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);

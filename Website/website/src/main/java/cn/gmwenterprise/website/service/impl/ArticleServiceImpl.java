@@ -13,31 +13,31 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleServiceImpl implements ArticleService {
     private final ArticleDao articleDao;
-    
+
     public ArticleServiceImpl(ArticleDao articleDao) {
         this.articleDao = articleDao;
     }
-    
+
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return articleDao.deleteByPrimaryKey(id);
     }
-    
+
     @Override
     public int insert(ArticleBo bo) {
         return articleDao.insert(po(bo));
     }
-    
+
     @Override
     public int insertSelective(ArticleBo bo) {
         return articleDao.insertSelective(po(bo));
     }
-    
+
     @Override
     public ArticleBo selectByPrimaryKey(Integer id) {
         return bo(articleDao.selectByPrimaryKey(id));
     }
-    
+
     @Override
     public List<ArticleBo> selectAll(ArticleBo bo) {
         return articleDao.selectAll(po(bo))
@@ -57,12 +57,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     private ArticleBo bo(Article po) {
+        if (po == null) {
+            return null;
+        }
         ArticleBo bo = new ArticleBo();
         BeanUtils.copyProperties(po, bo);
         return bo;
     }
 
     private Article po(ArticleBo bo) {
+        if (bo == null) {
+            return null;
+        }
         Article po = new Article();
         BeanUtils.copyProperties(bo, po);
         return po;

@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Repository
 public interface CommentDao {
-    
+
     /**
      * 删除记录
      *
@@ -18,7 +18,7 @@ public interface CommentDao {
      * @return 受影响行数
      */
     int deleteByPrimaryKey(Integer id);
-    
+
     /**
      * 插入记录
      *
@@ -26,7 +26,7 @@ public interface CommentDao {
      * @return 受影响行数
      */
     int insert(Comment record);
-    
+
     /**
      * 插入满足条件的字段
      *
@@ -50,7 +50,7 @@ public interface CommentDao {
      * @return 结果
      */
     List<Comment> selectAll(Comment record);
-    
+
     /**
      * 更新满足条件的字段
      *
@@ -58,7 +58,7 @@ public interface CommentDao {
      * @return 受影响行数
      */
     int updateByPrimaryKeySelective(Comment record);
-    
+
     /**
      * 更新记录
      *

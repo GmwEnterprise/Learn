@@ -13,31 +13,31 @@ import java.util.stream.Collectors;
 @Service
 public class AccountServiceImpl implements AccountService {
     private final AccountDao accountDao;
-    
+
     public AccountServiceImpl(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
-    
+
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return accountDao.deleteByPrimaryKey(id);
     }
-    
+
     @Override
     public int insert(AccountBo bo) {
         return accountDao.insert(po(bo));
     }
-    
+
     @Override
     public int insertSelective(AccountBo bo) {
         return accountDao.insertSelective(po(bo));
     }
-    
+
     @Override
     public AccountBo selectByPrimaryKey(Integer id) {
         return bo(accountDao.selectByPrimaryKey(id));
     }
-    
+
     @Override
     public List<AccountBo> selectAll(AccountBo bo) {
         return accountDao.selectAll(po(bo))
