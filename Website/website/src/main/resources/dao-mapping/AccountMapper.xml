@@ -43,34 +43,34 @@
         from account a
         <where>
             <if test="accountId != null">
-                a.`account_id` = #{accountId,jdbcType=VARCHAR},
+                and a.`account_id` = #{accountId,jdbcType=VARCHAR}
             </if>
             <if test="accountType != null">
-                a.`account_type` = #{accountType,jdbcType=TINYINT},
+                and a.`account_type` = #{accountType,jdbcType=TINYINT}
             </if>
             <if test="nickname != null">
-                a.`nickname` = #{nickname,jdbcType=VARCHAR},
+                and a.`nickname` = #{nickname,jdbcType=VARCHAR}
             </if>
             <if test="sex != null">
-                a.`sex` = #{sex,jdbcType=TINYINT},
+                and a.`sex` = #{sex,jdbcType=TINYINT}
             </if>
             <if test="age != null">
-                a.`age` = #{age,jdbcType=INTEGER},
+                and a.`age` = #{age,jdbcType=INTEGER}
             </if>
             <if test="introduction != null">
-                a.`introduction` = #{introduction,jdbcType=VARCHAR},
+                and a.`introduction` = #{introduction,jdbcType=VARCHAR}
             </if>
             <if test="phone != null">
-                a.`phone` = #{phone,jdbcType=VARCHAR},
+                and a.`phone` = #{phone,jdbcType=VARCHAR}
             </if>
             <if test="email != null">
-                a.`email` = #{email,jdbcType=VARCHAR},
+                and a.`email` = #{email,jdbcType=VARCHAR}
             </if>
             <if test="createDatetime != null">
-                a.`create_datetime` = #{createDatetime,jdbcType=TIMESTAMP},
+                and a.`create_datetime` = #{createDatetime,jdbcType=TIMESTAMP}
             </if>
             <if test="updateDatetime != null">
-                a.`update_datetime` = #{updateDatetime,jdbcType=TIMESTAMP},
+                and a.`update_datetime` = #{updateDatetime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>

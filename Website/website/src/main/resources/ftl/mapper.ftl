@@ -33,7 +33,7 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
             <#list columnList as item>
             <#if !item.isPrimaryKey>
             ${'<if test="${item.fieldName} != null">'}
-                ${'a.`${item.columnName}` = #' + '{${item.fieldName},jdbcType=${item.columnType}},'}
+                ${'and a.`${item.columnName}` = #' + '{${item.fieldName},jdbcType=${item.columnType}}'}
             ${'</if>'}
             </#if>
             </#list>

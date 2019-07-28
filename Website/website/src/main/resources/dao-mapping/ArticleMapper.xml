@@ -35,22 +35,22 @@
         from article a
         <where>
             <if test="title != null">
-                a.`title` = #{title,jdbcType=VARCHAR},
+                and a.`title` = #{title,jdbcType=VARCHAR}
             </if>
             <if test="wordContent != null">
-                a.`word_content` = #{wordContent,jdbcType=VARCHAR},
+                and a.`word_content` = #{wordContent,jdbcType=VARCHAR}
             </if>
             <if test="markdownContent != null">
-                a.`markdown_content` = #{markdownContent,jdbcType=VARCHAR},
+                and a.`markdown_content` = #{markdownContent,jdbcType=VARCHAR}
             </if>
             <if test="writer != null">
-                a.`writer` = #{writer,jdbcType=INTEGER},
+                and a.`writer` = #{writer,jdbcType=INTEGER}
             </if>
             <if test="writeDatetime != null">
-                a.`write_datetime` = #{writeDatetime,jdbcType=TIMESTAMP},
+                and a.`write_datetime` = #{writeDatetime,jdbcType=TIMESTAMP}
             </if>
             <if test="lastUpdateDatetime != null">
-                a.`last_update_datetime` = #{lastUpdateDatetime,jdbcType=TIMESTAMP},
+                and a.`last_update_datetime` = #{lastUpdateDatetime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>

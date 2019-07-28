@@ -33,19 +33,19 @@
         from comment a
         <where>
             <if test="commentWriter != null">
-                a.`comment_writer` = #{commentWriter,jdbcType=VARCHAR},
+                and a.`comment_writer` = #{commentWriter,jdbcType=VARCHAR}
             </if>
             <if test="commentContent != null">
-                a.`comment_content` = #{commentContent,jdbcType=VARCHAR},
+                and a.`comment_content` = #{commentContent,jdbcType=VARCHAR}
             </if>
             <if test="commentBelong != null">
-                a.`comment_belong` = #{commentBelong,jdbcType=INTEGER},
+                and a.`comment_belong` = #{commentBelong,jdbcType=INTEGER}
             </if>
             <if test="createDatetime != null">
-                a.`create_datetime` = #{createDatetime,jdbcType=TIMESTAMP},
+                and a.`create_datetime` = #{createDatetime,jdbcType=TIMESTAMP}
             </if>
             <if test="status != null">
-                a.`status` = #{status,jdbcType=TINYINT},
+                and a.`status` = #{status,jdbcType=TINYINT}
             </if>
         </where>
     </select>
