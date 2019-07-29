@@ -89,6 +89,7 @@ export default {
   sign(phone, success, error) {
     axios.get(`/app/account/sign/${phone}`)
       .then(response => {
+        alert(JSON.stringify(response))
         if (response.data.code === 0) {
           success(response.data)
         } else {

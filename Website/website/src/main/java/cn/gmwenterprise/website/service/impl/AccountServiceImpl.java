@@ -70,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
             bo.setAccountType(EntityConstants.ACCOUNT_TYPE_READER);
             bo.setSex(EntityConstants.SEX_KEEP_SECRET);
             bo.setNickname(phone);
-            return insert(bo) == 1 ? bo : null;
+            return insertSelective(bo) == 1 ? bo : null;
         }
     }
 
