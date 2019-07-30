@@ -1,10 +1,10 @@
 export default {
   set(key, val) {
-    sessionStorage.setItem(key, val)
+    sessionStorage.setItem(key, JSON.stringify(val))
   },
 
   get(key) {
-    return sessionStorage.getItem(key)
+    return JSON.parse(sessionStorage.getItem(key))
   },
 
   exist(key) {

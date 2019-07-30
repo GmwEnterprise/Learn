@@ -23,14 +23,13 @@
 
 <script>
 import LoginForm from '@/components/common/LoginForm.vue'
-import store from '@/services/local-store.js'
+// import store from '@/services/local-store.js'
 export default {
   name: 'commonHeader',
   components: { LoginForm },
   data() {
     return {
-      currentUser: {},
-      headTitle: ''
+      headTitle: '标题'
     }
   },
   computed: {
@@ -38,25 +37,18 @@ export default {
       return this.$store.state.isLogin
     },
     headPath() {
-      return process.env.BASE_URL + (this.isLogin ? 'head-online.png' : 'head-offline.png')
-    }
-  },
-  watch: {
-    isLogin() {
-      if (this.isLogin) {
-        this.currentUser = store.get('identification')
-        this.headTitle = this.currentUser.nickname
-      } else {
-        this.currentUser = {}
-        this.headTitle = '请登陆'
-      }
+      return (
+        process.env.BASE_URL +
+        (this.isLogin ? 'head-online.png' : 'head-offline.png')
+      )
     }
   },
   methods: {
     signInOutBox() {
       this.$bvModal.show('sign-in-out')
     }
-  }
+  },
+  created() {}
 }
 </script>
 

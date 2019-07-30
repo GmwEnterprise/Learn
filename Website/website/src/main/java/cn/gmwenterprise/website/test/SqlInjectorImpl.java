@@ -44,6 +44,10 @@ public class SqlInjectorImpl implements SqlInjector {
         return null;
     }
 
+    private String field2StringParam(Object result) {
+        return null;
+    }
+
     private String camel2Case(String string) {
         List<String> strings = new ArrayList<>();
         int start = 0;
@@ -79,7 +83,7 @@ public class SqlInjectorImpl implements SqlInjector {
         System.out.println(sqlInjector.camel2Case("tbmMainInst"));
     }
 
-    public static void main1(String[] args) {
+    public static void main1(String[] args) throws Exception {
         String sql1 = "insert into user (id, user_name, sex, remark) values (?, ?, ?, ?)";
         String sql2 = "insert into user (id, user_name, sex, remark) values (:id, :userName, :sex, :remark)";
         SqlInjector injector = new SqlInjectorImpl();
