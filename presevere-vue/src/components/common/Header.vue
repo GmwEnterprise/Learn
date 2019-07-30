@@ -23,7 +23,6 @@
 
 <script>
 import LoginForm from '@/components/common/LoginForm.vue'
-// import store from '@/services/local-store.js'
 export default {
   name: 'commonHeader',
   components: { LoginForm },
