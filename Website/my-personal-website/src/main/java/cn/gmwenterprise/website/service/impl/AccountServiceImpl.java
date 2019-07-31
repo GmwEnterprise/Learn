@@ -1,5 +1,6 @@
 package cn.gmwenterprise.website.service.impl;
 
+import cn.gmwenterprise.website.common.EntityConstants;
 import cn.gmwenterprise.website.vo.AccountVo;
 import cn.gmwenterprise.website.dao.AccountDao;
 import cn.gmwenterprise.website.domain.Account;
@@ -8,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +56,23 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public int updateByPrimaryKey(AccountVo vo) {
         return accountDao.updateByPrimaryKey(domain(vo));
+    }
+
+    @Override
+    public AccountVo signByEmail(String email) {
+        AccountVo vo = new AccountVo();
+        vo.setEmail(email);
+        List<AccountVo> vos = selectAll(vo);
+        if (vos.size() == 1) {
+            return vos.get(0);
+        }
+        String[] split = email.split("@");
+        String prefix = split[0];
+        vo.setAccountId(UUID.randomUUID().toString());
+        vo.setNickname(prefix);
+        vo.setSex(EntityConstants.SEX_KEEP_SECRET);
+        insert(vo);
+        return selectByPrimaryKey(vo.getId());
     }
 
     private AccountVo vo(Account domain) {

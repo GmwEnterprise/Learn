@@ -45,4 +45,10 @@ public class AccountController implements BaseController {
         accountService.deleteByPrimaryKey(id);
         return ok();
     }
+
+    @PostMapping("/sign")
+    public ResponseEntity sign(@RequestBody AccountVo vo) {
+        AccountVo data = accountService.signByEmail(vo.getEmail());
+        return data != null ? ok(data) : fail("登陆/注册失败");
+    }
 }

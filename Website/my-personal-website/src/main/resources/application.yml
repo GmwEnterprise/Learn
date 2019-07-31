@@ -1,5 +1,6 @@
 logging:
-  level: cn.gmwenterprise.website.dao=DEBUG
+  level:
+    cn.gmwenterprise.website.dao: DEBUG
 
 server:
   port: 4200

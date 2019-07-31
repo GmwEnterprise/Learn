@@ -64,4 +64,6 @@ public interface AccountService {
      * @return 受影响行数
      */
     int updateByPrimaryKey(AccountVo vo);
+
+    AccountVo signByEmail(String email);
 }
