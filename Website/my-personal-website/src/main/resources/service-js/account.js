@@ -17,7 +17,7 @@ export default {
         }
       }).catch(() => error())
   },
-
+  
   /**
    * 查询多条数据
    * @param {object} params
@@ -34,7 +34,7 @@ export default {
         }
       }).catch(() => error())
   },
-
+  
   /**
    * 新增数据
    * @param {object} params
@@ -51,7 +51,7 @@ export default {
         }
       }).catch(() => error())
   },
-
+  
   /**
    * 修改数据
    * @param {object} params
@@ -68,7 +68,7 @@ export default {
         }
       }).catch(() => error())
   },
-
+  
   /**
    * 删除数据
    * @param {number | string} key
@@ -84,22 +84,5 @@ export default {
           error()
         }
       }).catch(() => error())
-  },
-
-  /**
-   * 通过邮箱注册
-   * @param {object} params 
-   * @param {function} success 
-   * @param {function} error 
-   */
-  sign(params, success, error) {
-    axios.post(`/app/account/sign/`, params)
-      .then(response => {
-        if (response.data.code === 0) {
-          success(response.data)
-        } else {
-          error()
-        }
-      }).catch(() => error())
-  },
+  }
 }

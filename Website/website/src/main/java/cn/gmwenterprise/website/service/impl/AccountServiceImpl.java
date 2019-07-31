@@ -58,9 +58,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountBo signByPhone(String phone) {
+    public AccountBo signByEmail(String email) {
         AccountBo bo = new AccountBo();
-        bo.setPhone(phone);
+        bo.setEmail(email);
         List<AccountBo> all = selectAll(bo);
         if (all.size() > 0) {
             // 登陆
@@ -69,7 +69,7 @@ public class AccountServiceImpl implements AccountService {
             // 注册
             bo.setAccountType(EntityConstants.ACCOUNT_TYPE_READER);
             bo.setSex(EntityConstants.SEX_KEEP_SECRET);
-            bo.setNickname(phone);
+            bo.setNickname(email.split("@")[0]);
             return insertSelective(bo) == 1 ? bo : null;
         }
     }

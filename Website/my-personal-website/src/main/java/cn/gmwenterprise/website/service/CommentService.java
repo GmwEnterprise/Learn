@@ -1,13 +1,13 @@
 package cn.gmwenterprise.website.service;
 
-import cn.gmwenterprise.website.bo.AccountBo;
+import cn.gmwenterprise.website.vo.CommentVo;
 
 import java.util.List;
 
 /**
  * @author gmw
  */
-public interface AccountService {
+public interface CommentService {
 
     /**
      * 删除记录
@@ -20,18 +20,18 @@ public interface AccountService {
     /**
      * 插入记录
      *
-     * @param bo 记录
+     * @param vo 记录
      * @return 受影响行数
      */
-    int insert(AccountBo bo);
+    int insert(CommentVo vo);
 
     /**
      * 插入满足条件的字段
      *
-     * @param bo 记录
+     * @param vo 记录
      * @return 受影响行数
      */
-    int insertSelective(AccountBo bo);
+    int insertSelective(CommentVo vo);
 
     /**
      * 查询记录
@@ -39,37 +39,29 @@ public interface AccountService {
      * @param id 主键
      * @return 结果
      */
-    AccountBo selectByPrimaryKey(Integer id);
+    CommentVo selectByPrimaryKey(Integer id);
 
     /**
      * 查询所有记录
      *
-     * @param bo 条件
+     * @param vo 条件
      * @return 结果
      */
-    List<AccountBo> selectAll(AccountBo bo);
+    List<CommentVo> selectAll(CommentVo vo);
 
     /**
      * 更新满足条件的字段
      *
-     * @param bo 记录
+     * @param vo 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKeySelective(AccountBo bo);
+    int updateByPrimaryKeySelective(CommentVo vo);
 
     /**
      * 更新记录
      *
-     * @param bo 记录
+     * @param vo 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKey(AccountBo bo);
-
-    /**
-     * 通过邮箱登陆或注册账户
-     *
-     * @param email 邮箱
-     * @return 成功注册或登陆则返回信息; 失败返回null
-     */
-    AccountBo signByEmail(String email);
+    int updateByPrimaryKey(CommentVo vo);
 }

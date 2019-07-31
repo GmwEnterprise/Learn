@@ -32,13 +32,10 @@ export default {
     }
   },
   computed: {
-    isLogin() {
-      return this.$store.state.isLogin
-    },
     headPath() {
       return (
         process.env.BASE_URL +
-        (this.isLogin ? 'head-online.png' : 'head-offline.png')
+        (this.$store.state.isLogin ? 'head-online.png' : 'head-offline.png')
       )
     }
   },

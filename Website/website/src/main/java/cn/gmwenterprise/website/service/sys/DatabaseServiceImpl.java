@@ -63,7 +63,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         return resultList;
     }
 
-    public class TableMsg {
+    public static class TableMsg {
         private String name;
         private LocalDateTime createTime;
         private String collection;

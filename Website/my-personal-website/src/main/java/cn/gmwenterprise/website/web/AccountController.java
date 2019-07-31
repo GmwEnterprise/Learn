@@ -1,6 +1,6 @@
 package cn.gmwenterprise.website.web;
 
-import cn.gmwenterprise.website.bo.AccountBo;
+import cn.gmwenterprise.website.vo.AccountVo;
 import cn.gmwenterprise.website.common.BaseController;
 import cn.gmwenterprise.website.common.ResponseEntity;
 import cn.gmwenterprise.website.service.AccountService;
@@ -24,19 +24,19 @@ public class AccountController implements BaseController {
     }
 
     @GetMapping("/")
-    public ResponseEntity queryAll(AccountBo bo) {
-        return ok(accountService.selectAll(bo));
+    public ResponseEntity queryAll(AccountVo vo) {
+        return ok(accountService.selectAll(vo));
     }
 
     @PostMapping("/")
-    public ResponseEntity add(@RequestBody AccountBo bo) {
-        accountService.insert(bo);
+    public ResponseEntity add(@RequestBody AccountVo vo) {
+        accountService.insert(vo);
         return ok();
     }
 
     @PatchMapping("/")
-    public ResponseEntity modify(@RequestBody AccountBo bo) {
-        accountService.updateByPrimaryKeySelective(bo);
+    public ResponseEntity modify(@RequestBody AccountVo vo) {
+        accountService.updateByPrimaryKeySelective(vo);
         return ok();
     }
 
@@ -44,11 +44,5 @@ public class AccountController implements BaseController {
     public ResponseEntity delete(@PathVariable Integer id) {
         accountService.deleteByPrimaryKey(id);
         return ok();
-    }
-
-    @PostMapping("/sign")
-    public ResponseEntity sign(@RequestBody AccountBo accountBo) {
-        AccountBo data = accountService.signByEmail(accountBo.getEmail());
-        return data != null ? ok(data) : fail("登陆/注册失败");
     }
 }

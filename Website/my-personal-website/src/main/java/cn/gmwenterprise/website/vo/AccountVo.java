@@ -1,9 +1,5 @@
-package cn.gmwenterprise.website.bo;
+package cn.gmwenterprise.website.vo;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 
 import java.time.*;
@@ -12,7 +8,7 @@ import java.time.*;
  * Account 业务对象
  */
 @Data
-public class AccountBo {
+public class AccountVo {
     /**
      * PRIMARY KEY<br>
      * AUTO INCREMENT<br>
@@ -44,23 +40,19 @@ public class AccountBo {
      */
     private String introduction;
     /**
-     * [phone] 手机号，不可以为空，注册必填
+     * [phone] 手机号
      */
     private String phone;
     /**
-     * [email] 邮箱
+     * [email] 邮箱，注册必填
      */
     private String email;
     /**
      * [create_datetime] 字段创建时间
      */
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createDatetime;
     /**
      * [update_datetime] 字段上一次更新时间
      */
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime updateDatetime;
 }
