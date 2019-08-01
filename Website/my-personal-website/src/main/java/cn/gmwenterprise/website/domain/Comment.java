@@ -3,10 +3,10 @@ package cn.gmwenterprise.website.domain;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
-import java.time.*;
+import java.time.LocalDateTime;
 
 /**
- * comment 
+ * comment
  */
 @Data
 @Alias("comment")
