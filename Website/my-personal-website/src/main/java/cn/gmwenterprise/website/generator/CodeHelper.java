@@ -21,8 +21,6 @@ public class CodeHelper {
 
     public static void main(String[] args) throws Exception {
         generateTable("account");
-        generateTable("article");
-        generateTable("comment");
     }
 
     public static void generateTable(String tableName) throws Exception {
