@@ -23,6 +23,7 @@ public class CodeHelper {
         // generateTable("account");
         generateTable("article");
         generateTable("comment");
+        generateTable("account");
     }
 
     public static void generateTable(String tableName) throws Exception {
