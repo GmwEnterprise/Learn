@@ -1,8 +1,9 @@
 package cn.gmwenterprise.website.vo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.*;
 
 /**
  * Comment 业务对象
@@ -30,6 +31,7 @@ public class CommentVo {
     /**
      * [create_datetime] 评论时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDatetime;
     /**
      * [status] 该条评论状态，1-公开，2-删除

@@ -29,6 +29,6 @@ spring:
     prefix: classpath:/templates/
 
 mybatis:
-  config-location: classpath:mybatis.config.xml
   type-aliases-package: cn.gmwenterprise.website.domain
   mapper-locations: classpath:dao-mapping/**
+  config-location: classpath:mybatis.config.xml

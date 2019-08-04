@@ -1,6 +1,7 @@
 package cn.gmwenterprise.website.vo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -50,9 +51,11 @@ public class AccountVo {
     /**
      * [create_datetime] 字段创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDatetime;
     /**
      * [update_datetime] 字段上一次更新时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateDatetime;
 }

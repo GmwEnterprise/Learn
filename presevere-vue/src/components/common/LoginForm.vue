@@ -28,7 +28,8 @@ export default {
         // 邮箱验证通过
         Account.sign(
           {
-            email
+            email,
+            createDatetime: '2019-09-19 12:00:00'
           },
           response => {
             console.log(response)
