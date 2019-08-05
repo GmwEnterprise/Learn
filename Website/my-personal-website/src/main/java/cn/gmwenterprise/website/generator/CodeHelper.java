@@ -20,10 +20,9 @@ public class CodeHelper {
     private static final String CONTROLLER_PATH = "/src/main/java/cn/gmwenterprise/website/web/";
 
     public static void main(String[] args) throws Exception {
-        // generateTable("account");
+        generateTable("account");
         generateTable("article");
         generateTable("comment");
-        generateTable("account");
     }
 
     public static void generateTable(String tableName) throws Exception {
@@ -36,14 +35,14 @@ public class CodeHelper {
             return;
         }
         Map<String, Object> tsMap = ts.toMap();
-        generatePoFile(tsMap);
+//        generatePoFile(tsMap);
         generateBoFile(tsMap);
-        generateDaoFile(tsMap);
-        generateMapperFile(tsMap);
-        generateServiceFile(tsMap);
-        generateServiceImplFile(tsMap);
-        generateServiceJsFile(tsMap);
-        generateControllerFile(tsMap);
+//        generateDaoFile(tsMap);
+//        generateMapperFile(tsMap);
+//        generateServiceFile(tsMap);
+//        generateServiceImplFile(tsMap);
+//        generateServiceJsFile(tsMap);
+//        generateControllerFile(tsMap);
     }
 
     /**

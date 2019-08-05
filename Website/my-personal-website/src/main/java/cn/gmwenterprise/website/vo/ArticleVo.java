@@ -1,7 +1,6 @@
 package cn.gmwenterprise.website.vo;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.*;
 
@@ -35,11 +34,9 @@ public class ArticleVo {
     /**
      * [write_datetime] 创建时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime writeDatetime;
     /**
      * [last_update_datetime] 最后更新时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastUpdateDatetime;
 }

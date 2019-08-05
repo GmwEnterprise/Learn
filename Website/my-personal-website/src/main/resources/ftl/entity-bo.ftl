@@ -1,7 +1,6 @@
 package cn.gmwenterprise.website.vo;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.*;
 
@@ -20,15 +19,6 @@ public class ${entityName}Vo {
     </#if>
      * [${field.columnName}] ${field.columnComment}
      */
-    <#if field.fieldType == 'LocalDateTime'>
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    </#if>
-    <#if field.fieldType == 'LocalDate'>
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    </#if>
-    <#if field.fieldType == 'LocalTime'>
-    @DateTimeFormat(pattern = "HH:mm:ss")
-    </#if>
     private ${field.fieldType} ${field.fieldName};
 </#list>
 }
