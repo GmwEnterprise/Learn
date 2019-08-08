@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import store from '@/services/local-store.js'
+import session from '@/services/session-store.js'
 export default {
   name: 'App',
   created() {
-    if (store.exist('identification')) {
+    if (session.exist('identification')) {
       this.$store.commit('changeLoginStatus')
     }
   }

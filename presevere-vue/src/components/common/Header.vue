@@ -9,15 +9,21 @@
         </b-col>
         <b-col class="media-hidden"></b-col>
         <b-col class="icon-wrapper right">
-          <a class="icon-link" href="javascript:void(0)" :title="headTitle" @click="signInOutBox">
+          <a id="head-link" class="icon-link" href="javascript:void(0)" :title="headTitle" @click="signInOut">
             <img class="icon" :src="headPath" style="height: 35px;" />
           </a>
         </b-col>
       </b-row>
     </b-container>
     <b-modal id="sign-in-out" hide-footer hide-header>
-      <login-form></login-form>
+      <login-form v-if="!isLogin"></login-form>
     </b-modal>
+    <b-popover
+      target="head-link"
+      title="Prop Examples"
+      triggers="hover focus"
+      content="Embedding content using properties is easy"
+    >Hello <strong>World!</strong></b-popover>
   </div>
 </template>
 
@@ -28,20 +34,30 @@ export default {
   components: { LoginForm },
   data() {
     return {
-      headTitle: '标题'
+      headTitle: '标题',
     }
   },
   computed: {
     headPath() {
       return (
         process.env.BASE_URL +
-        (this.$store.state.isLogin ? 'head-online.png' : 'head-offline.png')
+        (this.isLogin ? 'head-online.png' : 'head-offline.png')
       )
+    },
+    isLogin() {
+      return this.$store.state.isLogin
+    }
+  },
+  watch: {
+    isLogin() {
+      this.$bvModal.hide('sign-in-out')
     }
   },
   methods: {
-    signInOutBox() {
-      this.$bvModal.show('sign-in-out')
+    signInOut() {
+      if (!this.isLogin) {
+        this.$bvModal.show('sign-in-out')
+      }
     }
   },
   created() {}

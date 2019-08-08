@@ -12,6 +12,7 @@
 <script>
 import Validator from '@/tools/validator.js'
 import Account from '@/services/account.js'
+import session from '@/services/session-store.js'
 export default {
   name: 'LoginForm',
   data() {
@@ -28,14 +29,16 @@ export default {
         // 邮箱验证通过
         Account.sign(
           {
-            email,
-            createDatetime: '2019-09-19 12:00:00'
+            email
           },
           response => {
-            console.log(response)
+            // 登录成功
+            session.set('identification', response.data)
+            this.$store.commit('changeLoginStatus')
           },
           () => {
-            console.error('error')
+            // 登录失败
+            alert('登录失败，请稍后再试')
           }
         )
       } else {
