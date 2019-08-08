@@ -39,4 +39,13 @@ public class ArticleVo {
      * [last_update_datetime] 最后更新时间
      */
     private LocalDateTime lastUpdateDatetime;
+
+    /**
+     * 当前页（入参）
+     */
+    private Integer currentPage;
+    /**
+     * 每页条数（入参）
+     */
+    private Integer pageSize;
 }

@@ -1,19 +1,25 @@
 package cn.gmwenterprise.website.config.mybatis;
 
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.statement.StatementHandler;
+import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
+import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
+import org.apache.ibatis.scripting.xmltags.SqlNode;
+import org.apache.ibatis.scripting.xmltags.StaticTextSqlNode;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
 
 /**
  * 分页插件实现类
@@ -21,6 +27,7 @@ import java.util.Properties;
  * @author Gmw
  * @date 2019年8月7日 11:16:07
  */
+@Slf4j
 @Intercepts(
     @Signature(
         type = Executor.class,
@@ -44,14 +51,16 @@ public class PageHelper implements Interceptor {
      * @param startPage 起始页
      * @param pageSize  本页条数
      */
-    public static void startPage(int startPage, Integer pageSize) {
+    public static void startPage(Integer startPage, Integer pageSize) {
+        startPage = startPage != null && startPage > 0 ? startPage : 1;
+        PAGE_INFO.remove();
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPage(startPage);
         pageInfo.setPageSize(pageSize);
         PAGE_INFO.set(pageInfo);
     }
 
-    public static void startPage(int startPage) {
+    public static void startPage(Integer startPage) {
         startPage(startPage, null);
     }
 
@@ -63,24 +72,64 @@ public class PageHelper implements Interceptor {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Object intercept(Invocation invocation) throws Throwable {
         // 1. 检查线程中是否有分页参数，若没有则不启动分页
-        /*PageInfo pageInfo = PAGE_INFO.get();
+        PageInfo pageInfo = PAGE_INFO.get();
         if (!defaultUseFlag || pageInfo == null) {
             return invocation.proceed();
         }
         if (pageInfo.getPageSize() == null) {
             pageInfo.setPageSize(defaultPageSize);
-        }*/
-        // 2. 获取sql
-//        Executor executor = (Executor) getUnProxyObject(invocation.getTarget());
-//        MetaObject metaExecutor = SystemMetaObject.forObject(executor);
+        }
+        // 2. 获取未注入参数的sql
         Object[] args = invocation.getArgs();
         MappedStatement mappedStatement = (MappedStatement) args[0];
         Object parameterObject = args[1];
         BoundSql boundSql = mappedStatement.getBoundSql(parameterObject);
         MetaObject metaBoundSql = SystemMetaObject.forObject(boundSql);
-        // TODO 未完成
+        String sql = (String) metaBoundSql.getValue("sql");
+        // 3. 计算总条数、总页数
+        int total = 0;
+        String countSql = String.format("select count(1) as total from (%s) $_paging", sql);
+        Configuration configuration = mappedStatement.getConfiguration();
+        MetaObject metaMappedStatement = SystemMetaObject.forObject(mappedStatement);
+        DataSource dataSource = (DataSource) metaMappedStatement.getValue("configuration.environment.dataSource");
+        try (PreparedStatement pCount = dataSource.getConnection().prepareStatement(countSql)) {
+            BoundSql countBoundSql = new BoundSql(configuration, countSql, boundSql.getParameterMappings(), boundSql.getParameterObject());
+            ParameterHandler handler = new DefaultParameterHandler(mappedStatement, boundSql.getParameterObject(), countBoundSql);
+            handler.setParameters(pCount);
+            ResultSet rs = pCount.executeQuery();
+            while (rs.next()) {
+                total = rs.getInt("total");
+            }
+        }
+        int totalPage = total % pageInfo.getPageSize() == 0 ? total / pageInfo.getPageSize() : total / pageInfo.getPageSize() + 1;
+        // 4. 检测分页参数是否合法
+        if (pageInfo.getCurrentPage() > totalPage) {
+            log.warn("分页参数不合法！输入页码为[{}], 总页数为[{}]", pageInfo.getCurrentPage(), totalPage);
+            // 设置为最后一页
+            pageInfo.setCurrentPage(totalPage);
+        }
+        // 5. 填入分页参数
+        Page<?> page = new Page<>();
+        page.setCurrentPage(pageInfo.getCurrentPage());
+        page.setPageSize(pageInfo.getPageSize());
+        page.setTotal(total);
+        page.setTotalPage(totalPage);
+        page.setHasNextPage(pageInfo.getCurrentPage() < totalPage);
+        page.setHasPrevPage(pageInfo.getCurrentPage() > 1);
+        PAGE_RESULT.remove();
+        PAGE_RESULT.set(page);
+        // 6. 修改sql
+        ArrayList<SqlNode> sqlNodes = (ArrayList) metaMappedStatement.getValue("sqlSource.rootSqlNode.contents");
+        StaticTextSqlNode start = new StaticTextSqlNode("select * from (");
+        StaticTextSqlNode end = new StaticTextSqlNode(") $_paging_list limit " + (pageInfo.getCurrentPage() - 1) * pageInfo.getPageSize() + ", " + pageInfo.getPageSize());
+        ArrayList<SqlNode> newSqlNodes = Lists.newArrayList();
+        newSqlNodes.add(start);
+        newSqlNodes.addAll(sqlNodes);
+        newSqlNodes.add(end);
+        metaMappedStatement.setValue("sqlSource.rootSqlNode.contents", newSqlNodes);
         return invocation.proceed();
     }
 

@@ -1,9 +1,10 @@
 package cn.gmwenterprise.website.web;
 
-import cn.gmwenterprise.website.vo.${entityName}Vo;
 import cn.gmwenterprise.website.common.BaseController;
 import cn.gmwenterprise.website.common.ResponseEntity;
+import cn.gmwenterprise.website.config.mybatis.PageHelper;
 import cn.gmwenterprise.website.service.${entityName}Service;
+import cn.gmwenterprise.website.vo.${entityName}Vo;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,7 +26,8 @@ public class ${entityName}Controller implements BaseController {
 
     @GetMapping("/")
     public ResponseEntity queryAll(${entityName}Vo vo) {
-        return ok(${entityAlias}Service.selectAll(vo));
+        PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
+        return ok(PageHelper.page(${entityAlias}Service.selectAll(vo)));
     }
 
     @PostMapping("/")

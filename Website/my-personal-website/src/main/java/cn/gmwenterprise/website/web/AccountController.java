@@ -2,11 +2,10 @@ package cn.gmwenterprise.website.web;
 
 import cn.gmwenterprise.website.common.BaseController;
 import cn.gmwenterprise.website.common.ResponseEntity;
+import cn.gmwenterprise.website.config.mybatis.PageHelper;
 import cn.gmwenterprise.website.service.AccountService;
 import cn.gmwenterprise.website.vo.AccountVo;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 /**
  * @author gmw
@@ -27,7 +26,8 @@ public class AccountController implements BaseController {
 
     @GetMapping("/")
     public ResponseEntity queryAll(AccountVo vo) {
-        return ok(accountService.selectAll(vo));
+        PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
+        return ok(PageHelper.page(accountService.selectAll(vo)));
     }
 
     @PostMapping("/")

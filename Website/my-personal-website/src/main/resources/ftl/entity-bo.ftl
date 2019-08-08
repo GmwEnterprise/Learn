@@ -21,4 +21,13 @@ public class ${entityName}Vo {
      */
     private ${field.fieldType} ${field.fieldName};
 </#list>
+
+    /**
+     * 当前页（入参）
+     */
+    private Integer currentPage;
+    /**
+     * 每页条数（入参）
+     */
+    private Integer pageSize;
 }

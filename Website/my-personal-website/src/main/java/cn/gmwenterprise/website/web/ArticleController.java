@@ -1,9 +1,10 @@
 package cn.gmwenterprise.website.web;
 
-import cn.gmwenterprise.website.vo.ArticleVo;
 import cn.gmwenterprise.website.common.BaseController;
 import cn.gmwenterprise.website.common.ResponseEntity;
+import cn.gmwenterprise.website.config.mybatis.PageHelper;
 import cn.gmwenterprise.website.service.ArticleService;
+import cn.gmwenterprise.website.vo.ArticleVo;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,7 +26,8 @@ public class ArticleController implements BaseController {
 
     @GetMapping("/")
     public ResponseEntity queryAll(ArticleVo vo) {
-        return ok(articleService.selectAll(vo));
+        PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
+        return ok(PageHelper.page(articleService.selectAll(vo)));
     }
 
     @PostMapping("/")

@@ -55,4 +55,13 @@ public class AccountVo {
      * [update_datetime] 字段上一次更新时间
      */
     private LocalDateTime updateDatetime;
+
+    /**
+     * 当前页（入参）
+     */
+    private Integer currentPage;
+    /**
+     * 每页条数（入参）
+     */
+    private Integer pageSize;
 }

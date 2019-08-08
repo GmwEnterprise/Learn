@@ -1,9 +1,10 @@
 package cn.gmwenterprise.website.web;
 
-import cn.gmwenterprise.website.vo.CommentVo;
 import cn.gmwenterprise.website.common.BaseController;
 import cn.gmwenterprise.website.common.ResponseEntity;
+import cn.gmwenterprise.website.config.mybatis.PageHelper;
 import cn.gmwenterprise.website.service.CommentService;
+import cn.gmwenterprise.website.vo.CommentVo;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,7 +26,8 @@ public class CommentController implements BaseController {
 
     @GetMapping("/")
     public ResponseEntity queryAll(CommentVo vo) {
-        return ok(commentService.selectAll(vo));
+        PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
+        return ok(PageHelper.page(commentService.selectAll(vo)));
     }
 
     @PostMapping("/")

@@ -9,14 +9,6 @@
     </settings>
 
     <plugins>
-        <!--
-        <plugin interceptor="cn.gmwenterprise.website.config.mybatis.demopageplugin.PagePlugin">
-            <property name="default.page" value="1"/>
-            <property name="default.pageSize" value="20"/>
-            <property name="default.useFlag" value="true"/>
-            <property name="default.checkFlag" value="false"/>
-            <property name="default.cleanOrderBy" value="false"/>
-        </plugin> -->
         <plugin interceptor="cn.gmwenterprise.website.config.mybatis.PageHelper">
             <property name="default.pageSize" value="20"/>
             <property name="default.useFlag" value="true"/>

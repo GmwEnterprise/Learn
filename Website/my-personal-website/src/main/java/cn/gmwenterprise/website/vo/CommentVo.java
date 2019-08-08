@@ -35,4 +35,13 @@ public class CommentVo {
      * [status] 该条评论状态，1-公开，2-删除
      */
     private Integer status;
+
+    /**
+     * 当前页（入参）
+     */
+    private Integer currentPage;
+    /**
+     * 每页条数（入参）
+     */
+    private Integer pageSize;
 }

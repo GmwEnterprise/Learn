@@ -1,5 +1,7 @@
 package cn.gmwenterprise.website;
 
+import cn.gmwenterprise.website.config.mybatis.Page;
+import cn.gmwenterprise.website.config.mybatis.PageHelper;
 import cn.gmwenterprise.website.dao.AccountDao;
 import cn.gmwenterprise.website.domain.Account;
 import org.junit.Test;
@@ -19,11 +21,11 @@ public class MyPersonalWebsiteApplicationTests {
 
     @Test
     public void contextLoads() {
-        List<Account> accounts1 = accountDao.selectAll(new Account());
-        assert accounts1 != null;
-
-        Account account = accountDao.selectByPrimaryKey(1);
-        System.out.println(account != null);
+        Account record = new Account();
+        PageHelper.startPage(1, 1);
+        List<Account> accounts1 = accountDao.selectAll(record);
+        Page<Account> page = PageHelper.page(accounts1);
+        System.out.println(page);
     }
 
 }
