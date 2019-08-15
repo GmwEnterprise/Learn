@@ -64,12 +64,4 @@ public interface AccountService {
      * @return 受影响行数
      */
     int updateByPrimaryKey(AccountVo vo);
-
-    /**
-     * 通过邮箱登录或注册账户
-     *
-     * @param email 邮箱
-     * @return 成功注册或登录后返回登录账户信息
-     */
-    AccountVo signByEmail(String email);
 }

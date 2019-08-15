@@ -1,6 +1,3 @@
-// reset
-import '@/assets/reset.css'
-
 // sys
 import Vue from 'vue'
 import './plugins/axios'
@@ -8,11 +5,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-// bootstrap.js
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-Vue.use(BootstrapVue)
+// bootstrap
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 // my css
 import '@/assets/global.css'

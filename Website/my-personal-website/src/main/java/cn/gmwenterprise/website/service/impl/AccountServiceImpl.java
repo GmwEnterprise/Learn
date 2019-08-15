@@ -58,23 +58,6 @@ public class AccountServiceImpl implements AccountService {
         return accountDao.updateByPrimaryKey(domain(vo));
     }
 
-    @Override
-    public AccountVo signByEmail(String email) {
-        AccountVo vo = new AccountVo();
-        vo.setEmail(email);
-        List<AccountVo> vos = selectAll(vo);
-        if (vos.size() == 1) {
-            return vos.get(0);
-        }
-        String[] split = email.split("@");
-        String prefix = split[0];
-        vo.setAccountId(UUID.randomUUID().toString());
-        vo.setNickname(prefix);
-        vo.setSex(EntityConstants.SEX_KEEP_SECRET);
-        insert(vo);
-        return selectByPrimaryKey(vo.getId());
-    }
-
     private AccountVo vo(Account domain) {
         if (domain == null) {
             return null;

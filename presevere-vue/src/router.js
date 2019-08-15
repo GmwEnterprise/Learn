@@ -9,20 +9,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('@/views/home/Home.vue')
+      name: 'index',
+      component: () => import('@/views/index/Index.vue')
     }, {
-      path: '/about',
-      name: 'about',
-      component: () => import('@/views/about/About.vue')
-    }, {
-      path: '/writer',
-      name: 'writer',
-      component: () => import('@/views/writer/Writer.vue')
-    }, {
-      path: '/article',
-      name: '/article',
-      component: () => import('@/views/article/Article.vue')
+      path: '/sys',
+      name: 'system',
+      component: () => import('@/views/backstage/Main.vue'),
+      children: [
+        {
+          path: '/account',
+          component: () => import('@/views/backstage/models/Account.vue')
+        }
+      ]
     }
   ]
 })
