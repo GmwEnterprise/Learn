@@ -1,6 +1,6 @@
 package cn.gmwenterprise.website.config.mybatis;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -109,7 +109,7 @@ public class PageHelper implements Interceptor {
         if (pageInfo.getCurrentPage() > totalPage) {
             log.warn("分页参数不合法！输入页码为[{}], 总页数为[{}]", pageInfo.getCurrentPage(), totalPage);
             // 设置为最后一页
-            pageInfo.setCurrentPage(totalPage);
+            pageInfo.setCurrentPage(totalPage > 0 ? totalPage : 1);
         }
         // 5. 填入分页参数
         Page<?> page = new Page<>();
@@ -123,15 +123,22 @@ public class PageHelper implements Interceptor {
         PAGE_RESULT.set(page);
         // 6. 修改sql
         ArrayList<SqlNode> sqlNodes = (ArrayList) metaMappedStatement.getValue("sqlSource.rootSqlNode.contents");
-        StaticTextSqlNode start = new StaticTextSqlNode("select * from (");
-        StaticTextSqlNode end = new StaticTextSqlNode(") $_paging_list limit " + (pageInfo.getCurrentPage() - 1) * pageInfo.getPageSize() + ", " + pageInfo.getPageSize());
-        ArrayList<SqlNode> newSqlNodes = Lists.newArrayList();
-        newSqlNodes.add(start);
-        newSqlNodes.addAll(sqlNodes);
-        newSqlNodes.add(end);
-        metaMappedStatement.setValue("sqlSource.rootSqlNode.contents", newSqlNodes);
+        StaticTextSqlNode end = new StaticTextSqlNode(PAGE_ENDING + (pageInfo.getCurrentPage() - 1) * pageInfo.getPageSize() + ", " + pageInfo.getPageSize());
+        if (!SQL_NODES_MAP.containsKey(String.valueOf(System.identityHashCode(sqlNodes)))) {
+            StaticTextSqlNode start = new StaticTextSqlNode(PAGE_START);
+            sqlNodes.add(0, start);
+            SQL_NODES_MAP.put(String.valueOf(System.identityHashCode(sqlNodes)), sqlNodes);
+        } else {
+            sqlNodes.remove(sqlNodes.size() - 1);
+        }
+        sqlNodes.add(sqlNodes.size(), end);
+        metaMappedStatement.setValue("sqlSource.rootSqlNode.contents", sqlNodes);
         return invocation.proceed();
     }
+
+    private static final Map<String, ArrayList<SqlNode>> SQL_NODES_MAP = Maps.newHashMap();
+    private static final String PAGE_START = "select $_paging_list.* from (";
+    private static final String PAGE_ENDING = ") $_paging_list limit ";
 
     /**
      * 从代理对象中分离出真实对象

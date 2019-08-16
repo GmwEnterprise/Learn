@@ -24,19 +24,19 @@ public class ArticleController implements BaseController {
         return ok(articleService.selectByPrimaryKey(id));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity queryAll(ArticleVo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
         return ok(PageHelper.page(articleService.selectAll(vo)));
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity add(@RequestBody ArticleVo vo) {
         articleService.insert(vo);
         return ok();
     }
 
-    @PatchMapping("/")
+    @PatchMapping
     public ResponseEntity modify(@RequestBody ArticleVo vo) {
         articleService.updateByPrimaryKeySelective(vo);
         return ok();

@@ -2,14 +2,43 @@
   <div class="container-fluid">
     <div class="row" style="background-color: white;box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);">
       <div class="col-12" style="display: flex;">
-        <a href="javascript:void(0)" class="logo" :style="logoStyle"></a>
+        <!-- <a href="javascript:void(0)" class="logo" :style="logoStyle"></a> -->
+        <router-link to="/sys" :style="logoStyle" class="logo"></router-link>
       </div>
     </div>
-    <div class="row" style="margin-top: 1rem;">
-      <div class="col-2 catalog"></div>
+    <div class="row" style="margin-top: .5rem;">
+      <div class="col-2 catalog">
+        <a
+          class="catalog-link"
+          @click="accordion($event, 'c-s-data-manage')"
+          href="javascript:void(0)"
+        >
+          <i class="fa fa-table" aria-hidden="true"></i> 数据管理
+        </a>
+        <div class="catalog-sub" id="c-s-data-manage" style="display: none;">
+          <template v-if="tableList.length > 0">
+            <router-link
+              v-for="table of tableList"
+              :key="table.tableId"
+              :to="`/sys/tableList/${table.tableId}`"
+            >{{ table.tableAlias }}</router-link>
+          </template>
+          <a v-else href="javascript:void(0)">没有数据</a>
+        </div>
+        <a
+          class="catalog-link"
+          @click="accordion($event, 'c-s-user-manage')"
+          href="javascript:void(0)"
+        >
+          <i class="fa fa-bars" aria-hidden="true"></i> 界面管理
+        </a>
+        <div class="catalog-sub" id="c-s-user-manage" style="display: none;">
+          <router-link to="/sys/addLink">添加数据表</router-link>
+        </div>
+      </div>
       <div class="col-10" style="padding: 0;">
         <div class="content-wrapper">
-          <router-view></router-view>
+          <router-view />
         </div>
       </div>
     </div>
@@ -18,19 +47,57 @@
 
 <script>
 import logo from '@/assets/persevere.png'
+import SysTableListService from '@/services/interface/sysTableList.js'
 export default {
   data() {
     return {
+      tableList: [],
       logoStyle: {
         backgroundImage: `url(${logo})`,
         backgroundSize: 'contain',
         display: 'inline-block',
-        width: '24rem',
-        height: '5.5rem',
+        width: '13rem',
+        height: '3rem',
         backgroundRepeat: 'no-repeat',
         margin: '.5rem'
       }
     }
+  },
+  methods: {
+    accordion(event, targetId) {
+      event.target.classList.toggle('active')
+      const target = document.getElementById(targetId)
+      if (target.style.display === 'none') {
+        target.style.display = 'block'
+      } else {
+        target.style.display = 'none'
+      }
+      if (target.style.maxHeight) {
+        target.style.maxHeight = null
+      } else {
+        target.style.maxHeight = target.scrollHeight + 'px'
+      }
+    }
+  },
+  created() {
+    SysTableListService.queryAll(
+      {
+        currentPage: 1,
+        pageSize: 1000
+      },
+      response => {
+        console.log(response)
+        this.tableList = response.data.list
+          ? response.data.list.map(origin => {
+              return {
+                tableId: origin.id,
+                tableName: origin.tableServiceLink,
+                tableAlias: origin.tableName
+              }
+            })
+          : []
+      }
+    )
   }
 }
 </script>
@@ -39,15 +106,69 @@ export default {
 div.catalog {
   margin: 0;
   padding: 0;
-  height: calc(100vh - 7.5rem);
+  height: calc(100vh - 4.5rem);
   background-color: white;
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+  overflow-y: scroll;
 }
 div.content-wrapper {
-  height: calc(100vh - 7.5rem);
+  height: calc(100vh - 4.5rem);
   background-color: white;
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
-  width: calc(100% - 1.1rem);
-  margin-left: 1.1rem;
+  width: calc(100% - 0.6rem);
+  margin-left: 0.6rem;
+  overflow: scroll;
+  padding: 2rem;
+}
+a.catalog-link {
+  display: block;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.1rem;
+  text-align: center;
+  color: #0072bc;
+  transition: 0.4s;
+  overflow: hidden;
+}
+a.catalog-link.active {
+  background-color: #e6e6e6;
+}
+a.catalog-link:hover {
+  text-decoration: none;
+  background-color: #e6e6e6;
+  cursor: pointer;
+}
+.catalog-link:after {
+  content: '+';
+  color: #0072bc;
+  width: 2rem;
+  font-size: 1.1rem;
+  float: right;
+  margin-right: .5rem;
+  text-align: center;
+}
+.active:after {
+  content: '-';
+}
+div.catalog-sub {
+  width: 100%;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.2s ease-out;
+  background-color: white;
+}
+div.catalog-sub > a {
+  display: block;
+  font-size: 1rem;
+  text-align: center;
+  line-height: 2.4rem;
+  background-color: white;
+  margin: 0.4rem 0;
+  color: #777;
+  transition: 0.4s;
+}
+div.catalog-sub > a:hover {
+  color: #111;
+  text-decoration: none;
 }
 </style>

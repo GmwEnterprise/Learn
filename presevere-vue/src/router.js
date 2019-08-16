@@ -17,8 +17,17 @@ export default new Router({
       component: () => import('@/views/backstage/Main.vue'),
       children: [
         {
-          path: '/account',
-          component: () => import('@/views/backstage/models/Account.vue')
+          path: 'tableList/:tableId',
+          name: 'tableList',
+          component: () => import('@/views/backstage/TableList.vue')
+        }, {
+          path: 'tableEdit/:tableId',
+          name: 'tableEdit',
+          component: () => import('@/views/backstage/TableEdit.vue')
+        }, {
+          path: 'addLink',
+          name: 'addServiceLink',
+          component: () => import('@/views/backstage/AddServiceLink.vue')
         }
       ]
     }

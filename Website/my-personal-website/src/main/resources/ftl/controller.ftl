@@ -24,19 +24,19 @@ public class ${entityName}Controller implements BaseController {
         return ok(${entityAlias}Service.selectByPrimaryKey(${keyProperty}));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity queryAll(${entityName}Vo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
         return ok(PageHelper.page(${entityAlias}Service.selectAll(vo)));
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity add(@RequestBody ${entityName}Vo vo) {
         ${entityAlias}Service.insert(vo);
         return ok();
     }
 
-    @PatchMapping("/")
+    @PatchMapping
     public ResponseEntity modify(@RequestBody ${entityName}Vo vo) {
         ${entityAlias}Service.updateByPrimaryKeySelective(vo);
         return ok();

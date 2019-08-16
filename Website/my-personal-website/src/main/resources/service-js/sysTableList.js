@@ -8,7 +8,7 @@ export default {
    * @param {function} error
    */
   queryByKey(key, success, error) {
-    axios.get(`/app/account/${key}`, {
+    axios.get(`/app/sysTableList/${key}`, {
       timeout: 5000
     }).then(response => {
       if (response.data.code === 0) {
@@ -26,7 +26,7 @@ export default {
    * @param {function} error
    */
   queryAll(params, success, error) {
-    axios.get('/app/account', {
+    axios.get('/app/sysTableList', {
       params,
       timeout: 5000
     }).then(response => {
@@ -45,7 +45,7 @@ export default {
    * @param {function} error
    */
   add(params, success, error) {
-    axios.post('/app/account', params, {
+    axios.post('/app/sysTableList', params, {
       timeout: 5000
     }).then(response => {
       if (response.data.code === 0) {
@@ -63,7 +63,7 @@ export default {
    * @param {function} error
    */
   modify(params, success, error) {
-    axios.patch('/app/account', params, {
+    axios.patch('/app/sysTableList', params, {
       timeout: 5000
     }).then(response => {
       if (response.data.code === 0) {
@@ -81,7 +81,7 @@ export default {
    * @param {function} error
    */
   delByKey(key, success, error) {
-    axios.delete(`/app/account/${key}`, {
+    axios.delete(`/app/sysTableList/${key}`, {
       timeout: 5000
     }).then(response => {
       if (response.data.code === 0) {

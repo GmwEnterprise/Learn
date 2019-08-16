@@ -24,19 +24,19 @@ public class CommentController implements BaseController {
         return ok(commentService.selectByPrimaryKey(id));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity queryAll(CommentVo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
         return ok(PageHelper.page(commentService.selectAll(vo)));
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity add(@RequestBody CommentVo vo) {
         commentService.insert(vo);
         return ok();
     }
 
-    @PatchMapping("/")
+    @PatchMapping
     public ResponseEntity modify(@RequestBody CommentVo vo) {
         commentService.updateByPrimaryKeySelective(vo);
         return ok();

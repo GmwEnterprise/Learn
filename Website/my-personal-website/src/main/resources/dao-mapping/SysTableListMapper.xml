@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gmwenterprise.website.dao.SysTableListDao">
+
+    <resultMap id="BaseResultMap" type="sysTableList">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="table_name" jdbcType="VARCHAR" property="tableName"/>
+        <result column="table_service_link" jdbcType="VARCHAR" property="tableServiceLink"/>
+        <result column="create_datetime" jdbcType="TIMESTAMP" property="createDatetime"/>
+        <result column="update_datetime" jdbcType="TIMESTAMP" property="updateDatetime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        a.`id`,
+        a.`table_name`,
+        a.`table_service_link`,
+        a.`create_datetime`,
+        a.`update_datetime`
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_table_list a
+        where a.`id` = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_table_list a
+        <where>
+            <if test="tableName != null">
+                and a.`table_name` = #{tableName,jdbcType=VARCHAR}
+            </if>
+            <if test="tableServiceLink != null">
+                and a.`table_service_link` = #{tableServiceLink,jdbcType=VARCHAR}
+            </if>
+            <if test="createDatetime != null">
+                and a.`create_datetime` = #{createDatetime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateDatetime != null">
+                and a.`update_datetime` = #{updateDatetime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete
+        from sys_table_list a
+        where a.`id` = #{id}
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into sys_table_list (
+            `table_name`,
+            `table_service_link`,
+            `create_datetime`,
+            `update_datetime`
+        ) values (
+            #{tableName,jdbcType=VARCHAR},
+            #{tableServiceLink,jdbcType=VARCHAR},
+            #{createDatetime,jdbcType=TIMESTAMP},
+            #{updateDatetime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into sys_table_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableName != null">
+                `table_name`,
+            </if>
+            <if test="tableServiceLink != null">
+                `table_service_link`,
+            </if>
+            <if test="createDatetime != null">
+                `create_datetime`,
+            </if>
+            <if test="updateDatetime != null">
+                `update_datetime`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableName != null">
+                #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="tableServiceLink != null">
+                #{tableServiceLink,jdbcType=VARCHAR},
+            </if>
+            <if test="createDatetime != null">
+                #{createDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDatetime != null">
+                #{updateDatetime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective">
+        update sys_table_list
+        <set>
+            <if test="tableName != null">
+                `table_name` = #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="tableServiceLink != null">
+                `table_service_link` = #{tableServiceLink,jdbcType=VARCHAR},
+            </if>
+            <if test="createDatetime != null">
+                `create_datetime` = #{createDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDatetime != null">
+                `update_datetime` = #{updateDatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+    where id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey">
+        update sys_table_list
+        set
+            `table_name` = #{tableName,jdbcType=VARCHAR},
+            `table_service_link` = #{tableServiceLink,jdbcType=VARCHAR},
+            `create_datetime` = #{createDatetime,jdbcType=TIMESTAMP},
+            `update_datetime` = #{updateDatetime,jdbcType=TIMESTAMP}
+        where id = #{id}
+    </update>
+</mapper>

@@ -8,14 +8,15 @@ export default {
    * @param {function} error
    */
   queryByKey(key, success, error) {
-    ${'axios.get(`/app/${entityAlias}/$' + '{key}`)'}
-      .then(response => {
-        if (response.data.code === 0) {
-          success(response.data)
-        } else {
-          error()
-        }
-      }).catch(() => error())
+    ${'axios.get(`/app/${entityAlias}/$' + '{key}`, {'}
+      timeout: 5000
+    }).then(response => {
+      if (response.data.code === 0) {
+        success(response.data)
+      } else {
+        error(new Error(response.data.msg))
+      }
+    }).catch(err => error && error(err))
   },
   
   /**
@@ -25,14 +26,16 @@ export default {
    * @param {function} error
    */
   queryAll(params, success, error) {
-    axios.get('/app/${entityAlias}/', params)
-      .then(response => {
-        if (response.data.code === 0) {
-          success(response.data)
-        } else {
-          error()
-        }
-      }).catch(() => error())
+    axios.get('/app/${entityAlias}', {
+      params,
+      timeout: 5000
+    }).then(response => {
+      if (response.data.code === 0) {
+        success(response.data)
+      } else {
+        error(new Error(response.data.msg))
+      }
+    }).catch(err => error && error(err))
   },
   
   /**
@@ -42,14 +45,15 @@ export default {
    * @param {function} error
    */
   add(params, success, error) {
-    axios.post('/app/${entityAlias}/', params)
-      .then(response => {
-        if (response.data.code === 0) {
-          success(response.data)
-        } else {
-          error()
-        }
-      }).catch(() => error())
+    axios.post('/app/${entityAlias}', params, {
+      timeout: 5000
+    }).then(response => {
+      if (response.data.code === 0) {
+        success(response.data)
+      } else {
+        error(new Error(response.data.msg))
+      }
+    }).catch(err => error && error(err))
   },
   
   /**
@@ -59,14 +63,15 @@ export default {
    * @param {function} error
    */
   modify(params, success, error) {
-    axios.patch('/app/${entityAlias}/', params)
-      .then(response => {
-        if (response.data.code === 0) {
-          success(response.data)
-        } else {
-          error()
-        }
-      }).catch(() => error())
+    axios.patch('/app/${entityAlias}', params, {
+      timeout: 5000
+    }).then(response => {
+      if (response.data.code === 0) {
+        success(response.data)
+      } else {
+        error(new Error(response.data.msg))
+      }
+    }).catch(err => error && error(err))
   },
   
   /**
@@ -76,13 +81,14 @@ export default {
    * @param {function} error
    */
   delByKey(key, success, error) {
-    ${'axios.delete(`/app/${entityAlias}/$' + '{key}`)'}
-      .then(response => {
-        if (response.data.code === 0) {
-          success(response.data)
-        } else {
-          error()
-        }
-      }).catch(() => error())
+    ${'axios.delete(`/app/${entityAlias}/$' + '{key}`, {'}
+      timeout: 5000
+    }).then(response => {
+      if (response.data.code === 0) {
+        success(response.data)
+      } else {
+        error(new Error(response.data.msg))
+      }
+    }).catch(err => error && error(err))
   }
 }

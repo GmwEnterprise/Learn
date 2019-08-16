@@ -12,6 +12,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 // my css
 import '@/assets/global.css'
 
+// font-awesome
+import '@fortawesome/fontawesome-free/css/all.min.css'
+
 Vue.config.productionTip = false
 
 new Vue({

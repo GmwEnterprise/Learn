@@ -24,19 +24,19 @@ public class AccountController implements BaseController {
         return ok(accountService.selectByPrimaryKey(id));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity queryAll(AccountVo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
         return ok(PageHelper.page(accountService.selectAll(vo)));
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity add(@RequestBody AccountVo vo) {
         accountService.insert(vo);
         return ok();
     }
 
-    @PatchMapping("/")
+    @PatchMapping
     public ResponseEntity modify(@RequestBody AccountVo vo) {
         accountService.updateByPrimaryKeySelective(vo);
         return ok();
