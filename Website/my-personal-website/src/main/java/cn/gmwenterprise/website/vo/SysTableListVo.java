@@ -1,8 +1,10 @@
 package cn.gmwenterprise.website.vo;
 
+import cn.gmwenterprise.website.generator.ColumnStruct;
 import lombok.Data;
 
-import java.time.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * SysTableList 业务对象
@@ -40,4 +42,6 @@ public class SysTableListVo {
      * 每页条数（入参）
      */
     private Integer pageSize;
+
+    private List<ColumnStruct> detailMsg;
 }

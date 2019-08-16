@@ -47,7 +47,7 @@ public interface ArticleService {
      * @param vo 条件
      * @return 结果
      */
-    List<ArticleVo> selectAll(ArticleVo vo);
+    List<ArticleVo> selectPage(ArticleVo vo);
 
     /**
      * 更新满足条件的字段

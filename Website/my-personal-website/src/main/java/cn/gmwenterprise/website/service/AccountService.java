@@ -47,7 +47,7 @@ public interface AccountService {
      * @param vo 条件
      * @return 结果
      */
-    List<AccountVo> selectAll(AccountVo vo);
+    List<AccountVo> selectPage(AccountVo vo);
 
     /**
      * 更新满足条件的字段

@@ -39,8 +39,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleVo> selectAll(ArticleVo vo) {
-        return articleDao.selectAll(domain(vo))
+    public List<ArticleVo> selectPage(ArticleVo vo) {
+        return articleDao.selectPage(domain(vo))
             .stream()
             .map(this::vo)
             .collect(Collectors.toList());

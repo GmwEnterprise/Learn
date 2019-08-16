@@ -25,9 +25,9 @@ public class ArticleController implements BaseController {
     }
 
     @GetMapping
-    public ResponseEntity queryAll(ArticleVo vo) {
+    public ResponseEntity queryPage(ArticleVo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
-        return ok(PageHelper.page(articleService.selectAll(vo)));
+        return ok(PageHelper.page(articleService.selectPage(vo)));
     }
 
     @PostMapping

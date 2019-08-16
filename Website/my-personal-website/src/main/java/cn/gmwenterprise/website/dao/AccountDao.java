@@ -49,7 +49,7 @@ public interface AccountDao {
      * @param record 条件
      * @return 结果
      */
-    List<Account> selectAll(Account record);
+    List<Account> selectPage(Account record);
 
     /**
      * 更新满足条件的字段

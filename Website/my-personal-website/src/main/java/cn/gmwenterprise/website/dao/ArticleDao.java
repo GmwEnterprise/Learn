@@ -49,7 +49,7 @@ public interface ArticleDao {
      * @param record 条件
      * @return 结果
      */
-    List<Article> selectAll(Article record);
+    List<Article> selectPage(Article record);
 
     /**
      * 更新满足条件的字段

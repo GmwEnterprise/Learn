@@ -25,9 +25,9 @@ public class CommentController implements BaseController {
     }
 
     @GetMapping
-    public ResponseEntity queryAll(CommentVo vo) {
+    public ResponseEntity queryPage(CommentVo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
-        return ok(PageHelper.page(commentService.selectAll(vo)));
+        return ok(PageHelper.page(commentService.selectPage(vo)));
     }
 
     @PostMapping

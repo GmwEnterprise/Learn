@@ -25,7 +25,7 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
         ${'where a.`${keyColumn}` = #' + '{${keyProperty}}'}
     ${'</select>'}
 
-    ${'<select id="selectAll" resultMap="BaseResultMap">'}
+    ${'<select id="selectPage" resultMap="BaseResultMap">'}
         select
         ${'<include refid="Base_Column_List"/>'}
         from ${tableName} a

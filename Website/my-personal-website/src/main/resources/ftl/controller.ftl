@@ -25,9 +25,9 @@ public class ${entityName}Controller implements BaseController {
     }
 
     @GetMapping
-    public ResponseEntity queryAll(${entityName}Vo vo) {
+    public ResponseEntity queryPage(${entityName}Vo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
-        return ok(PageHelper.page(${entityAlias}Service.selectAll(vo)));
+        return ok(PageHelper.page(${entityAlias}Service.selectPage(vo)));
     }
 
     @PostMapping

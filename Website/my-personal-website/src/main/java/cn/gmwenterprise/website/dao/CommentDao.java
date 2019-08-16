@@ -49,7 +49,7 @@ public interface CommentDao {
      * @param record 条件
      * @return 结果
      */
-    List<Comment> selectAll(Comment record);
+    List<Comment> selectPage(Comment record);
 
     /**
      * 更新满足条件的字段

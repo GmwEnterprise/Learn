@@ -25,9 +25,9 @@ public class AccountController implements BaseController {
     }
 
     @GetMapping
-    public ResponseEntity queryAll(AccountVo vo) {
+    public ResponseEntity queryPage(AccountVo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
-        return ok(PageHelper.page(accountService.selectAll(vo)));
+        return ok(PageHelper.page(accountService.selectPage(vo)));
     }
 
     @PostMapping

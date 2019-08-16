@@ -1,15 +1,13 @@
 package cn.gmwenterprise.website.service.impl;
 
-import cn.gmwenterprise.website.common.EntityConstants;
+import cn.gmwenterprise.website.vo.AccountVo;
 import cn.gmwenterprise.website.dao.AccountDao;
 import cn.gmwenterprise.website.domain.Account;
 import cn.gmwenterprise.website.service.AccountService;
-import cn.gmwenterprise.website.vo.AccountVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,8 +39,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountVo> selectAll(AccountVo vo) {
-        return accountDao.selectAll(domain(vo))
+    public List<AccountVo> selectPage(AccountVo vo) {
+        return accountDao.selectPage(domain(vo))
             .stream()
             .map(this::vo)
             .collect(Collectors.toList());

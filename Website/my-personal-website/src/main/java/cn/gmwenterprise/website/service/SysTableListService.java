@@ -2,6 +2,7 @@ package cn.gmwenterprise.website.service;
 
 import cn.gmwenterprise.website.vo.SysTableListVo;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public interface SysTableListService {
      * @param vo 条件
      * @return 结果
      */
-    List<SysTableListVo> selectAll(SysTableListVo vo);
+    List<SysTableListVo> selectPage(SysTableListVo vo);
 
     /**
      * 更新满足条件的字段
@@ -64,4 +65,6 @@ public interface SysTableListService {
      * @return 受影响行数
      */
     int updateByPrimaryKey(SysTableListVo vo);
+
+    SysTableListVo selectMoreByPrimaryKey(Integer id) throws Exception;
 }

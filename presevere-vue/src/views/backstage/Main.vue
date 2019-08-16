@@ -86,7 +86,7 @@ export default {
         pageSize: 1000
       },
       response => {
-        console.log(response)
+        // console.log(response)
         this.tableList = response.data.list
           ? response.data.list.map(origin => {
               return {

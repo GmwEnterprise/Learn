@@ -21,11 +21,6 @@ public class MyPersonalWebsiteApplicationTests {
 
     @Test
     public void contextLoads() {
-        Account record = new Account();
-        PageHelper.startPage(1, 1);
-        List<Account> accounts1 = accountDao.selectAll(record);
-        Page<Account> page = PageHelper.page(accounts1);
-        System.out.println(page);
     }
 
 }

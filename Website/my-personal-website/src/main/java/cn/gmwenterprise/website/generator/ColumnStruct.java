@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
+public
 class ColumnStruct {
     /**
      * 字段名

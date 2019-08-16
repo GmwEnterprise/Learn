@@ -25,7 +25,7 @@
         where a.`id` = #{id}
     </select>
 
-    <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectPage" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sys_table_list a

@@ -2,8 +2,8 @@ package cn.gmwenterprise.website.config.mybatis;
 
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
+import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
@@ -11,12 +11,9 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.scripting.xmltags.SqlNode;
-import org.apache.ibatis.scripting.xmltags.StaticTextSqlNode;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.ResultHandler;
-import org.apache.ibatis.session.RowBounds;
 
-import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
@@ -30,13 +27,11 @@ import java.util.*;
 @Slf4j
 @Intercepts(
     @Signature(
-        type = Executor.class,
-        method = "query",
+        type = StatementHandler.class,
+        method = "prepare",
         args = {
-            MappedStatement.class,
-            Object.class,
-            RowBounds.class,
-            ResultHandler.class
+            Connection.class,
+            Integer.class
         }
     )
 )
@@ -71,8 +66,18 @@ public class PageHelper implements Interceptor {
         return page;
     }
 
+
+    /**
+     * 判断是否sql语句
+     *
+     * @param sql --当前执行SQL
+     * @return 是否查询语句
+     */
+    private boolean checkSelect(String sql) {
+        return sql.trim().toLowerCase().indexOf("select") == 0;
+    }
+
     @Override
-    @SuppressWarnings("unchecked")
     public Object intercept(Invocation invocation) throws Throwable {
         // 1. 检查线程中是否有分页参数，若没有则不启动分页
         PageInfo pageInfo = PAGE_INFO.get();
@@ -82,58 +87,139 @@ public class PageHelper implements Interceptor {
         if (pageInfo.getPageSize() == null) {
             pageInfo.setPageSize(defaultPageSize);
         }
-        // 2. 获取未注入参数的sql
-        Object[] args = invocation.getArgs();
-        MappedStatement mappedStatement = (MappedStatement) args[0];
-        Object parameterObject = args[1];
-        BoundSql boundSql = mappedStatement.getBoundSql(parameterObject);
-        MetaObject metaBoundSql = SystemMetaObject.forObject(boundSql);
-        String sql = (String) metaBoundSql.getValue("sql");
-        // 3. 计算总条数、总页数
-        int total = 0;
-        String countSql = String.format("select count(1) as total from (%s) $_paging", sql);
-        Configuration configuration = mappedStatement.getConfiguration();
-        MetaObject metaMappedStatement = SystemMetaObject.forObject(mappedStatement);
-        DataSource dataSource = (DataSource) metaMappedStatement.getValue("configuration.environment.dataSource");
-        try (PreparedStatement pCount = dataSource.getConnection().prepareStatement(countSql)) {
-            BoundSql countBoundSql = new BoundSql(configuration, countSql, boundSql.getParameterMappings(), boundSql.getParameterObject());
-            ParameterHandler handler = new DefaultParameterHandler(mappedStatement, boundSql.getParameterObject(), countBoundSql);
-            handler.setParameters(pCount);
-            ResultSet rs = pCount.executeQuery();
-            while (rs.next()) {
-                total = rs.getInt("total");
-            }
+
+        StatementHandler stmtHandler = (StatementHandler) getUnProxyObject(invocation.getTarget());
+        MetaObject metaStatementHandler = SystemMetaObject.forObject(stmtHandler);
+        String sql = (String) metaStatementHandler.getValue("delegate.boundSql.sql");
+        MappedStatement mappedStatement = (MappedStatement) metaStatementHandler.getValue("delegate.mappedStatement");
+        // 不是select语句
+        if (!checkSelect(sql)) {
+            return invocation.proceed();
         }
+        BoundSql boundSql = (BoundSql) metaStatementHandler.getValue("delegate.boundSql");
+
+        if (!defaultUseFlag) {
+            // 不使用分页插件
+            return invocation.proceed();
+        }
+
+        Page<?> page = new Page<>();
+
+        // 计算总条数
+        int total = getTotal(invocation, metaStatementHandler, boundSql);
+        // 回填总条数到分页参数
+        page.setTotal(total);
+        // 计算总页数.
         int totalPage = total % pageInfo.getPageSize() == 0 ? total / pageInfo.getPageSize() : total / pageInfo.getPageSize() + 1;
+        // 回填总页数到分页参数
+        page.setTotalPage(totalPage);
+        // 检查当前页码的有效性
         // 4. 检测分页参数是否合法
         if (pageInfo.getCurrentPage() > totalPage) {
             log.warn("分页参数不合法！输入页码为[{}], 总页数为[{}]", pageInfo.getCurrentPage(), totalPage);
             // 设置为最后一页
             pageInfo.setCurrentPage(totalPage > 0 ? totalPage : 1);
         }
-        // 5. 填入分页参数
-        Page<?> page = new Page<>();
+
         page.setCurrentPage(pageInfo.getCurrentPage());
         page.setPageSize(pageInfo.getPageSize());
-        page.setTotal(total);
-        page.setTotalPage(totalPage);
         page.setHasNextPage(pageInfo.getCurrentPage() < totalPage);
         page.setHasPrevPage(pageInfo.getCurrentPage() > 1);
+
         PAGE_RESULT.remove();
         PAGE_RESULT.set(page);
-        // 6. 修改sql
-        ArrayList<SqlNode> sqlNodes = (ArrayList) metaMappedStatement.getValue("sqlSource.rootSqlNode.contents");
-        StaticTextSqlNode end = new StaticTextSqlNode(PAGE_ENDING + (pageInfo.getCurrentPage() - 1) * pageInfo.getPageSize() + ", " + pageInfo.getPageSize());
-        if (!SQL_NODES_MAP.containsKey(String.valueOf(System.identityHashCode(sqlNodes)))) {
-            StaticTextSqlNode start = new StaticTextSqlNode(PAGE_START);
-            sqlNodes.add(0, start);
-            SQL_NODES_MAP.put(String.valueOf(System.identityHashCode(sqlNodes)), sqlNodes);
-        } else {
-            sqlNodes.remove(sqlNodes.size() - 1);
+        // 修改sql
+        return preparedSql(invocation, metaStatementHandler, boundSql, pageInfo.getCurrentPage(), pageInfo.getPageSize());
+    }
+
+
+    /**
+     * 预编译改写后的SQL，并设置分页参数
+     *
+     * @param invocation           入参
+     * @param metaStatementHandler MetaObject绑定的StatementHandler
+     * @param boundSql             boundSql对象
+     * @param pageNum              当前页
+     * @param pageSize             最大页
+     * @throws Exception 异常
+     */
+    private Object preparedSql(Invocation invocation, MetaObject metaStatementHandler, BoundSql boundSql, int pageNum,
+                               int pageSize) throws Exception {
+        // 获取当前需要执行的SQL
+        String sql = boundSql.getSql();
+        String newSql = "select * from (" + sql + ") $_paging_table limit ?, ?";
+        // 修改当前需要执行的SQL
+        metaStatementHandler.setValue("delegate.boundSql.sql", newSql);
+        // 执行编译，相当于StatementHandler执行了prepared()方法，这个时候，就剩下两个分页参数没有设置
+        Object statementObj = invocation.proceed();
+        // 设置两个分页参数
+        this.preparePageDataParams((PreparedStatement) statementObj, pageNum, pageSize);
+        return statementObj;
+    }
+
+
+    /**
+     * 使用PreparedStatement预编译两个分页参数，如果数据库的规则不一样，需要改写设置的参数规则
+     *
+     * @throws Exception 异常
+     */
+    private void preparePageDataParams(PreparedStatement ps, int pageNum, int pageSize) throws Exception {
+        // prepared()方法编译SQL，由于MyBatis上下文没有分页参数的信息，所以这里需要设置这两个参数
+        // 获取需要设置的参数个数，由于参数是最后的两个，所以很容易得到其位置
+        int idx = ps.getParameterMetaData().getParameterCount();
+        // 最后两个是我们的分页参数
+        // 开始行
+        ps.setInt(idx - 1, (pageNum - 1) * pageSize);
+        // 限制条数
+        ps.setInt(idx, pageSize);
+    }
+
+    /**
+     * 获取总条数.
+     *
+     * @param ivt                  Invocation 入参
+     * @param metaStatementHandler statementHandler
+     * @param boundSql             sql
+     * @return sql查询总数.
+     * @throws Throwable 异常.
+     */
+    private int getTotal(Invocation ivt, MetaObject metaStatementHandler, BoundSql boundSql)
+        throws Throwable {
+        // 获取当前的mappedStatement
+        MappedStatement mappedStatement = (MappedStatement) metaStatementHandler.getValue("delegate.mappedStatement");
+        // 配置对象
+        Configuration cfg = mappedStatement.getConfiguration();
+        // 当前需要执行的SQL
+        String sql = (String) metaStatementHandler.getValue("delegate.boundSql.sql");
+        // 改写为统计总数的SQL
+        String countSql = "select count(*) as total from (" + sql + ") $_paging";
+        // 获取拦截方法参数，根据插件签名，知道是Connection对象
+        Connection connection = (Connection) ivt.getArgs()[0];
+        PreparedStatement ps = null;
+        int total = 0;
+        try {
+            // 预编译统计总数SQL
+            ps = connection.prepareStatement(countSql);
+            // 构建统计总数BoundSql
+            BoundSql countBoundSql = new BoundSql(cfg, countSql, boundSql.getParameterMappings(),
+                boundSql.getParameterObject());
+            // 构建MyBatis的ParameterHandler用来设置总数Sql的参数
+            ParameterHandler handler = new DefaultParameterHandler(mappedStatement, boundSql.getParameterObject(),
+                countBoundSql);
+            // 设置总数SQL参数
+            handler.setParameters(ps);
+            // 执行查询.
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                total = rs.getInt("total");
+            }
+        } finally {
+            // 这里不能关闭Connection，否则后续的SQL就没法继续了
+            if (ps != null) {
+                ps.close();
+            }
         }
-        sqlNodes.add(sqlNodes.size(), end);
-        metaMappedStatement.setValue("sqlSource.rootSqlNode.contents", sqlNodes);
-        return invocation.proceed();
+        return total;
     }
 
     private static final Map<String, ArrayList<SqlNode>> SQL_NODES_MAP = Maps.newHashMap();

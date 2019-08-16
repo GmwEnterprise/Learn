@@ -39,8 +39,8 @@ public class ${entityName}ServiceImpl implements ${entityName}Service {
     }
 
     @Override
-    public List<${entityName}Vo> selectAll(${entityName}Vo vo) {
-        return ${entityAlias}Dao.selectAll(domain(vo))
+    public List<${entityName}Vo> selectPage(${entityName}Vo vo) {
+        return ${entityAlias}Dao.selectPage(domain(vo))
             .stream()
             .map(this::vo)
             .collect(Collectors.toList());

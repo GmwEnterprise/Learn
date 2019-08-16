@@ -49,7 +49,7 @@ public interface SysTableListDao {
      * @param record 条件
      * @return 结果
      */
-    List<SysTableList> selectAll(SysTableList record);
+    List<SysTableList> selectPage(SysTableList record);
 
     /**
      * 更新满足条件的字段

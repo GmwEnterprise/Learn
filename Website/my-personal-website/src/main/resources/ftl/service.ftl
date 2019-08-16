@@ -47,7 +47,7 @@ public interface ${entityName}Service {
      * @param vo 条件
      * @return 结果
      */
-    List<${entityName}Vo> selectAll(${entityName}Vo vo);
+    List<${entityName}Vo> selectPage(${entityName}Vo vo);
 
     /**
      * 更新满足条件的字段

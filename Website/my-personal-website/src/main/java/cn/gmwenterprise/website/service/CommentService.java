@@ -47,7 +47,7 @@ public interface CommentService {
      * @param vo 条件
      * @return 结果
      */
-    List<CommentVo> selectAll(CommentVo vo);
+    List<CommentVo> selectPage(CommentVo vo);
 
     /**
      * 更新满足条件的字段

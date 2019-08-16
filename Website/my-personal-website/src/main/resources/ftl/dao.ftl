@@ -49,7 +49,7 @@ public interface ${entityName}Dao {
      * @param record 条件
      * @return 结果
      */
-    List<${entityName}> selectAll(${entityName} record);
+    List<${entityName}> selectPage(${entityName} record);
 
     /**
      * 更新满足条件的字段

@@ -39,8 +39,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentVo> selectAll(CommentVo vo) {
-        return commentDao.selectAll(domain(vo))
+    public List<CommentVo> selectPage(CommentVo vo) {
+        return commentDao.selectPage(domain(vo))
             .stream()
             .map(this::vo)
             .collect(Collectors.toList());

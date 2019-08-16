@@ -7,6 +7,8 @@ import cn.gmwenterprise.website.service.SysTableListService;
 import cn.gmwenterprise.website.vo.SysTableListVo;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+
 /**
  * @author gmw
  */
@@ -24,10 +26,21 @@ public class SysTableListController implements BaseController {
         return ok(sysTableListService.selectByPrimaryKey(id));
     }
 
+    /**
+     * 获取更多关于指定表字段的信息，为了生成表数据的展示
+     *
+     * @param id 主键
+     * @return 信息
+     */
+    @GetMapping("/more/{id}")
+    public ResponseEntity queryByPrimaryKeyAndMore(@PathVariable Integer id) throws Exception {
+        return ok(sysTableListService.selectMoreByPrimaryKey(id));
+    }
+
     @GetMapping
-    public ResponseEntity queryAll(SysTableListVo vo) {
+    public ResponseEntity queryPage(SysTableListVo vo) {
         PageHelper.startPage(vo.getCurrentPage(), vo.getPageSize());
-        return ok(PageHelper.page(sysTableListService.selectAll(vo)));
+        return ok(PageHelper.page(sysTableListService.selectPage(vo)));
     }
 
     @PostMapping

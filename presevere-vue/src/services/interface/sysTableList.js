@@ -18,6 +18,18 @@ export default {
       }
     }).catch(err => error && error(err))
   },
+
+  queryByKeyWithFieldMsg(key, success, error) {
+    axios.get(`/app/sysTableList/more/${key}`, {
+      timeout: 5000
+    }).then(response => {
+      if (response.data.code === 0) {
+        success(response.data)
+      } else {
+        error(new Error(response.data.msg))
+      }
+    }).catch(err => error && error(err))
+  },
   
   /**
    * 查询多条数据
