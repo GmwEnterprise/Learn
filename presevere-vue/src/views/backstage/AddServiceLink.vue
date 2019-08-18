@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import tableListService from '@/services/interface/sysTableList.js'
+import tableListService from '@/services/sysTableList.js'
 export default {
   name: 'AddServiceLink',
   data() {
@@ -47,15 +47,8 @@ export default {
     submitModel(event) {
       event.preventDefault()
       if (this.inputModel.tableName && this.inputModel.tableServiceLink) {
-        tableListService.add(
-          this.inputModel,
-          () => {
-            alert('添加成功')
-          },
-          () => {
-            alert('添加失败')
-          }
-        )
+        tableListService.add(this.inputModel)
+          .then(() => alert('success'))
       } else {
         alert('请输入值')
       }

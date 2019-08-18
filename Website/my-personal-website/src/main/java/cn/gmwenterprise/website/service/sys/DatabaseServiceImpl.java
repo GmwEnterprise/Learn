@@ -57,23 +57,28 @@ public class DatabaseServiceImpl implements DatabaseService {
         DatabaseMetaData dma = connection.getMetaData();
         ResultSet columns = dma.getColumns(conn.getCatalog(), "%", tableName, "%");
         List<ColumnStruct> list = new ArrayList<>();
+        String primaryKeyFieldName = getPrimaryKeyFieldName(dma, tableName);
         while (columns.next()) {
             ColumnStruct struct = new ColumnStruct();
             struct.setColumnName(columns.getString("COLUMN_NAME"));
             struct.setColumnComment(columns.getString("REMARKS"));
             struct.setFieldName(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, struct.getColumnName()));
-            struct.setPrimaryKey(getPrimaryKeyFieldName(dma, tableName).equals(struct.getColumnName()));
+            struct.setPrimaryKey(primaryKeyFieldName.equals(struct.getColumnName()));
             list.add(struct);
         }
+        columns.close();
         return list;
     }
 
     private String getPrimaryKeyFieldName(DatabaseMetaData databaseMetaData, String tableName) throws Exception {
-        ResultSet pk = databaseMetaData.getPrimaryKeys(dataSource.getConnection().getCatalog(), "%", tableName);
+        Connection connection = dataSource.getConnection();
+        String catalog = connection.getCatalog();
+        ResultSet pk = databaseMetaData.getPrimaryKeys(catalog, "%", tableName);
         List<String> pkList = new ArrayList<>();
         while (pk.next()) {
             pkList.add(pk.getString("COLUMN_NAME"));
         }
+        pk.close();
         return pkList.get(0);
     }
 

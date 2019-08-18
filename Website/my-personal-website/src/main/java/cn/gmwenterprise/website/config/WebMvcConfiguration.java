@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDate;
@@ -28,10 +28,8 @@ import static cn.gmwenterprise.website.util.DateUtils.*;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry
-            .addMapping("/**")
-            .allowedMethods("GET", "POST", "PATCH", "DELETE");
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new HttpInterceptor());
     }
 
     @Bean
@@ -46,11 +44,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(TIME_FORMATTER));
         objectMapper.registerModule(javaTimeModule);
         return objectMapper;
-    }
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        // converters.add(new MappingJackson2HttpMessageConverter(objectMapper()));
     }
 
     @Override

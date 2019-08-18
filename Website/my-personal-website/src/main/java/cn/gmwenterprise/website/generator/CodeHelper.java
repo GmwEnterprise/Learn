@@ -27,7 +27,12 @@ public class CodeHelper {
     }
 
     public static void generateTable(String tableName) throws Exception {
-        generateAllFiles(DatabaseHelper.getInstance().getTableStruct(tableName));
+        TableStruct tableStruct = DatabaseHelper.getInstance().getTableStruct(tableName);
+        if (tableStruct == null) {
+            System.err.println(tableName + "表不存在");
+            return;
+        }
+        generateAllFiles(tableStruct);
     }
 
     public static void generateAllFiles(TableStruct ts) throws Exception {
@@ -36,14 +41,14 @@ public class CodeHelper {
             return;
         }
         Map<String, Object> tsMap = ts.toMap();
-//        generateServiceJsFile(tsMap);
-        generateControllerFile(tsMap);
+        generateServiceJsFile(tsMap);
+//        generateControllerFile(tsMap);
 //        generatePoFile(tsMap);
 //        generateBoFile(tsMap);
-        generateDaoFile(tsMap);
-        generateMapperFile(tsMap);
-        generateServiceFile(tsMap);
-        generateServiceImplFile(tsMap);
+//        generateDaoFile(tsMap);
+//        generateMapperFile(tsMap);
+//        generateServiceFile(tsMap);
+//        generateServiceImplFile(tsMap);
     }
 
     /**

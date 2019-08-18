@@ -1,6 +1,5 @@
 package cn.gmwenterprise.website.config.mybatis;
 
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
@@ -10,13 +9,15 @@ import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
-import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.session.Configuration;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 
 /**
  * 分页插件实现类
@@ -55,10 +56,6 @@ public class PageHelper implements Interceptor {
         PAGE_INFO.set(pageInfo);
     }
 
-    public static void startPage(Integer startPage) {
-        startPage(startPage, null);
-    }
-
     @SuppressWarnings("unchecked")
     public static <E> Page<E> page(List<E> list) {
         Page<E> page = (Page<E>) Objects.requireNonNull(PAGE_RESULT.get());
@@ -91,7 +88,6 @@ public class PageHelper implements Interceptor {
         StatementHandler stmtHandler = (StatementHandler) getUnProxyObject(invocation.getTarget());
         MetaObject metaStatementHandler = SystemMetaObject.forObject(stmtHandler);
         String sql = (String) metaStatementHandler.getValue("delegate.boundSql.sql");
-        MappedStatement mappedStatement = (MappedStatement) metaStatementHandler.getValue("delegate.mappedStatement");
         // 不是select语句
         if (!checkSelect(sql)) {
             return invocation.proceed();
@@ -192,7 +188,7 @@ public class PageHelper implements Interceptor {
         // 当前需要执行的SQL
         String sql = (String) metaStatementHandler.getValue("delegate.boundSql.sql");
         // 改写为统计总数的SQL
-        String countSql = "select count(*) as total from (" + sql + ") $_paging";
+        String countSql = String.format("select count(*) as total from (%s) $_paging", sql);
         // 获取拦截方法参数，根据插件签名，知道是Connection对象
         Connection connection = (Connection) ivt.getArgs()[0];
         PreparedStatement ps = null;
@@ -221,10 +217,6 @@ public class PageHelper implements Interceptor {
         }
         return total;
     }
-
-    private static final Map<String, ArrayList<SqlNode>> SQL_NODES_MAP = Maps.newHashMap();
-    private static final String PAGE_START = "select $_paging_list.* from (";
-    private static final String PAGE_ENDING = ") $_paging_list limit ";
 
     /**
      * 从代理对象中分离出真实对象

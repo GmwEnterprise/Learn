@@ -1,5 +1,9 @@
 export default {
 
+  queryByKeyWithFieldMsg(key) {
+    return window.axios.get(`/app/sysTableList/more/${key}`)
+  },
+
   queryByKey(key) {
     return window.axios.get(`/app/sysTableList/${key}`)
   },

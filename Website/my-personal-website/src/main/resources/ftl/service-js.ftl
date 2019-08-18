@@ -1,94 +1,22 @@
-import axios from 'axios'
-
 export default {
-  /**
-   * 查询单条数据
-   * @param {number | string} key
-   * @param {function} success
-   * @param {function} error
-   */
-  queryByKey(key, success, error) {
-    ${'axios.get(`/app/${entityAlias}/$' + '{key}`, {'}
-      timeout: 5000
-    }).then(response => {
-      if (response.data.code === 0) {
-        success(response.data)
-      } else {
-        error(new Error(response.data.msg))
-      }
-    }).catch(err => error && error(err))
+
+  queryByKey(key) {
+    ${'return window.axios.get(`/app/${entityAlias}/$' + '{key}`)'}
   },
-  
-  /**
-   * 查询多条数据
-   * @param {object} params
-   * @param {function} success
-   * @param {function} error
-   */
-  queryAll(params, success, error) {
-    axios.get('/app/${entityAlias}', {
-      params,
-      timeout: 5000
-    }).then(response => {
-      if (response.data.code === 0) {
-        success(response.data)
-      } else {
-        error(new Error(response.data.msg))
-      }
-    }).catch(err => error && error(err))
+
+  queryPage(params) {
+    return window.axios.get('/app/${entityAlias}', { params })
   },
-  
-  /**
-   * 新增数据
-   * @param {object} params
-   * @param {function} success
-   * @param {function} error
-   */
-  add(params, success, error) {
-    axios.post('/app/${entityAlias}', params, {
-      timeout: 5000
-    }).then(response => {
-      if (response.data.code === 0) {
-        success(response.data)
-      } else {
-        error(new Error(response.data.msg))
-      }
-    }).catch(err => error && error(err))
+
+  add(params) {
+    return window.axios.post('/app/${entityAlias}', params)
   },
-  
-  /**
-   * 修改数据
-   * @param {object} params
-   * @param {function} success
-   * @param {function} error
-   */
-  modify(params, success, error) {
-    axios.patch('/app/${entityAlias}', params, {
-      timeout: 5000
-    }).then(response => {
-      if (response.data.code === 0) {
-        success(response.data)
-      } else {
-        error(new Error(response.data.msg))
-      }
-    }).catch(err => error && error(err))
+
+  modify(params) {
+    return window.axios.patch('/app/${entityAlias}', params)
   },
-  
-  /**
-   * 删除数据
-   * @param {number | string} key
-   * @param {function} success
-   * @param {function} error
-   */
-  delByKey(key, success, error) {
-    ${'axios.delete(`/app/${entityAlias}/$' + '{key}`, {'}
-      timeout: 5000
-    }).then(response => {
-      if (response.data.code === 0) {
-        success(response.data)
-      } else {
-        error(new Error(response.data.msg))
-      }
-    }).catch(err => error && error(err))
+
+  delByKey(key) {
+    ${'return window.axios.delete(`/app/${entityAlias}/$' + '{key}`)'}
   }
 }

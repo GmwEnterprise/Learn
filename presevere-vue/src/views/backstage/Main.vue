@@ -47,7 +47,7 @@
 
 <script>
 import logo from '@/assets/persevere.png'
-import SysTableListService from '@/services/interface/sysTableList.js'
+import SysTableListService from '@/services/sysTableList.js'
 export default {
   data() {
     return {
@@ -80,24 +80,21 @@ export default {
     }
   },
   created() {
-    SysTableListService.queryAll(
-      {
-        currentPage: 1,
-        pageSize: 1000
-      },
-      response => {
-        // console.log(response)
-        this.tableList = response.data.list
-          ? response.data.list.map(origin => {
-              return {
-                tableId: origin.id,
-                tableName: origin.tableServiceLink,
-                tableAlias: origin.tableName
-              }
-            })
-          : []
-      }
-    )
+    SysTableListService.queryPage({
+      currentPage: 1,
+      pageSize: 1000
+    }).then(response => {
+      console.log(response)
+      this.tableList = response.data.list
+        ? response.data.list.map(origin => {
+            return {
+              tableId: origin.id,
+              tableName: origin.tableServiceLink,
+              tableAlias: origin.tableName
+            }
+          })
+        : []
+    })
   }
 }
 </script>
@@ -144,7 +141,7 @@ a.catalog-link:hover {
   width: 2rem;
   font-size: 1.1rem;
   float: right;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
   text-align: center;
 }
 .active:after {

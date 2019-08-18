@@ -21,11 +21,6 @@ public class SysTableListController implements BaseController {
         this.sysTableListService = sysTableListService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity queryByPrimaryKey(@PathVariable Integer id) {
-        return ok(sysTableListService.selectByPrimaryKey(id));
-    }
-
     /**
      * 获取更多关于指定表字段的信息，为了生成表数据的展示
      *
@@ -35,6 +30,11 @@ public class SysTableListController implements BaseController {
     @GetMapping("/more/{id}")
     public ResponseEntity queryByPrimaryKeyAndMore(@PathVariable Integer id) throws Exception {
         return ok(sysTableListService.selectMoreByPrimaryKey(id));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity queryByPrimaryKey(@PathVariable Integer id) {
+        return ok(sysTableListService.selectByPrimaryKey(id));
     }
 
     @GetMapping
