@@ -1,7 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import _ from 'lodash'
 
 Vue.use(Router)
+
+const moduleRoutes = (() => {
+  const r = require.context('./', true, /\.router\.js$/)
+  const routes = r.keys().map(key => r(key).default)
+  return _.flatten(routes)
+})()
 
 export default new Router({
   mode: 'history',
@@ -16,7 +23,12 @@ export default new Router({
       name: 'system',
       component: () => import('@/views/backstage/Main.vue'),
       children: [
+        ...moduleRoutes,
         {
+          path: 'addLink',
+          name: 'addServiceLink',
+          component: () => import('@/views/backstage/AddServiceLink.vue')
+        }, {
           path: 'tableList/:tableId',
           name: 'tableList',
           component: () => import('@/views/backstage/TableList.vue')
@@ -24,10 +36,6 @@ export default new Router({
           path: 'tableEdit/:tableId',
           name: 'tableEdit',
           component: () => import('@/views/backstage/TableEdit.vue')
-        }, {
-          path: 'addLink',
-          name: 'addServiceLink',
-          component: () => import('@/views/backstage/AddServiceLink.vue')
         }
       ]
     }
