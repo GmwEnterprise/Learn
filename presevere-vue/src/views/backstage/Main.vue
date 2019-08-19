@@ -47,7 +47,8 @@
 
 <script>
 import logo from '@/assets/persevere.png'
-import SysTableListService from '@/services/sysTableList.js'
+// import SysTableListService from '@/services/sysTableList.js'
+import _ from 'lodash'
 export default {
   data() {
     return {
@@ -64,6 +65,12 @@ export default {
     }
   },
   methods: {
+    testRequireContext() {
+      let r = require(
+        './account/router.js'
+      )
+      return r
+    },
     accordion(event, targetId) {
       event.target.classList.toggle('active')
       const target = document.getElementById(targetId)
@@ -80,21 +87,23 @@ export default {
     }
   },
   created() {
-    SysTableListService.queryPage({
-      currentPage: 1,
-      pageSize: 1000
-    }).then(response => {
-      console.log(response)
-      this.tableList = response.data.list
-        ? response.data.list.map(origin => {
-            return {
-              tableId: origin.id,
-              tableName: origin.tableServiceLink,
-              tableAlias: origin.tableName
-            }
-          })
-        : []
-    })
+    // SysTableListService.queryPage({
+    //   currentPage: 1,
+    //   pageSize: 1000
+    // }).then(response => {
+    //   console.log(response)
+    //   this.tableList = response.data.list
+    //     ? response.data.list.map(origin => {
+    //         return {
+    //           tableId: origin.id,
+    //           tableName: origin.tableServiceLink,
+    //           tableAlias: origin.tableName
+    //         }
+    //       })
+    //     : []
+    // })
+
+    console.log(this.testRequireContext())
   }
 }
 </script>
