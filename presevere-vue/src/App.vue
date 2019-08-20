@@ -1,12 +1,15 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
+    <customize-toast></customize-toast>
   </div>
 </template>
 
 <script>
+import CustomizeToast from '@/components/Toast.vue'
 export default {
   name: 'App',
+  components: { CustomizeToast }
 }
 </script>
 
