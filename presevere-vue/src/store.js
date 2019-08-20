@@ -5,11 +5,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    isLogin: false,
+    toast: {
+      message: '',
+      type: 'info'
+    }
   },
   mutations: {
-    changeLoginStatus(state) {
-      state.isLogin = !state.isLogin
+    toast(state, toastOptions) {
+      state.toast = {
+        message: toastOptions.message || '空',
+        type: toastOptions.type || 'info'
+      }
     }
   },
   actions: {

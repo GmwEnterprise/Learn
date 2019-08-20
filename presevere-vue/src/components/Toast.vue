@@ -6,11 +6,30 @@
 import { setTimeout } from 'timers'
 export default {
   name: 'CustomizeToast',
-  mounted() {
-    this.successToast('成功')
-    this.warningToast('成功')
-    this.dangerToast('成功')
-    this.infoToast('成功')
+  computed: {
+    toastObj() {
+      return this.$store.state.toast
+    }
+  },
+  watch: {
+    toastObj() {
+      switch (this.toastObj.toastType) {
+        case 'info':
+          this.infoToast(this.toastObj.message)
+          break
+        case 'danger':
+          this.dangerToast(this.toastObj.message)
+          break
+        case 'warning':
+          this.warningToast(this.toastObj.message)
+          break
+        case 'success':
+          this.successToast(this.toastObj.message)
+          break
+        default:
+          this.infoToast(this.toastObj.message)
+      }
+    }
   },
   methods: {
     successToast(value) {

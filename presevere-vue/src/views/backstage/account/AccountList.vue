@@ -128,7 +128,7 @@ export default {
   },
   methods: {
     editRow(rowId) {
-      alert(rowId)
+      this.$store.commit('toast', { message: rowId, type: 'success' })
     },
     deleteRow(rowId) {
       accountService.delByKey(rowId).then(() => {
