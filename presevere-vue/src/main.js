@@ -10,16 +10,10 @@ import store from './store'
 
 // bootstrap
 import 'bootstrap'
-// import 'bootstrap/dist/css/bootstrap.min.css'
 
-// // my css
-// import '@/assets/global.css'
-
-// // font-awesome
-// import '@fortawesome/fontawesome-free/css/all.min.css'
-
-// // 后台模型控制专用
-// import '@/assets/backstage.css'
+// 我写的插件
+import Toast from './plugins/toast.js'
+Vue.prototype.$toast = new Toast()
 
 Vue.config.productionTip = false
 

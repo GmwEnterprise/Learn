@@ -21,7 +21,7 @@ export default new Router({
     }, {
       path: '/sys',
       name: 'system',
-      component: () => import('@/views/backstage/Main.vue'),
+      component: () => import('@/views/backstage/Manager.vue'),
       children: [
         ...moduleRoutes,
         {
