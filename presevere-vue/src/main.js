@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 
 // toast全局命令
 Vue.prototype.$toast = {
-  success(message = 'success message', title = '成功提示', duration = 2500) {
+  success(message = 'success message', title = '成功提示', duration = 3000) {
     store.commit('toast', {
       message,
       type: 'success',
@@ -23,7 +23,7 @@ Vue.prototype.$toast = {
       duration
     })
   },
-  warning(message = 'warning message', title = '警告提示', duration = 2500) {
+  warning(message = 'warning message', title = '警告提示', duration = 3000) {
     store.commit('toast', {
       message,
       type: 'warning',
@@ -31,7 +31,7 @@ Vue.prototype.$toast = {
       duration
     })
   },
-  danger(message = 'danger message', title = '错误提示', duration = 2500) {
+  danger(message = 'danger message', title = '错误提示', duration = 3000) {
     store.commit('toast', {
       message,
       type: 'danger',
@@ -39,7 +39,7 @@ Vue.prototype.$toast = {
       duration
     })
   },
-  info(message = 'info message', title = '消息提示', duration = 2500) {
+  info(message = 'info message', title = '消息提示', duration = 3000) {
     store.commit('toast', {
       message,
       type: 'success',
