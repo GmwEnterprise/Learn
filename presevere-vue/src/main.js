@@ -15,18 +15,43 @@ Vue.config.productionTip = false
 
 // toast全局命令
 Vue.prototype.$toast = {
-  success(message) {
-    store.commit('toast', { message, type: 'success' })
+  success(message = 'success message', title = '成功提示', duration = 2500) {
+    store.commit('toast', {
+      message,
+      type: 'success',
+      title,
+      duration
+    })
   },
-  warning(message) {
-    store.commit('toast', { message, type: 'warning' })
+  warning(message = 'warning message', title = '警告提示', duration = 2500) {
+    store.commit('toast', {
+      message,
+      type: 'warning',
+      title,
+      duration
+    })
   },
-  danger(message) {
-    store.commit('toast', { message, type: 'danger' })
+  danger(message = 'danger message', title = '错误提示', duration = 2500) {
+    store.commit('toast', {
+      message,
+      type: 'danger',
+      title,
+      duration
+    })
   },
-  info(message) {
-    store.commit('toast', { message, type: 'info' })
+  info(message = 'info message', title = '消息提示', duration = 2500) {
+    store.commit('toast', {
+      message,
+      type: 'success',
+      title,
+      duration
+    })
   }
+}
+
+// messageBox全局命令
+Vue.prototype.$message = config => {
+  store.commit('message', config)
 }
 
 new Vue({
@@ -34,3 +59,19 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+// 手动挂载toast插件
+import Toast from '@/components/Toast.vue'
+let ToastConstructor = Vue.extend(Toast)
+let toastInstance = new ToastConstructor({
+  store
+}).$mount()
+document.body.appendChild(toastInstance.$el)
+
+// 手动挂载messagebox插件
+import MessageBox from '@/components/MessageBox.vue'
+let MessageBoxConstructor = Vue.extend(MessageBox)
+let messageBoxInstance = new MessageBoxConstructor({
+  store
+}).$mount()
+document.body.appendChild(messageBoxInstance.$el)

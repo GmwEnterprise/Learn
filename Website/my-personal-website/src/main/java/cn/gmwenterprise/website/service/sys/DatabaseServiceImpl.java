@@ -36,7 +36,6 @@ public class DatabaseServiceImpl implements DatabaseService {
         return tableListData;
     }
 
-
     private DataSource dataSource;
 
     @Autowired

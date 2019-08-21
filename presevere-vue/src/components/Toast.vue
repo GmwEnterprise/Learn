@@ -13,84 +13,87 @@ export default {
   },
   watch: {
     toastObj() {
-      switch (this.toastObj.toastType) {
+      switch (this.toastObj.type) {
         case 'info':
-          this.infoToast(this.toastObj.message)
+          this.infoToast(this.toastObj)
           break
         case 'danger':
-          this.dangerToast(this.toastObj.message)
+          this.dangerToast(this.toastObj)
           break
         case 'warning':
-          this.warningToast(this.toastObj.message)
+          this.warningToast(this.toastObj)
           break
         case 'success':
-          this.successToast(this.toastObj.message)
+          this.successToast(this.toastObj)
           break
         default:
-          this.infoToast(this.toastObj.message)
+          this.infoToast(this.toastObj)
       }
     }
   },
   methods: {
-    successToast(value) {
+    successToast(obj) {
       this.toast(
         `
         <div
           class="custom-toast-header"
           style="color: #0b690b;background-color: #bee2d4;"
-        >success message</div>
+        >${obj.title}</div>
         <div
           class="custom-toast-body"
           style="background-color: #eaf7ea;color: #2d5f2d;"
-        >${value}</div>`,
-        '1px solid rgba(126, 181, 127, 0.42)'
+        >${obj.message}</div>`,
+        '1px solid rgba(126, 181, 127, 0.42)',
+        obj.duration
       )
     },
-    warningToast(value) {
+    warningToast(obj) {
       this.toast(
         `
         <div
           class="custom-toast-header"
           style="color: #948934;background-color: #fff7c4;"
-        >warning message</div>
+        >${obj.title}</div>
         <div
           class="custom-toast-body"
           style="background-color: #ffffeb;color: #adad1d;"
-        >${value}</div>`,
-        '1px solid rgba(253, 227, 149, 0.5)'
+        >${obj.message}</div>`,
+        '1px solid rgba(253, 227, 149, 0.5)',
+        obj.duration
       )
     },
-    dangerToast(value) {
+    dangerToast(obj) {
       this.toast(
         `
         <div
           class="custom-toast-header"
           style="color: #770000;background-color: #ffcfcf;"
-        >danger message</div>
+        >${obj.title}</div>
         <div
           class="custom-toast-body"
           style="background-color: #ffe5e5;color: #8c0000;"
-        >${value}</div>`,
-        '1px solid rgba(255, 172, 172, 0.5)'
+        >${obj.message}</div>`,
+        '1px solid rgba(255, 172, 172, 0.5)',
+        obj.duration
       )
     },
-    infoToast(value) {
+    infoToast(obj) {
       this.toast(
         `
         <div
           class="custom-toast-header"
           style="color: white;background-color: #71d2ff;"
-        >info message</div>
+        >${obj.title}</div>
         <div
           class="custom-toast-body"
           style="background-color: #fff;color: #333;"
-        >${value}</div>`,
-        '1px solid rgba(131, 216, 255, 0.5)'
+        >${obj.message}</div>`,
+        '1px solid rgba(131, 216, 255, 0.5)',
+        obj.duration
       )
     },
-    toast(value, borderStyle) {
+    toast(value, borderStyle, duration) {
       const dom = document.getElementById('toast-wrapper')
-      // console.log(dom)
       const divElement = document.createElement('div')
       divElement.innerHTML = value
       divElement.style.border = borderStyle
@@ -104,7 +107,7 @@ export default {
       setTimeout(() => {
         divElement.classList.add('bounceOutRight')
         setTimeout(() => dom.removeChild(divElement), 800)
-      }, 2500)
+      }, duration)
     }
   }
 }
@@ -121,6 +124,7 @@ export default {
   background-color: rgba(0, 0, 0, 0);
 }
 .custom-toast {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
   border-radius: 0.25rem;
   overflow: hidden;
   box-sizing: border-box;

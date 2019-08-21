@@ -4,6 +4,7 @@
     <table class="table table-striped" style="width: auto;">
       <thead class="thead-dark">
         <tr>
+          <th class="back-th-td">序号</th>
           <th class="back-th-td">操作</th>
           <th
             class="back-th-td"
@@ -16,6 +17,7 @@
       </thead>
       <tbody>
         <tr v-for="(row, index) of tableData.list" :key="index">
+          <td class="back-th-td">{{ index + 1 + tableData.pageSize * (tableData.currentPage - 1) }}</td>
           <td class="back-th-td back-btn-cell" style="padding: 0;">
             <span class="back-temp-td-operator">占位符</span>
             <div class="back-btn-box">
@@ -57,13 +59,14 @@
         </tr>
       </tbody>
     </table>
-    <page-component></page-component>
+    <page-component v-on:jump="pageJump" :param="tableData"></page-component>
   </div>
 </template>
 
 <script>
 import PageComponent from '@/components/Page.vue'
 import accountService from './account.service.js'
+import { setTimeout } from 'timers'
 export default {
   name: 'AccountModule',
   components: { PageComponent },
@@ -120,25 +123,47 @@ export default {
           }
         ]
       },
-      tableData: {}
+      tableData: {},
+      currentEvent: null
     }
   },
   created() {
     this.initTable()
   },
   methods: {
+    async pageJump(pageValue) {
+      if (!this.currentEvent) {
+        this.currentEvent = 1
+        this.tableData.currentPage = pageValue
+        await this.initTable()
+        setTimeout(() => {
+          this.currentEvent = null
+        }, 100)
+      }
+    },
     editRow(rowId) {
-      this.$store.commit('toast', { message: rowId, type: 'success' })
+      console.log(rowId)
     },
     deleteRow(rowId) {
-      accountService.delByKey(rowId).then(() => {
-        this.initTable()
+      this.$message({
+        title: '确定删除吗？',
+        detail: '该操作将不可逆！',
+        btnName: '删除',
+        event: close => {
+          accountService
+            .delByKey(rowId)
+            .then(() => {
+              this.$toast.success('删除成功！')
+              return this.initTable()
+            })
+            .then(close)
+        }
       })
     },
     async initTable() {
       const response = await accountService.queryPage({
         currentPage: this.tableData.currentPage || 1,
-        pageSize: this.tableData.pageSize || 15
+        pageSize: this.tableData.pageSize || 8
       })
       this.tableData = response.data || {}
     }
