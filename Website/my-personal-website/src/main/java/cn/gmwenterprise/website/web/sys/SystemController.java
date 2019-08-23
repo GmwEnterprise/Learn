@@ -2,13 +2,12 @@ package cn.gmwenterprise.website.web.sys;
 
 import cn.gmwenterprise.website.common.BaseController;
 import cn.gmwenterprise.website.common.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import cn.gmwenterprise.website.common.SpringContext;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,5 +24,22 @@ public class SystemController implements BaseController {
                 .collect(Collectors.toList()));
         }
         return fail("moduleName不符合驼峰命名规则");
+    }
+
+    @GetMapping("/allRouters")
+    public ResponseEntity getAllRouter() {
+        RequestMappingHandlerMapping bean = SpringContext.getBean(RequestMappingHandlerMapping.class);
+        List<Object> allRouters =
+            bean.getHandlerMethods().keySet().stream()
+                .map(item -> {
+                    Set<RequestMethod> methods = item.getMethodsCondition().getMethods();
+                    Set<String> patterns = item.getPatternsCondition().getPatterns();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("method", methods.stream().findFirst().orElse(RequestMethod.TRACE).toString());
+                    map.put("pattern", patterns.stream().findFirst().orElse("NULL"));
+                    return map;
+                })
+                .collect(Collectors.toList());
+        return ok(allRouters);
     }
 }
