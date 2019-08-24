@@ -1,6 +1,14 @@
 <template>
   <div id="table-list-vue">
     <h3>{{ table.className + ' 表' }}</h3>
+    <form id="table-data-query" @submit="querySubmit">
+      <div v-for="(column, idx) of table.columns" :key="idx" class="form-group">
+        <label :for="`query-${column.code}`">{{ column.name }}：</label>
+        <template v-if="column.type === 'date'">
+          
+        </template>
+      </div>
+    </form>
     <table class="table table-striped" style="width: auto;">
       <thead class="thead-dark">
         <tr>
@@ -77,8 +85,9 @@ export default {
         columns: [
           { code: 'id', name: '主键', type: 'number', show: false },
           { code: 'accountId', name: '账户ID', type: 'string', show: true },
-          { code: 'nickname', name: '昵称', type: 'string', show: true },
+          { query: true, code: 'nickname', name: '昵称', type: 'string', show: true },
           {
+            query: true,
             code: 'sex',
             name: '性别',
             type: 'customize',
@@ -131,6 +140,9 @@ export default {
     this.initTable()
   },
   methods: {
+    querySubmit(e) {
+
+    },
     async pageJump(pageValue) {
       if (!this.currentEvent) {
         this.currentEvent = 1
@@ -146,6 +158,7 @@ export default {
     },
     deleteRow(rowId) {
       this.$message({
+        type: 'warning',
         title: '确定删除吗？',
         detail: '该操作将不可逆！',
         btnName: '删除',

@@ -31,12 +31,10 @@ export default new Vuex.Store({
     },
     message(state, messageValue = {}) {
       state.messageBox = {
-        title: messageValue.title || '未设置标题',
-        detail: messageValue.detail || '未设置详细内容',
+        type: messageValue.type || 'info',
+        title: messageValue.title || '',
+        detail: messageValue.detail || '',
         btnName: messageValue.btnName || '确定',
-        // event: messageValue.event || (() => {
-        //   console.log('没有事件传递')
-        // }),
         event: messageValue.event ? () => new Promise(resolve => {
           messageValue.event(resolve)
         }) : null

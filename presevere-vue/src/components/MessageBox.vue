@@ -2,31 +2,99 @@
   <div id="customize-message-box">
     <!-- 删除提示框 -->
     <!-- Button trigger modal -->
-    <button
+    <!-- <button
       type="button"
       class="btn btn-primary"
       data-toggle="modal"
       data-target="#delete-message-box"
-    >Launch demo modal</button>
+    >Launch demo modal</button>-->
     <!-- Modal -->
     <div
       class="modal fade"
-      id="delete-message-box"
+      id="warning-message-box"
       tabindex="-1"
       role="dialog"
-      aria-labelledby="deleteMessageLabel"
+      aria-labelledby="warningMessageLabel"
       aria-hidden="true"
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-body">
-            <span class="warning-icon"></span>
+            <span class="message-icon warning-icon"></span>
             <h3 class="customize-message-box-title">{{ message.title }}</h3>
             <span class="customize-message-box-detail">{{ message.detail }}</span>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" @click="doEvent">{{ message.btnName }}</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="success-message-box"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="successMessageLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <span class="message-icon success-icon"></span>
+            <h3 class="customize-message-box-title">{{ message.title }}</h3>
+            <span class="customize-message-box-detail">{{ message.detail }}</span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" @click="doEvent">{{ message.btnName }}</button>
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="info-message-box"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="infoMessageLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3 class="customize-message-box-title">{{ message.title }}</h3>
+            <span class="customize-message-box-detail">{{ message.detail }}</span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @click="doEvent">{{ message.btnName }}</button>
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="error-message-box"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="errorMessageLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <span class="message-icon error-icon"></span>
+            <h3 class="customize-message-box-title">{{ message.title }}</h3>
+            <span class="customize-message-box-detail">{{ message.detail }}</span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" @click="doEvent">{{ message.btnName }}</button>
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button> -->
           </div>
         </div>
       </div>
@@ -42,6 +110,7 @@ export default {
   data() {
     return {
       message: {
+        type: 'info/warning/error/success',
         title: '确定删除吗？',
         detail: '该操作将不可逆！',
         btnName: '删除',
@@ -58,7 +127,20 @@ export default {
   watch: {
     storeMessage() {
       this.message = this.storeMessage
-      $('#delete-message-box').modal('show')
+      switch (this.message.type) {
+        case 'warning':
+          $('#warning-message-box').modal('show')
+          break
+        case 'success':
+          $('#success-message-box').modal('show')
+          break
+        case 'error':
+          $('#error-message-box').modal('show')
+          break
+        default:
+          $('#info-message-box').modal('show')
+          break
+      }
     }
   },
   methods: {
@@ -70,7 +152,7 @@ export default {
         this.currentEvent = new Promise(resolve => {
           resolve(this.message.event && this.message.event())
         }).finally(() => {
-          $('#delete-message-box').modal('hide')
+          $(`#${this.message.type}-message-box`).modal('hide')
           setTimeout(() => {
             this.currentEvent = null
           }, 300)
@@ -96,22 +178,6 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.warning-icon {
-  width: 5em;
-  height: 5em;
-  border: 0.2rem solid #f8bb86;
-  border-radius: 50%;
-  margin-top: 2rem;
-}
-.warning-icon::before {
-  content: '!';
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  align-items: center;
-  font-size: 2.4em;
-  color: #f8bb86;
-}
 .customize-message-box-title {
   margin: 2rem 3rem 1rem;
   width: calc(100% - 6rem);
@@ -126,5 +192,39 @@ export default {
   text-align: center;
   margin: 0 2rem;
   color: #666;
+}
+.message-icon {
+  width: 5em;
+  height: 5em;
+  border-radius: 50%;
+  margin-top: 2rem;
+}
+.message-icon::before {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+  font-size: 2.4em;
+}
+.warning-icon {
+  border: 0.2rem solid #f8bb86;
+}
+.warning-icon::before {
+  content: '!';
+  color: #f8bb86;
+}
+.success-icon {
+  border: 0.2rem solid #5fb513;
+}
+.success-icon::before {
+  content: '√';
+  color: #5fb513;
+}
+.error-icon {
+  border: 0.2rem solid #ff7c7c;
+}
+.error-icon::before {
+  content: '×';
+  color: #ff7c7c;
 }
 </style>
