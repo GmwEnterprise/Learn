@@ -1,13 +1,11 @@
 <template>
   <div id="table-list-vue">
     <h3>{{ table.className + ' 表' }}</h3>
-    <form id="table-data-query" @submit="querySubmit">
-      <div v-for="(column, idx) of table.columns" :key="idx" class="form-group">
-        <label :for="`query-${column.code}`">{{ column.name }}：</label>
-        <template v-if="column.type === 'date'">
-          
-        </template>
-      </div>
+    <form id="queryForm">
+      <!-- <div class="form-group">
+        <label for=""></label>
+        <input type="text" v-model="">
+      </div> -->
     </form>
     <table class="table table-striped" style="width: auto;">
       <thead class="thead-dark">
@@ -80,14 +78,22 @@ export default {
   components: { PageComponent },
   data() {
     return {
+      formParam: {
+        accountId: '',
+        accountType: -1,
+        nickname: '',
+        sex: -1, 
+        age: -1,
+        introduction: '',
+        phone: ''
+      },
       table: {
         className: 'Account',
         columns: [
           { code: 'id', name: '主键', type: 'number', show: false },
           { code: 'accountId', name: '账户ID', type: 'string', show: true },
-          { query: true, code: 'nickname', name: '昵称', type: 'string', show: true },
+          { code: 'nickname', name: '昵称', type: 'string', show: true },
           {
-            query: true,
             code: 'sex',
             name: '性别',
             type: 'customize',
@@ -140,9 +146,7 @@ export default {
     this.initTable()
   },
   methods: {
-    querySubmit(e) {
-
-    },
+    querySubmit() {},
     async pageJump(pageValue) {
       if (!this.currentEvent) {
         this.currentEvent = 1
@@ -162,14 +166,18 @@ export default {
         title: '确定删除吗？',
         detail: '该操作将不可逆！',
         btnName: '删除',
-        event: close => {
-          accountService
-            .delByKey(rowId)
-            .then(() => {
-              this.$toast.success('删除成功！')
-              return this.initTable()
-            })
-            .then(close)
+        event: async close => {
+          // accountService
+          //   .delByKey(rowId)
+          //   .then(() => {
+          //     this.$toast.success('删除成功！')
+          //     return this.initTable()
+          //   })
+          //   .then(close)
+          await accountService.delByKey(rowId)
+          this.$toast.success('删除成功')
+          await this.initTable()
+          close()
         }
       })
     },
