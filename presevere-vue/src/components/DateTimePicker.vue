@@ -19,7 +19,22 @@
       </thead>
       <tbody>
         <tr>
-          <td></td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>4</td>
+          <td>5</td>
+          <td>6</td>
+          <td>7</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>9</td>
+          <td>10</td>
+          <td>11</td>
+          <td>12</td>
+          <td>13</td>
+          <td>14</td>
         </tr>
       </tbody>
     </table>
@@ -30,11 +45,26 @@
 export default {
   name: 'CustomizeDateTimePicker',
   props: {
-    datetime: Date
-  },
-  computed: {
-    dateObject() {
+    dateValue: {
+      type: Date,
+      default: () => new Date(2019, 8 - 1, 4)
     }
+  },
+  computed: {},
+  methods: {
+    clickTd() {
+
+    },
+    dateInit() {
+      const year = this.dateValue.getFullYear()
+      const month = (this.dateValue.getMonth() + 1) + '' // 0 ~ 11
+      const dayOfMonth = this.dateValue.getDate() + '' // 1 ~ 31
+      const dayOfWeek = this.dateValue.getDay() // 0 ~ 6
+      console.log(`${year}-${month.padStart(2, '0')}-${dayOfMonth.padStart(2, '0')}, ${dayOfWeek}`)
+    }
+  },
+  mounted() {
+    this.dateInit()
   }
 }
 </script>
@@ -62,5 +92,20 @@ export default {
   width: 2em;
   text-align: center;
   cursor: pointer;
+}
+.c-d-p-content {
+  width: 96%;
+  margin: 0.3rem auto;
+  text-align: center;
+  line-height: 2em;
+  color: #4e4e4e;
+}
+.c-d-p-content td {
+  transition: 0.2s;
+  cursor: pointer;
+}
+.c-d-p-content td:hover {
+  color: white;
+  background-color: lightgray;
 }
 </style>
