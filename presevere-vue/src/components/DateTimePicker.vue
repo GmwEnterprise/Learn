@@ -1,23 +1,30 @@
 <template>
   <div id="customize-datetime-picker">
     <div class="c-d-p-title">
-      <span class="c-d-p-btn" @click="prev()">&lt;</span>
-      <span @click="monthModel()" style="display: inline-block;width: 60%;text-align: center;">
-        <template v-if="displayModel === 'day'">{{ `${temp.year}年${temp.month}月` }}</template>
-        <template v-else>{{ `${temp.year}年` }}</template>
+      <span class="c-d-p-btn" @click="prev()">
+        <i class="fa fa-caret-left" aria-hidden="true"></i>
       </span>
-      <span class="c-d-p-btn" @click="next()">&gt;</span>
+      <span
+        @click="monthModel()"
+        style="display: inline-block;width: 75%;text-align: center; cursor: pointer;"
+      >
+        <template v-if="displayModel === 'day'">{{ `${temp.year} / ${temp.month}` }}</template>
+        <template v-else>{{ `${temp.year}` }}</template>
+      </span>
+      <span class="c-d-p-btn" @click="next()">
+        <i class="fa fa-caret-right" aria-hidden="true"></i>
+      </span>
     </div>
     <table v-show="displayModel === 'day'" class="c-d-p-content">
       <thead>
         <tr>
-          <th>日</th>
-          <th>一</th>
-          <th>二</th>
-          <th>三</th>
-          <th>四</th>
-          <th>五</th>
-          <th>六</th>
+          <th>Su</th>
+          <th>Mo</th>
+          <th>Tu</th>
+          <th>We</th>
+          <th>Th</th>
+          <th>Fr</th>
+          <th>Sa</th>
         </tr>
       </thead>
       <tbody>
@@ -27,6 +34,15 @@
               class="c-d-p-calendar-item"
               @click="$emit('value-submit', currentLdt.year, currentLdt.month, item.dayOfMonth)"
             >{{ item.dayOfMonth }}</div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="7">
+            <a
+              class="choose-today"
+              href="javascript:void(0)"
+              @click="$emit('value-submit', today.getFullYear(), today.getMonth() + 1, today.getDate())"
+            >Choose today.</a>
           </td>
         </tr>
       </tbody>
@@ -43,6 +59,7 @@ export default {
   name: 'CustomizeDateTimePicker',
   data() {
     return {
+      today: new Date(),
       ldt: null,
       currentLdt: {},
       currentDisplay: [],
@@ -53,9 +70,13 @@ export default {
       }
     }
   },
-  props: {
-    year: Number,
-    month: Number
+  computed: {
+    year() {
+      return this.$store.state.LocalDateTime.year
+    },
+    month() {
+      return this.$store.state.LocalDateTime.month
+    }
   },
   watch: {
     year() {
@@ -163,7 +184,7 @@ export default {
   background-color: lightgray;
 }
 .c-d-p-btn {
-  width: 2em;
+  width: 10%;
   text-align: center;
   cursor: pointer;
 }
@@ -199,5 +220,8 @@ export default {
 .c-d-p-month-choose > span:hover {
   color: white;
   background-color: lightgray;
+}
+a.choose-today:hover {
+  text-decoration: none;
 }
 </style>
