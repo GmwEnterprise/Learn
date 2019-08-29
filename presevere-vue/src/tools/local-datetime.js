@@ -13,7 +13,7 @@ export default class LocalDateTime {
     this.currentDate = {
       year: year || def.getFullYear(),
       month: month || def.getMonth() + 1,
-      dayOfMonth: dayOfMonth || def.getDate(),
+      dayOfMonth: dayOfMonth || 1,
       hour: hour || 0,
       minute: minute || 0,
       second: second || 0
@@ -23,7 +23,7 @@ export default class LocalDateTime {
   getCurrentCalendar() {
     const year = this.currentDate.year
     const month = this.currentDate.month
-    let ofWeek = new Date(year, month, 1).getDay()
+    let ofWeek = new Date(year, month - 1, 1).getDay()
     const countDayOfMonth = this.getCountDayOfMonth(year, month)
     if (!countDayOfMonth) {
       throw new Error('the month value is wrong !')
@@ -48,13 +48,23 @@ export default class LocalDateTime {
   }
 
   prevMonth() {
-    const countDayOfCurrentMonth = this.getCountDayOfMonth(this.currentDate.year, this.currentDate.month)
-    
+    if (this.currentDate.month === 1) {
+      this.currentDate.month = 12
+      this.currentDate.year--
+    } else {
+      this.currentDate.month--
+    }
+    this.currentDate.dayOfMonth = null
   }
 
   nextMonth() {
-    const countDayOfCurrentMonth = this.getCountDayOfMonth(this.currentDate.year, this.currentDate.month)
-
+    if (this.currentDate.month === 12) {
+      this.currentDate.month = 1
+      this.currentDate.year++
+    } else {
+      this.currentDate.month++
+    }
+    this.currentDate.dayOfMonth = null
   }
 
   getCountDayOfMonth(year, month) {

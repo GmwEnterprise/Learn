@@ -1,11 +1,14 @@
 <template>
   <div id="customize-datetime-picker">
     <div class="c-d-p-title">
-      <span class="c-d-p-btn">&lt;</span>
-      <span>2019-07-24</span>
-      <span class="c-d-p-btn">&gt;</span>
+      <span class="c-d-p-btn" @click="prev()">&lt;</span>
+      <span @click="monthModel()" style="display: inline-block;width: 60%;text-align: center;">
+        <template v-if="displayModel === 'day'">{{ `${temp.year}年${temp.month}月` }}</template>
+        <template v-else>{{ `${temp.year}年` }}</template>
+      </span>
+      <span class="c-d-p-btn" @click="next()">&gt;</span>
     </div>
-    <table class="c-d-p-content">
+    <table v-show="displayModel === 'day'" class="c-d-p-content">
       <thead>
         <tr>
           <th>日</th>
@@ -18,52 +21,122 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>2</td>
-          <td>3</td>
-          <td>4</td>
-          <td>5</td>
-          <td>6</td>
-          <td>7</td>
-        </tr>
-        <tr>
-          <td>8</td>
-          <td>9</td>
-          <td>10</td>
-          <td>11</td>
-          <td>12</td>
-          <td>13</td>
-          <td>14</td>
+        <tr v-for="(row, rowId) of currentDisplay" :key="rowId">
+          <td v-for="(item, itemId) of row" :key="itemId">
+            <div
+              class="c-d-p-calendar-item"
+              @click="$emit('value-submit', currentLdt.year, currentLdt.month, item.dayOfMonth)"
+            >{{ item.dayOfMonth }}</div>
+          </td>
         </tr>
       </tbody>
     </table>
+    <div v-show="displayModel === 'month'" class="c-d-p-month-choose">
+      <span v-for="month of 12" :key="month" @click="setMonth(month)">{{ month }}</span>
+    </div>
   </div>
 </template>
 
 <script>
+import LocalDateTime from '@/tools/local-datetime.js'
 export default {
   name: 'CustomizeDateTimePicker',
-  props: {
-    dateValue: {
-      type: Date,
-      default: () => new Date(2019, 8 - 1, 4)
+  data() {
+    return {
+      ldt: null,
+      currentLdt: {},
+      currentDisplay: [],
+      displayModel: 'day',
+      temp: {
+        year: 0,
+        month: 0
+      }
     }
   },
-  computed: {},
-  methods: {
-    clickTd() {
-
+  props: {
+    year: Number,
+    month: Number
+  },
+  watch: {
+    year() {
+      this.setLdt(this.year, this.temp.month)
     },
+    month() {
+      this.setLdt(this.temp.year, this.month)
+    },
+    currentLdt() {
+      const row = []
+      let line = []
+      for (let i = 0, week = 0; i < this.currentLdt.day.length; i++, week++) {
+        if (week === 7) {
+          week = 0
+        }
+        if (week === this.currentLdt.day[i].ofWeek) {
+          line.push({
+            dayOfMonth: this.currentLdt.day[i].ofMonth,
+            dayOfWeek: this.currentLdt.day[i].ofWeek
+          })
+        } else {
+          line.push({})
+          i--
+        }
+        if (week === 6) {
+          row.push(line)
+          line = []
+        } else if (i === this.currentLdt.day.length - 1) {
+          for (let a = 0; a < 6 - week; a++) {
+            line.push({})
+          }
+          row.push(line)
+        }
+      }
+      this.currentDisplay = row
+    }
+  },
+  methods: {
     dateInit() {
-      const year = this.dateValue.getFullYear()
-      const month = (this.dateValue.getMonth() + 1) + '' // 0 ~ 11
-      const dayOfMonth = this.dateValue.getDate() + '' // 1 ~ 31
-      const dayOfWeek = this.dateValue.getDay() // 0 ~ 6
-      console.log(`${year}-${month.padStart(2, '0')}-${dayOfMonth.padStart(2, '0')}, ${dayOfWeek}`)
+      this.currentLdt = this.ldt.getCurrentCalendar()
+      this.temp.year = this.currentLdt.year
+      this.temp.month = this.currentLdt.month
+    },
+    prev() {
+      if (this.displayModel === 'day') {
+        this.ldt.prevMonth()
+        this.dateInit()
+      } else if (this.displayModel === 'month') {
+        this.temp.year--
+      }
+    },
+    next() {
+      if (this.displayModel === 'day') {
+        this.ldt.nextMonth()
+        this.dateInit()
+      } else if (this.displayModel === 'month') {
+        this.temp.year++
+      }
+    },
+    setMonth(monthValue) {
+      this.temp.month = monthValue
+      this.setLdt(this.temp.year, this.temp.month)
+    },
+    setLdt(year, month) {
+      this.ldt = new LocalDateTime(year, month)
+      this.dateInit()
+      this.displayModel = 'day'
+    },
+    monthModel() {
+      this.displayModel = 'month'
     }
   },
   mounted() {
+    this.ldt = new LocalDateTime(
+      this.year,
+      this.month,
+      this.dayOfMonth,
+      this.hour,
+      this.minute,
+      this.second
+    )
     this.dateInit()
   }
 }
@@ -78,10 +151,11 @@ export default {
   box-shadow: 0px 0px 10px 0px #cecece;
   border-radius: 5px;
   margin: 0 auto;
+  padding-bottom: 3px;
 }
 .c-d-p-title {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   height: 2em;
   line-height: 2em;
   padding: 10px;
@@ -100,11 +174,29 @@ export default {
   line-height: 2em;
   color: #4e4e4e;
 }
-.c-d-p-content td {
+.c-d-p-calendar-item {
   transition: 0.2s;
   cursor: pointer;
 }
-.c-d-p-content td:hover {
+.c-d-p-calendar-item:hover {
+  color: white;
+  background-color: lightgray;
+}
+.c-d-p-month-choose {
+  width: 90%;
+  margin: 0.8rem auto 0.6rem;
+}
+.c-d-p-month-choose > span {
+  display: inline-block;
+  width: 25%;
+  box-sizing: border-box;
+  height: 4rem;
+  line-height: 4rem;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.c-d-p-month-choose > span:hover {
   color: white;
   background-color: lightgray;
 }
