@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view />
-    <date-picker v-model="value"></date-picker>
+    <date-picker v-model="value" :width="width"></date-picker>
   </div>
 </template>
 
@@ -10,7 +10,8 @@ export default {
   name: 'App',
   data() {
     return {
-      value: ''
+      value: '',
+      width: '15rem'
     }
   }
 }

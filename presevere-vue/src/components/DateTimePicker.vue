@@ -1,5 +1,5 @@
 <template>
-  <div class="customize-datetime-picker" :style="cdpWidth">
+  <div class="customize-datetime-picker" :style="`width: ${width};`">
     <input
       v-model="displayValue"
       class="form-control"
@@ -69,9 +69,6 @@ export default {
   name: 'CustomizeDateTimePicker',
   data() {
     return {
-      cdpWidth: {
-        width: '256px'
-      },
       today: new Date(),
       ldt: null,
       currentLdt: {},
@@ -89,12 +86,9 @@ export default {
     year: Number,
     month: Number,
     value: String,
-    width: Number
+    width: String
   },
   watch: {
-    width() {
-      this.cdpWidth.width = this.width + 'px'
-    },
     year() {
       this.setLdt(this.year, this.temp.month)
     },
@@ -191,7 +185,7 @@ export default {
   position: absolute;
   box-shadow: 0px 0px 10px 0px #cecece;
   left: 0;
-  right: 0;
+  width: 256px;
 }
 .c-d-p-title {
   display: flex;
