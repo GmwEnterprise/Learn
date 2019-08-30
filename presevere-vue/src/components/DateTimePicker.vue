@@ -1,64 +1,77 @@
 <template>
-  <div id="customize-datetime-picker">
-    <div class="c-d-p-title">
-      <span class="c-d-p-btn" @click="prev()">
-        <i class="fa fa-caret-left" aria-hidden="true"></i>
-      </span>
-      <span
-        @click="monthModel()"
-        style="display: inline-block;width: 75%;text-align: center; cursor: pointer;"
-      >
-        <template v-if="displayModel === 'day'">{{ `${temp.year} / ${temp.month}` }}</template>
-        <template v-else>{{ `${temp.year}` }}</template>
-      </span>
-      <span class="c-d-p-btn" @click="next()">
-        <i class="fa fa-caret-right" aria-hidden="true"></i>
-      </span>
-    </div>
-    <table v-show="displayModel === 'day'" class="c-d-p-content">
-      <thead>
-        <tr>
-          <th>Su</th>
-          <th>Mo</th>
-          <th>Tu</th>
-          <th>We</th>
-          <th>Th</th>
-          <th>Fr</th>
-          <th>Sa</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row, rowId) of currentDisplay" :key="rowId">
-          <td v-for="(item, itemId) of row" :key="itemId">
-            <div
-              class="c-d-p-calendar-item"
-              @click="$emit('value-submit', currentLdt.year, currentLdt.month, item.dayOfMonth)"
-            >{{ item.dayOfMonth }}</div>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="7">
-            <a
-              class="choose-today"
-              href="javascript:void(0)"
-              @click="$emit('value-submit', today.getFullYear(), today.getMonth() + 1, today.getDate())"
-            >Choose today.</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div v-show="displayModel === 'month'" class="c-d-p-month-choose">
-      <span v-for="month of 12" :key="month" @click="setMonth(month)">{{ month }}</span>
+  <div class="customize-datetime-picker" :style="cdpWidth">
+    <input
+      v-model="displayValue"
+      class="form-control"
+      type="text"
+      placeholder="请选择日期"
+      @click="togglePicker()"
+    />
+    <div class="c-d-p-wrapper" v-show="showPicker">
+      <div class="c-d-p-title">
+        <span class="c-d-p-btn" @click="prev()">
+          <i class="fa fa-caret-left" aria-hidden="true"></i>
+        </span>
+        <span
+          @click="monthModel()"
+          style="display: inline-block;width: 75%;text-align: center; cursor: pointer;"
+        >
+          <template v-if="displayModel === 'day'">{{ `${temp.year} / ${temp.month}` }}</template>
+          <template v-else>{{ `${temp.year}` }}</template>
+        </span>
+        <span class="c-d-p-btn" @click="next()">
+          <i class="fa fa-caret-right" aria-hidden="true"></i>
+        </span>
+      </div>
+      <table v-show="displayModel === 'day'" class="c-d-p-content">
+        <thead>
+          <tr>
+            <th>Su</th>
+            <th>Mo</th>
+            <th>Tu</th>
+            <th>We</th>
+            <th>Th</th>
+            <th>Fr</th>
+            <th>Sa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row, rowId) of currentDisplay" :key="rowId">
+            <td v-for="(item, itemId) of row" :key="itemId">
+              <div
+                class="c-d-p-calendar-item"
+                @click="emitValueSubmit(currentLdt.year, currentLdt.month, item.dayOfMonth)"
+              >{{ item.dayOfMonth }}</div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="7">
+              <a
+                class="choose-today"
+                href="javascript:void(0)"
+                @click="emitValueSubmit(today.getFullYear(), today.getMonth() + 1, today.getDate())"
+              >Choose today.</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div v-show="displayModel === 'month'" class="c-d-p-month-choose">
+        <span v-for="month of 12" :key="month" @click="setMonth(month)">{{ month }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import LocalDateTime from '@/tools/local-datetime.js'
+import DateTimeFormat from '@/tools/datetime-format.js'
 export default {
   name: 'CustomizeDateTimePicker',
   data() {
     return {
+      cdpWidth: {
+        width: '256px'
+      },
       today: new Date(),
       ldt: null,
       currentLdt: {},
@@ -67,18 +80,21 @@ export default {
       temp: {
         year: 0,
         month: 0
-      }
+      },
+      showPicker: false,
+      displayValue: ''
     }
   },
-  computed: {
-    year() {
-      return this.$store.state.LocalDateTime.year
-    },
-    month() {
-      return this.$store.state.LocalDateTime.month
-    }
+  props: {
+    year: Number,
+    month: Number,
+    value: String,
+    width: Number
   },
   watch: {
+    width() {
+      this.cdpWidth.width = this.width + 'px'
+    },
     year() {
       this.setLdt(this.year, this.temp.month)
     },
@@ -147,32 +163,35 @@ export default {
     },
     monthModel() {
       this.displayModel = 'month'
+    },
+    togglePicker() {
+      this.showPicker = !this.showPicker
+    },
+    emitValueSubmit(year, month, dayOfMonth) {
+      this.displayValue = `${year}/${month}/${dayOfMonth}`
+      this.togglePicker()
+      this.$emit('input', DateTimeFormat.date2String(year, month, dayOfMonth))
     }
   },
   mounted() {
-    this.ldt = new LocalDateTime(
-      this.year,
-      this.month,
-      this.dayOfMonth,
-      this.hour,
-      this.minute,
-      this.second
-    )
+    this.ldt = new LocalDateTime(this.year, this.month)
     this.dateInit()
   }
 }
 </script>
 
 <style>
-#customize-datetime-picker {
-  width: 16rem;
+.customize-datetime-picker {
+  position: relative;
   height: auto;
-  min-height: 16rem;
-  background-color: white;
-  box-shadow: 0px 0px 10px 0px #cecece;
   border-radius: 5px;
-  margin: 0 auto;
-  padding-bottom: 3px;
+  background-color: rgba(0, 0, 0, 0);
+}
+.c-d-p-wrapper {
+  position: absolute;
+  box-shadow: 0px 0px 10px 0px #cecece;
+  left: 0;
+  right: 0;
 }
 .c-d-p-title {
   display: flex;

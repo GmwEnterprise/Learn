@@ -18,10 +18,6 @@ export default new Vuex.Store({
       event: () => {
         console.log('没有事件传递')
       }
-    },
-    LocalDateTime: {
-      year: 0,
-      month: 0
     }
   },
   mutations: {
@@ -43,14 +39,8 @@ export default new Vuex.Store({
           messageValue.event(resolve)
         }) : null
       }
-    },
-    setLdt(state, year, month) {
-      state.LocalDateTime = {
-        year, month
-      }
     }
   },
   actions: {
-
   }
 })

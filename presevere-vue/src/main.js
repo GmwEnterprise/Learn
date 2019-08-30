@@ -13,6 +13,13 @@ import 'bootstrap'
 
 Vue.config.productionTip = false
 
+// 自定义的日期选择器
+import DateTimePicker from '@/components/DateTimePicker.vue'
+DateTimePicker.install = (Vue) => {
+  Vue.component('date-picker', DateTimePicker)
+}
+Vue.use(DateTimePicker)
+
 // toast全局命令
 Vue.prototype.$toast = {
   success(message = 'success message', title = '成功提示', duration = 3000) {
