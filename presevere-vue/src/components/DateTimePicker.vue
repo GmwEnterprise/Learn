@@ -185,13 +185,14 @@ export default {
   position: relative;
   height: auto;
   border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0);
+  z-index: 100;
 }
 .c-d-p-wrapper {
   position: absolute;
   box-shadow: 0px 0px 10px 0px #cecece;
   left: 0;
   right: 0;
+  background-color: white;
 }
 .c-d-p-title {
   display: flex;

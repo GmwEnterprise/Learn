@@ -1,13 +1,8 @@
 <template>
   <div id="table-list-vue">
     <h3>{{ table.className + ' 表' }}</h3>
-    <form id="queryForm">
-      <!-- <div class="form-group">
-        <label for=""></label>
-        <input type="text" v-model="">
-      </div> -->
-    </form>
-    <table class="table table-striped" style="width: auto;">
+    <query-form @submit="querySubmit" />
+    <table class="table table-striped" style="width: auto;font-size: .9em;">
       <thead class="thead-dark">
         <tr>
           <th class="back-th-td">序号</th>
@@ -82,7 +77,7 @@ export default {
         accountId: '',
         accountType: -1,
         nickname: '',
-        sex: -1, 
+        sex: -1,
         age: -1,
         introduction: '',
         phone: ''
@@ -146,7 +141,9 @@ export default {
     this.initTable()
   },
   methods: {
-    querySubmit() {},
+    querySubmit() {
+      console.log('submit event !')
+    },
     async pageJump(pageValue) {
       if (!this.currentEvent) {
         this.currentEvent = 1
