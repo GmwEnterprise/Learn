@@ -2,6 +2,7 @@
   <form class="query-form" @submit="submitEvent">
     <div class="form-control-item-wrapper">
       <!-- 插槽 -->
+      <slot></slot>
     </div>
     <button type="submit" class="btn btn-primary query-form-submit-btn">查询</button>
   </form>
@@ -30,6 +31,7 @@ form.query-form {
   padding: 0.8rem;
   margin: 1rem 0;
   width: 100%;
+  font-size: .8rem;
 }
 button.query-form-submit-btn {
   font-size: 0.9em;

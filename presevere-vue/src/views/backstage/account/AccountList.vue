@@ -1,7 +1,12 @@
 <template>
   <div id="table-list-vue">
     <h3>{{ table.className + ' 表' }}</h3>
-    <query-form @submit="querySubmit" />
+    <query-form @submit="querySubmit">
+      <form-control v-model="formParam.nickname" label="昵称" id="nickname" />
+      <form-control v-model="formParam.phone" label="手机号" id="phone" />
+      <form-control v-model="formParam.accountId" label="用户ID" id="account-id" />
+      <form-control v-model="formParam.introduction" label="简介" id="introduction" />
+    </query-form>
     <table class="table table-striped" style="width: auto;font-size: .9em;">
       <thead class="thead-dark">
         <tr>
@@ -164,13 +169,6 @@ export default {
         detail: '该操作将不可逆！',
         btnName: '删除',
         event: async close => {
-          // accountService
-          //   .delByKey(rowId)
-          //   .then(() => {
-          //     this.$toast.success('删除成功！')
-          //     return this.initTable()
-          //   })
-          //   .then(close)
           await accountService.delByKey(rowId)
           this.$toast.success('删除成功')
           await this.initTable()
