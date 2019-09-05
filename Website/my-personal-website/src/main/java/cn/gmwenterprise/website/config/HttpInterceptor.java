@@ -12,9 +12,5 @@ public class HttpInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.debug("进入拦截器");
-        response.getHeaderNames().stream()
-            .map(name -> name + ": " + response.getHeader(name))
-            .forEach(System.out::println);
     }
 }

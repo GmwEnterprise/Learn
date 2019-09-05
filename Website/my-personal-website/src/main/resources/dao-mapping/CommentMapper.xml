@@ -33,10 +33,10 @@
         from comment a
         <where>
             <if test="commentWriter != null">
-                and a.`comment_writer` = #{commentWriter,jdbcType=VARCHAR}
+                and a.`comment_writer` like concat('%', #{commentWriter,jdbcType=VARCHAR}, '%')
             </if>
             <if test="commentContent != null">
-                and a.`comment_content` = #{commentContent,jdbcType=VARCHAR}
+                and a.`comment_content` like concat('%', #{commentContent,jdbcType=VARCHAR}, '%')
             </if>
             <if test="commentBelong != null">
                 and a.`comment_belong` = #{commentBelong,jdbcType=INTEGER}

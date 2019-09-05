@@ -33,7 +33,11 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
             <#list columnList as item>
             <#if !item.isPrimaryKey>
             ${'<if test="${item.fieldName} != null">'}
+                <#if item.columnType == "VARCHAR">
+                ${'and a.`${item.columnName}` like concat(\'%\', #' + '{${item.fieldName},jdbcType=${item.columnType}}, \'%\')'}
+                <#else>
                 ${'and a.`${item.columnName}` = #' + '{${item.fieldName},jdbcType=${item.columnType}}'}
+                </#if>
             ${'</if>'}
             </#if>
             </#list>

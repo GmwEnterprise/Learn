@@ -4,7 +4,9 @@
       <!-- 插槽 -->
       <slot></slot>
     </div>
-    <button type="submit" class="btn btn-primary query-form-submit-btn">查询</button>
+    <div class="q-f-btn-wrapper">
+      <button type="submit" class="btn btn-primary query-form-submit-btn">查询</button>
+    </div>
   </form>
 </template>
 
@@ -31,11 +33,16 @@ form.query-form {
   padding: 0.8rem;
   margin: 1rem 0;
   width: 100%;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 button.query-form-submit-btn {
   font-size: 0.9em;
   width: 5rem;
   display: block;
+  margin-left: 22%;
+}
+.q-f-btn-wrapper {
+  width: 30%;
+  box-sizing: border-box;
 }
 </style>

@@ -70,12 +70,10 @@
 </template>
 
 <script>
-import PageComponent from '@/components/Page.vue'
 import accountService from './account.service.js'
 import { setTimeout } from 'timers'
 export default {
   name: 'AccountModule',
-  components: { PageComponent },
   data() {
     return {
       formParam: {

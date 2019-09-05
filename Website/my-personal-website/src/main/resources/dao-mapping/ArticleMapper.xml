@@ -35,13 +35,13 @@
         from article a
         <where>
             <if test="title != null">
-                and a.`title` = #{title,jdbcType=VARCHAR}
+                and a.`title` like concat('%', #{title,jdbcType=VARCHAR}, '%')
             </if>
             <if test="wordContent != null">
-                and a.`word_content` = #{wordContent,jdbcType=VARCHAR}
+                and a.`word_content` like concat('%', #{wordContent,jdbcType=VARCHAR}, '%')
             </if>
             <if test="markdownContent != null">
-                and a.`markdown_content` = #{markdownContent,jdbcType=VARCHAR}
+                and a.`markdown_content` like concat('%', #{markdownContent,jdbcType=VARCHAR}, '%')
             </if>
             <if test="writer != null">
                 and a.`writer` = #{writer,jdbcType=INTEGER}

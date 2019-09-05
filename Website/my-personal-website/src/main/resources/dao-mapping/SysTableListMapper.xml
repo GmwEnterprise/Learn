@@ -31,10 +31,10 @@
         from sys_table_list a
         <where>
             <if test="tableName != null">
-                and a.`table_name` = #{tableName,jdbcType=VARCHAR}
+                and a.`table_name` like concat('%', #{tableName,jdbcType=VARCHAR}, '%')
             </if>
             <if test="tableServiceLink != null">
-                and a.`table_service_link` = #{tableServiceLink,jdbcType=VARCHAR}
+                and a.`table_service_link` like concat('%', #{tableServiceLink,jdbcType=VARCHAR}, '%')
             </if>
             <if test="createDatetime != null">
                 and a.`create_datetime` = #{createDatetime,jdbcType=TIMESTAMP}
