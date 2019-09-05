@@ -4,8 +4,6 @@
     <query-form @submit="querySubmit">
       <form-control v-model="formParam.nickname" label="昵称" id="nickname" />
       <form-control v-model="formParam.phone" label="手机号" id="phone" />
-      <form-control v-model="formParam.accountId" label="用户ID" id="account-id" />
-      <form-control v-model="formParam.introduction" label="简介" id="introduction" />
     </query-form>
     <table class="table table-striped" style="width: auto;font-size: .9em;">
       <thead class="thead-dark">
@@ -77,13 +75,13 @@ export default {
   data() {
     return {
       formParam: {
-        accountId: '',
-        accountType: -1,
-        nickname: '',
-        sex: -1,
-        age: -1,
-        introduction: '',
-        phone: ''
+        accountId: null,
+        accountType: null,
+        nickname: null,
+        sex: null,
+        age: null,
+        introduction: null,
+        phone: null
       },
       table: {
         className: 'Account',
@@ -91,6 +89,7 @@ export default {
           { code: 'id', name: '主键', type: 'number', show: false },
           { code: 'accountId', name: '账户ID', type: 'string', show: true },
           { code: 'nickname', name: '昵称', type: 'string', show: true },
+          { code: 'phone', name: '手机号', type: 'string', show: true },
           {
             code: 'sex',
             name: '性别',
@@ -144,8 +143,21 @@ export default {
     this.initTable()
   },
   methods: {
-    querySubmit() {
+    async initTable() {
+      const response = await accountService.queryPage({
+        currentPage: this.tableData.currentPage || 1,
+        pageSize: this.tableData.pageSize || 8
+      })
+      this.tableData = response.data || {}
+    },
+    async querySubmit() {
       console.log('submit event !')
+      const response = await accountService.queryPage({
+        currentPage: 1,
+        pageSize: 8,
+        ...this.formParam
+      })
+      this.tableData = response.data || {}
     },
     async pageJump(pageValue) {
       if (!this.currentEvent) {
@@ -159,6 +171,12 @@ export default {
     },
     editRow(rowId) {
       console.log(rowId)
+      this.$router.push({
+        name: 'accountEdit',
+        params: {
+          rowId
+        }
+      })
     },
     deleteRow(rowId) {
       this.$message({
@@ -173,13 +191,6 @@ export default {
           close()
         }
       })
-    },
-    async initTable() {
-      const response = await accountService.queryPage({
-        currentPage: this.tableData.currentPage || 1,
-        pageSize: this.tableData.pageSize || 8
-      })
-      this.tableData = response.data || {}
     }
   }
 }
