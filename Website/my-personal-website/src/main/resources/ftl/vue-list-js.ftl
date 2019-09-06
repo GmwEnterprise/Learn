@@ -1,11 +1,18 @@
 <template>
   <div id="table-list-vue">
     <h3>{{ table.className + ' 表' }}</h3>
+    <!--
     <query-form @submit="querySubmit">
-      <form-control v-model="formParam.nickname" label="昵称" id="nickname" />
-      <form-control v-model="formParam.phone" label="手机号" id="phone" />
-    </query-form>
-    <table class="table table-striped" style="width: auto;font-size: .9em;">
+      <#list columnList as column>
+      <form-control v-model="formParam.${column.fieldName}" label="${column.columnComment}" id="${column.fieldName}" />
+      </#list>
+    </query-form> -->
+    <router-link
+      to="/sys/modules/${entityAlias}/edit"
+      class="btn btn-light"
+      style="margin-bottom: 5px; font-size: .8em;"
+    >新增</router-link>
+    <table class="table table-striped" style="width: auto;font-size: .8em;">
       <thead class="thead-dark">
         <tr>
           <th class="back-th-td">序号</th>
@@ -50,7 +57,7 @@
               <span class="back-column-number">{{ row[column.code] }}</span>
             </template>
             <template v-else-if="column.type === 'date'">
-              <span class="back-column-date">{{ row[column.code].substring(0, 10) }}</span>
+              <span class="back-column-date">{{ row[column.code] }}</span>
             </template>
             <template v-else-if="column.type === 'string'">{{ row[column.code] }}</template>
             <div
@@ -68,71 +75,23 @@
 </template>
 
 <script>
-import accountService from './account.service.js'
+import ${entityAlias}Service from './${entityAlias}.service.js'
 import { setTimeout } from 'timers'
 export default {
-  name: 'AccountModule',
+  name: '${entityName}List',
   data() {
     return {
       formParam: {
-        accountId: null,
-        accountType: null,
-        nickname: null,
-        sex: null,
-        age: null,
-        introduction: null,
-        phone: null
+        <#list columnList as column>
+        ${column.fieldName}: null,
+        </#list>
       },
       table: {
-        className: 'Account',
+        className: '${entityName}',
         columns: [
-          { code: 'id', name: '主键', type: 'number', show: false },
-          { code: 'accountId', name: '账户ID', type: 'string', show: true },
-          { code: 'nickname', name: '昵称', type: 'string', show: true },
-          { code: 'phone', name: '手机号', type: 'string', show: true },
-          {
-            code: 'sex',
-            name: '性别',
-            type: 'customize',
-            show: true,
-            customize: origin => {
-              let target
-              switch (origin) {
-                case 1:
-                  target = '男'
-                  break
-                case 2:
-                  target = '女'
-                  break
-                default:
-                  target = '保密'
-              }
-              const style = `
-                display: flex;
-                font-size: .8em;
-                background: #0072bc;
-                color: white;
-                padding: 0 .5rem;
-                height: 100%;
-                justify-content: center;
-                align-items: center;
-              `
-              return `<span class="rounded-circle-1" style="${style}">${target}</span>`
-            }
-          },
-          {
-            code: 'createDatetime',
-            name: '字段创建时间',
-            type: 'date',
-            show: true,
-            customize: origin => origin
-          },
-          {
-            code: 'updateDatetime',
-            name: '字段更新时间',
-            type: 'date',
-            show: true
-          }
+          <#list columnList as column>
+          { code: '${column.fieldName}', name: '${column.columnComment}', type: '${column.javascriptType}', show: true },
+          </#list>
         ]
       },
       tableData: {},
@@ -144,15 +103,14 @@ export default {
   },
   methods: {
     async initTable() {
-      const response = await accountService.queryPage({
+      const response = await ${entityAlias}Service.queryPage({
         currentPage: this.tableData.currentPage || 1,
         pageSize: this.tableData.pageSize || 8
       })
       this.tableData = response.data || {}
     },
     async querySubmit() {
-      console.log('submit event !')
-      const response = await accountService.queryPage({
+      const response = await ${entityAlias}Service.queryPage({
         currentPage: 1,
         pageSize: 8,
         ...this.formParam
@@ -172,7 +130,7 @@ export default {
     editRow(rowId) {
       console.log(rowId)
       this.$router.push({
-        name: 'accountEdit',
+        name: '${entityAlias}Edit',
         params: {
           rowId
         }
@@ -185,7 +143,7 @@ export default {
         detail: '该操作将不可逆！',
         btnName: '删除',
         event: async close => {
-          await accountService.delByKey(rowId)
+          await ${entityAlias}Service.delByKey(rowId)
           this.$toast.success('删除成功')
           await this.initTable()
           close()

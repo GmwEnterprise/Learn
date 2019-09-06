@@ -2,7 +2,6 @@
   <div class="container-fluid">
     <div class="row" style="background-color: white;box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);">
       <div class="col-12" style="display: flex;">
-        <!-- <a href="javascript:void(0)" class="logo" :style="logoStyle"></a> -->
         <router-link to="/sys" :style="logoStyle" class="logo"></router-link>
       </div>
     </div>
@@ -16,12 +15,8 @@
           <i class="fa fa-table" aria-hidden="true"></i> 数据管理
         </a>
         <div class="catalog-sub" id="c-s-data-manage" style="display: none;">
-          <template v-if="tableList.length > 0">
-            <router-link
-              v-for="table of tableList"
-              :key="table.tableId"
-              :to="`/sys/tableList/${table.tableId}`"
-            >{{ table.tableAlias }}</router-link>
+          <template v-if="routerList.length > 0">
+            <!-- 路径获取 -->
           </template>
           <a v-else href="javascript:void(0)">没有数据</a>
         </div>
@@ -33,7 +28,7 @@
           <i class="fa fa-bars" aria-hidden="true"></i> 界面管理
         </a>
         <div class="catalog-sub" id="c-s-user-manage" style="display: none;">
-          <router-link to="/sys/addLink">添加数据表</router-link>
+          <a href="javascript:void(0)">暂无</a>
         </div>
       </div>
       <div class="col-10" style="padding: 0;">
@@ -47,11 +42,10 @@
 
 <script>
 import logo from '@/assets/persevere.png'
-import SysTableListService from '@/services/sysTableList.js'
 export default {
   data() {
     return {
-      tableList: [],
+      routerList: [],
       logoStyle: {
         backgroundImage: `url(${logo})`,
         backgroundSize: 'contain',
@@ -79,23 +73,7 @@ export default {
       }
     }
   },
-  created() {
-    SysTableListService.queryPage({
-      currentPage: 1,
-      pageSize: 1000
-    }).then(response => {
-      console.log(response)
-      this.tableList = response.data.list
-        ? response.data.list.map(origin => {
-            return {
-              tableId: origin.id,
-              tableName: origin.tableServiceLink,
-              tableAlias: origin.tableName
-            }
-          })
-        : []
-    })
-  }
+  created() {}
 }
 </script>
 

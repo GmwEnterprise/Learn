@@ -49,7 +49,7 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
         from ${tableName} a
         ${'where a.`${keyColumn}` = #' + '{${keyProperty}}'}
     ${'</delete>'}
-
+<#--
     ${'<insert id="insert" useGeneratedKeys="true" keyColumn="${keyColumn}" keyProperty="${keyProperty}">'}
         insert into ${tableName} (
         <#list columnList as item>
@@ -64,9 +64,9 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
         </#if>
         </#list>
         )
-    ${'</insert>'}
+    ${'</insert>'}-->
 
-    ${'<insert id="insertSelective" useGeneratedKeys="true" keyColumn="${keyColumn}" keyProperty="${keyProperty}">'}
+    ${'<insert id="insert" useGeneratedKeys="true" keyColumn="${keyColumn}" keyProperty="${keyProperty}">'}
         insert into ${tableName}
         ${'<trim prefix="(" suffix=")" suffixOverrides=",">'}
             <#list columnList as item>
@@ -88,7 +88,7 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
         ${'</trim>'}
     ${'</insert>'}
 
-    ${'<update id="updateByPrimaryKeySelective">'}
+    ${'<update id="updateByPrimaryKey">'}
         update ${tableName}
         ${'<set>'}
             <#list columnList as item>
@@ -101,7 +101,7 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
         ${'</set>'}
     ${'where ${keyColumn} = #' + '{${keyProperty}}'}
     ${'</update>'}
-
+<#--
     ${'<update id="updateByPrimaryKey">'}
         update ${tableName}
         set
@@ -111,5 +111,5 @@ ${'<mapper namespace="cn.gmwenterprise.website.dao.' + entityName + 'Dao">'}
         </#if>
         </#list>
         ${'where ${keyColumn} = #' + '{${keyProperty}}'}
-    ${'</update>'}
+    ${'</update>'}-->
 ${'</mapper>'}

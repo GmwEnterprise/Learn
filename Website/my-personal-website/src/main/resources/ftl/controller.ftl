@@ -38,7 +38,7 @@ public class ${entityName}Controller implements BaseController {
 
     @PatchMapping
     public ResponseEntity modify(@RequestBody ${entityName}Vo vo) {
-        ${entityAlias}Service.updateByPrimaryKeySelective(vo);
+        ${entityAlias}Service.updateByPrimaryKey(vo);
         return ok();
     }
 

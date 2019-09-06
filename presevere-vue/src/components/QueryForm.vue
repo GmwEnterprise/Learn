@@ -30,7 +30,7 @@ export default {
 form.query-form {
   background: #f2f2f2;
   box-sizing: border-box;
-  padding: 0.8rem;
+  padding: 0.8rem 0;
   margin: 1rem 0;
   width: 100%;
   font-size: 0.8rem;

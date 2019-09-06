@@ -24,14 +24,14 @@ public interface ${entityName}Service {
      * @return 受影响行数
      */
     int insert(${entityName}Vo vo);
-
+<#--
     /**
      * 插入满足条件的字段
      *
      * @param vo 记录
      * @return 受影响行数
      */
-    int insertSelective(${entityName}Vo vo);
+    int insertSelective(${entityName}Vo vo);-->
 
     /**
      * 查询记录
@@ -48,14 +48,14 @@ public interface ${entityName}Service {
      * @return 结果
      */
     List<${entityName}Vo> selectPage(${entityName}Vo vo);
-
+<#--
     /**
      * 更新满足条件的字段
      *
      * @param vo 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKeySelective(${entityName}Vo vo);
+    int updateByPrimaryKeySelective(${entityName}Vo vo);-->
 
     /**
      * 更新记录

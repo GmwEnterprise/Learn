@@ -26,14 +26,14 @@ public interface ${entityName}Dao {
      * @return 受影响行数
      */
     int insert(${entityName} record);
-
+<#--
     /**
      * 插入满足条件的字段
      *
      * @param record 记录
      * @return 受影响行数
      */
-    int insertSelective(${entityName} record);
+    int insertSelective(${entityName} record);-->
 
     /**
      * 查询记录
@@ -50,14 +50,14 @@ public interface ${entityName}Dao {
      * @return 结果
      */
     List<${entityName}> selectPage(${entityName} record);
-
+<#--
     /**
      * 更新满足条件的字段
      *
      * @param record 记录
      * @return 受影响行数
      */
-    int updateByPrimaryKeySelective(${entityName} record);
+    int updateByPrimaryKeySelective(${entityName} record);-->
 
     /**
      * 更新记录

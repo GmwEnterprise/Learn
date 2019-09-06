@@ -33,7 +33,7 @@ Vue.prototype.$toast = {
       duration
     })
   },
-  danger(message = 'danger message', title = '错误提示', duration = 3000) {
+  error(message = 'error message', title = '错误提示', duration = 3000) {
     store.commit('toast', {
       message,
       type: 'danger',

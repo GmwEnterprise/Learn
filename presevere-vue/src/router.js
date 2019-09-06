@@ -21,22 +21,9 @@ export default new Router({
     }, {
       path: '/sys',
       name: 'system',
-      component: () => import('@/views/backstage/Manager.vue'),
+      component: () => import('@/views/backstage/SystemMain.vue'),
       children: [
-        ...moduleRoutes,
-        {
-          path: 'addLink',
-          name: 'addServiceLink',
-          component: () => import('@/views/backstage/AddServiceLink.vue')
-        }, {
-          path: 'tableList/:tableId',
-          name: 'tableList',
-          component: () => import('@/views/backstage/TableList.vue')
-        }, {
-          path: 'tableEdit/:tableId',
-          name: 'tableEdit',
-          component: () => import('@/views/backstage/TableEdit.vue')
-        }
+        ...moduleRoutes
       ]
     }
   ]

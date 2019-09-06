@@ -34,6 +34,10 @@ class ColumnStruct {
      */
     private String fieldType;
     /**
+     * 成员JavaScript类型
+     */
+    private String javascriptType;
+    /**
      * 该字段是否为主键
      */
     private boolean primaryKey;
@@ -50,6 +54,7 @@ class ColumnStruct {
         map.put("columnComment", columnComment);
         map.put("fieldName", fieldName);
         map.put("fieldType", fieldType);
+        map.put("javascriptType", javascriptType);
         map.put("isPrimaryKey", primaryKey);
         map.put("isAutoIncrement", autoIncrement);
         return map;

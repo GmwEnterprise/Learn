@@ -27,11 +27,11 @@ public class ${entityName}ServiceImpl implements ${entityName}Service {
     public int insert(${entityName}Vo vo) {
         return ${entityAlias}Dao.insert(domain(vo));
     }
-
+<#--
     @Override
     public int insertSelective(${entityName}Vo vo) {
         return ${entityAlias}Dao.insertSelective(domain(vo));
-    }
+    }-->
 
     @Override
     public ${entityName}Vo selectByPrimaryKey(${keyPropertyType} ${keyProperty}) {
@@ -45,11 +45,11 @@ public class ${entityName}ServiceImpl implements ${entityName}Service {
             .map(this::vo)
             .collect(Collectors.toList());
     }
-
+<#--
     @Override
     public int updateByPrimaryKeySelective(${entityName}Vo vo) {
         return ${entityAlias}Dao.updateByPrimaryKeySelective(domain(vo));
-    }
+    }-->
 
     @Override
     public int updateByPrimaryKey(${entityName}Vo vo) {

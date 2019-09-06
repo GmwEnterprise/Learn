@@ -105,6 +105,7 @@ public class DatabaseHelper {
             struct.setColumnType(JdbcType.forCode(struct.getColumnTypeNo()).name());
             struct.setFieldName(nameConversion(struct.getColumnName(), 1));
             struct.setFieldType(typeConversion(struct.getColumnTypeNo()));
+            struct.setJavascriptType(javascriptTypeConversion(struct.getColumnTypeNo()));
             struct.setAutoIncrement("YES".equals(columns.getString("IS_AUTOINCREMENT")));
             struct.setPrimaryKey(pk.equals(struct.getColumnName()));
             list.add(struct);
@@ -188,6 +189,28 @@ public class DatabaseHelper {
                 return "LocalDateTime";
             default:
                 return "Object";
+        }
+    }
+
+    private String javascriptTypeConversion(int columnTypeNo) {
+        switch (columnTypeNo) {
+            case -6:
+            case 5:
+            case 4:
+            case -5:
+                return "number";
+            case 1:
+            case 12:
+            case -1:
+            case -9:
+            case -15:
+                return "string";
+            case 91:
+            case 92:
+            case 93:
+                return "date";
+            default:
+                return "any";
         }
     }
 

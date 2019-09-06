@@ -38,8 +38,8 @@ _axios.interceptors.response.use(
         // 请求成功
         resolve(response.data)
       } else {
-        // reject(response.data.msg)
         console.log('错误信息(code !== 0): ' + response.data.msg)
+        reject(response.data)
       }
     }) //.catch(errorMsg => console.log('错误信息(code !== 0): ' + errorMsg))
   },
