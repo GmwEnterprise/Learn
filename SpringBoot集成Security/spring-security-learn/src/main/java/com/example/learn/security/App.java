@@ -7,10 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Gmw
  */
 @SpringBootApplication
-public class SpringSecurityLearnApplication {
-
-  public static void main(String[] args) {
-    SpringApplication.run(SpringSecurityLearnApplication.class, args);
-  }
-  
+public class App {
+    public static void main(String[] args) {
+        SpringApplication.run(App.class, args);
+    }
 }
